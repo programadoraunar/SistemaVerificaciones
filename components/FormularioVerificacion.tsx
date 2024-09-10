@@ -4,7 +4,9 @@ import { useState } from "react";
 const FormularioVerificacion = () => {
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
 
-  const handleTipoSolicitanteChange = (e) => {
+  const handleTipoSolicitanteChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setTipoSolicitante(e.target.value);
   };
 

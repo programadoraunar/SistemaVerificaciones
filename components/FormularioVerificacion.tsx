@@ -4,6 +4,7 @@ import { useState } from "react";
 const FormularioVerificacion = () => {
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
 
+  // Declarar el tipo de evento correctamente
   const handleTipoSolicitanteChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -11,7 +12,7 @@ const FormularioVerificacion = () => {
   };
 
   return (
-    <div className="lg:w-[40%] bg-white shadow-md rounded-md">
+    <div className="p-6 bg-white shadow-md rounded-md">
       <h2 className="text-xl font-semibold mb-4">Datos del Graduado</h2>
       <form className="space-y-6">
         {/* Tipo de Identificación */}
@@ -221,7 +222,7 @@ const FormularioVerificacion = () => {
         <div className="mt-6">
           <button
             type="submit"
-            className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-indigo-700"
+            className="w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
           >
             Enviar Solicitud
           </button>

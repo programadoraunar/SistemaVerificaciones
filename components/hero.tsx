@@ -1,44 +1,16 @@
-import NextLogo from "./next-logo";
-import SupabaseLogo from "./supabase-logo";
-
 export default function Header() {
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
-      </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
+    <div className="lg:w-[60%] lg:px-8 lg:mx-8 py-24 border h-[50%]">
+      <h2 className="text-2xl">Bienvenido</h2>
+      <p>
+        A través de esta plataforma, podrás verificar la existencia y
+        autenticidad de los títulos profesionales de nuestros graduados desde el
+        año "" hasta la fecha. Recuerda que la información proporcionada es
+        pública, ya que incluye el nombre, número de documento y título obtenido
+        por el graduado. Si no eres el titular de los datos, al acceder a esta
+        plataforma declaras que utilizarás la información solo con fines
+        lícitos, específicamente académicos o laborales.
       </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
     </div>
   );
 }

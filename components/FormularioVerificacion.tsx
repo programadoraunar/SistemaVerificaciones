@@ -12,7 +12,7 @@ const FormularioVerificacion = () => {
   };
 
   return (
-    <div className="p-6 lg-w-[40%] bg-white shadow-md rounded-md">
+    <div className="p-6 lg:w-[40%]  bg-white shadow-md rounded-md">
       <h2 className="text-xl font-semibold mb-4">Datos del Graduado</h2>
       <form className="space-y-6">
         {/* Tipo de Identificación */}

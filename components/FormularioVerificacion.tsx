@@ -222,9 +222,9 @@ const FormularioVerificacion = () => {
         <div className="mt-6">
           <button
             type="submit"
-            className="w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-indigo-700"
           >
-            Enviar Solicitud
+            Verificar
           </button>
         </div>
       </form>

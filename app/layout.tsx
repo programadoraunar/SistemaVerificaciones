@@ -60,7 +60,6 @@ export default function RootLayout({
                     Aunar
                   </a>
                 </p>
-                <ThemeSwitcher />
               </footer>
             </div>
           </main>

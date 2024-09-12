@@ -229,6 +229,15 @@ const FormularioVerificacion = () => {
             Verificar
           </Link>
         </div>
+        <div className="mt-6">
+          <Link
+            href="/VerificacionNoEncontrado"
+            type="submit"
+            className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center"
+          >
+            No encontrado
+          </Link>
+        </div>
       </form>
     </div>
   );

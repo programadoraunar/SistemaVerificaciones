@@ -7,8 +7,8 @@ export default function DeployButton() {
       <Link href="/">
         <Image
           src="/Escudo_Aunar.png"
-          width={300}
-          height={300}
+          width={350}
+          height={350}
           alt="Picture of the author"
         />
       </Link>

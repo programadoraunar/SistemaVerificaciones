@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 const FormularioVerificacion = () => {
@@ -13,7 +14,7 @@ const FormularioVerificacion = () => {
 
   return (
     <div className="p-6 lg:w-[40%]  bg-white shadow-md rounded-md">
-      <h2 className="text-xl font-semibold mb-4">Datos del Graduado</h2>
+      <h2 className="text-2xl font-semibold mb-4">Datos del Graduado</h2>
       <form className="space-y-6">
         {/* Tipo de Identificación */}
         <div>
@@ -24,7 +25,7 @@ const FormularioVerificacion = () => {
             className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
             required
           >
-            <option>Seleccione una identificación</option>
+            <option disabled>Seleccione una identificación</option>
             <option>Cédula de Ciudadanía</option>
             <option>Cédula de Extranjería</option>
             <option>Pasaporte</option>
@@ -152,7 +153,7 @@ const FormularioVerificacion = () => {
             className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
             required
           >
-            <option>Seleccione una identificación</option>
+            <option disabled>Seleccione una identificación</option>
             <option>Cédula de Ciudadanía</option>
             <option>Cédula de Extranjería</option>
             <option>Pasaporte</option>
@@ -220,12 +221,13 @@ const FormularioVerificacion = () => {
         </div>
 
         <div className="mt-6">
-          <button
+          <Link
+            href="/verificacion"
             type="submit"
-            className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-indigo-700"
+            className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center"
           >
             Verificar
-          </button>
+          </Link>
         </div>
       </form>
     </div>

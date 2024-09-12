@@ -33,7 +33,7 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col items-center">
-              <nav className="w-full py-16 flex justify-center h-16">
+              <nav className="w-full py-20 flex justify-center h-16">
                 <div className="w-full  max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex items-center font-semibold py-5">
                     <div className="flex items-center">
@@ -46,7 +46,7 @@ export default function RootLayout({
               <div className="w-full px-10 py-3 my-2 bg-blueBase text-white">
                 Sistema de Verificacion
               </div>
-              <div className="flex flex-col gap-20 p-5">{children}</div>
+              <div className="w-full">{children}</div>
 
               <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
                 <p>

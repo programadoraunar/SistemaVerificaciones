@@ -14,36 +14,7 @@ const FormularioVerificacion = () => {
 
   return (
     <div className="p-6 lg:w-[40%]  bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-semibold mb-4">Datos del Graduado</h2>
       <form className="space-y-6">
-        {/* Tipo de Identificación */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Tipo de Identificación
-          </label>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-            required
-          >
-            <option disabled>Seleccione una identificación</option>
-            <option>Cédula de Ciudadanía</option>
-            <option>Cédula de Extranjería</option>
-            <option>Pasaporte</option>
-          </select>
-        </div>
-
-        {/* Número de Identificación */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Número de Identificación
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-            required
-          />
-        </div>
-
         {/* Datos del Solicitante */}
         <h2 className="text-xl font-semibold mt-8 mb-4">
           Datos del Solicitante
@@ -83,14 +54,32 @@ const FormularioVerificacion = () => {
         {/* Número de Documento */}
         {tipoSolicitante === "persona" && (
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
-              Número de Documento
-            </label>
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-              required
-            />
+            {/* Tipo Identificación del Solicitante */}
+            <div className="pb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Tipo Identificación del Solicitante
+              </label>
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+                required
+              >
+                <option disabled>Seleccione una identificación</option>
+                <option>Targeta de Identidad</option>
+                <option>Cédula de Ciudadanía</option>
+                <option>Cédula de Extranjería</option>
+                <option>Pasaporte</option>
+              </select>
+            </div>
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Número de Documento
+              </label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+                required
+              />
+            </div>
           </div>
         )}
 
@@ -136,34 +125,6 @@ const FormularioVerificacion = () => {
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Apellidos del Solicitante
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-            required
-          />
-        </div>
-
-        {/* Tipo Identificación del Solicitante */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Tipo Identificación del Solicitante
-          </label>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-            required
-          >
-            <option disabled>Seleccione una identificación</option>
-            <option>Cédula de Ciudadanía</option>
-            <option>Cédula de Extranjería</option>
-            <option>Pasaporte</option>
-          </select>
-        </div>
-
-        {/* Identificación del Solicitante */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Identificación del Solicitante
           </label>
           <input
             type="text"

@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <div className="lg:w-[60%] lg:px-8 lg:mx-8 py-24 border h-[50%]">
+    <div className="lg:px-8 lg:mx-8 pt-24 pb-10">
       <h2 className="text-2xl">Bienvenido</h2>
       <p>
         A través de esta plataforma, podrás verificar la existencia y

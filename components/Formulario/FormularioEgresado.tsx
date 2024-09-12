@@ -3,7 +3,7 @@ import React from "react";
 function FormularioEgresado() {
   return (
     <div className="px-8 lg:mx-8 lg:w-[50%]">
-      <h2 className="text-2xl font-semibold mb-4">Datos del Egresado</h2>
+      <h2 className="text-xl font-semibold mb-4">Datos del Egresado</h2>
       {/* Tipo de Identificación */}
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">

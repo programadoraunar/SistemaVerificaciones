@@ -17,7 +17,7 @@ function Verificacion() {
           Verificación del Egresado
         </h2>
         <div className="space-y-4 text-gray-700">
-          <div className="flex flex-col lg:flex-row lg:items-center">
+          <div className="flex flex-col">
             <label className="block text-gray-700 font-semibold mb-2">
               Nombre
             </label>

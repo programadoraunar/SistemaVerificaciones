@@ -106,6 +106,17 @@ const FormularioVerificacion = () => {
                 required
               />
             </div>
+            {/* Cargo del Solicitante */}
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Cargo del Solicitante
+              </label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+                required
+              />
+            </div>
           </>
         )}
 
@@ -125,18 +136,6 @@ const FormularioVerificacion = () => {
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Apellidos del Solicitante
-          </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-            required
-          />
-        </div>
-
-        {/* Cargo del Solicitante */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Cargo del Solicitante
           </label>
           <input
             type="text"
@@ -188,15 +187,6 @@ const FormularioVerificacion = () => {
             className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center"
           >
             Verificar
-          </Link>
-        </div>
-        <div className="mt-6">
-          <Link
-            href="/VerificacionNoEncontrado"
-            type="submit"
-            className="w-full p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center"
-          >
-            No encontrado
           </Link>
         </div>
       </form>

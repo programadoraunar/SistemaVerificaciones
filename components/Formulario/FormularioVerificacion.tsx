@@ -64,7 +64,6 @@ const FormularioVerificacion = () => {
                 required
               >
                 <option disabled>Seleccione una identificación</option>
-                <option>Targeta de Identidad</option>
                 <option>Cédula de Ciudadanía</option>
                 <option>Cédula de Extranjería</option>
                 <option>Pasaporte</option>

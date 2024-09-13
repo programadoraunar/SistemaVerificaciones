@@ -1,5 +1,6 @@
 import FormularioEgresado from "@/components/Formulario/FormularioEgresado";
-import FormularioVerificacion from "@/components/Formulario/FormularioVerificacion";
+import FormularioPersona from "@/components/Formulario/FormularioPersona";
+import LayoutFormularioSoli from "@/components/Formulario/LayoutFormularioSoli";
 import Hero from "@/components/hero";
 
 export default async function Index() {
@@ -9,8 +10,7 @@ export default async function Index() {
         <Hero />
         <FormularioEgresado />
       </div>
-
-      <FormularioVerificacion />
+      <LayoutFormularioSoli />
     </div>
   );
 }

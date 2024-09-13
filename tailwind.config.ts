@@ -19,6 +19,19 @@ const config = {
     },
     extend: {
       colors: {
+        "blue-zodiac": {
+          50: "#e9f8ff",
+          100: "#cef0ff",
+          200: "#a7e6ff",
+          300: "#6bdaff",
+          400: "#26c1ff",
+          500: "#0099ff",
+          600: "#006fff",
+          700: "#0054ff",
+          800: "#0047e6",
+          900: "#0042b3",
+          950: "#002053",
+        },
         blueBase: "#0F3F71",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

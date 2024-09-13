@@ -4,7 +4,7 @@ function Verificacion() {
   const datosGraduado = {
     nombre: "Juan",
     apellido: "Pérez",
-    programa: "Ingeniería Informatica",
+    folio: "Folio #1",
     titulo: "Ingeniero Informatico",
     fechaGrado: "2023-06-15",
     actaGrado: "ACTA-12345",
@@ -28,11 +28,11 @@ function Verificacion() {
               className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
             />
             <label className="block text-gray-700 font-semibold my-2">
-              Programa
+              Folio
             </label>
             <input
               type="text"
-              value={datosGraduado.programa}
+              value={datosGraduado.folio}
               disabled
               className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
             />

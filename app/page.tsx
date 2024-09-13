@@ -8,7 +8,6 @@ export default async function Index() {
     <div className={`flex flex-col lg:flex-row px-5 w-full`}>
       <div className="flex flex-col lg:w-[60%] ">
         <Hero />
-        <FormularioEgresado />
       </div>
       <LayoutFormularioSoli />
     </div>

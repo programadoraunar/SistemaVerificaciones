@@ -1,6 +1,16 @@
 // validationSchema.ts
 import { z } from "zod";
 
+export const formularioEgresado = z.object({
+  tipoIdentificacion: z.string().min(1, "Seleccione una identificación"), // Reemplaza nonempty() con min(1)
+  numeroDocumento: z
+    .string()
+    .regex(/^\d+$/, "Número de documento debe contener solo números") // Solo números
+    .min(1, "Número de documento es requerido"), // Reemplaza nonempty() con min(1)
+  formacionAcademica: z.string().min(1, "Seleccione una formacion academica"),
+});
+export type FormularioEgresadoType = z.infer<typeof formularioEgresado>;
+
 export const formularioPersonaSchema = z.object({
   tipoIdentificacion: z.string().min(1, "Seleccione una identificación"), // Reemplaza nonempty() con min(1)
   numeroDocumento: z

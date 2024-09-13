@@ -1,15 +1,30 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import departamentos from "../../utils/ciudadesColombia/colombia.json"; // Ruta relativa al archivo JSON
 
 const FormularioVerificacion = () => {
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
-
+  const [selectedDepartamento, setSelectedDepartamento] = useState(""); // Estado para el departamento seleccionado
+  const [ciudades, setCiudades] = useState<string[]>([]); // Estado para las ciudades
   // Declarar el tipo de evento correctamente
   const handleTipoSolicitanteChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTipoSolicitante(e.target.value);
+  };
+  // Maneja el cambio de departamento y actualiza las ciudades
+  const handleDepartamentoChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const departamentoSeleccionado = e.target.value;
+    setSelectedDepartamento(departamentoSeleccionado);
+
+    // Busca las ciudades del departamento seleccionado
+    const dept = departamentos.find(
+      (dep) => dep.departamento === departamentoSeleccionado
+    );
+    setCiudades(dept ? dept.ciudades : []);
   };
 
   return (
@@ -167,16 +182,45 @@ const FormularioVerificacion = () => {
           />
         </div>
 
+        {/* Departamento */}
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Departamento
+          </label>
+          <select
+            onChange={handleDepartamentoChange}
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+            required
+          >
+            <option value="" disabled selected>
+              Seleccione un departamento
+            </option>
+            {departamentos.map((dep) => (
+              <option key={dep.id} value={dep.departamento}>
+                {dep.departamento}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* Ciudad */}
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
             Ciudad
           </label>
-          <input
-            type="text"
+          <select
             className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
             required
-          />
+          >
+            <option value="" disabled selected>
+              Seleccione una ciudad
+            </option>
+            {ciudades.map((ciudad, index) => (
+              <option key={index} value={ciudad}>
+                {ciudad}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mt-6">

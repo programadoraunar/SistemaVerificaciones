@@ -52,3 +52,13 @@ export const formularioEmpresaSchema = z.object({
 });
 
 export type FormularioEmpresaType = z.infer<typeof formularioEmpresaSchema>;
+
+export const formularioEgresadoSchema = z.object({
+  tipoIdentificacionEgresado: z.string().nonempty("Este campo es obligatorio"),
+  numeroIdentificacionEgresado: z
+    .string()
+    .nonempty("Este campo es obligatorio"),
+  formacionAcademicaEgresado: z.string().nonempty("Este campo es obligatorio"),
+});
+
+export type FormularioEgresado = z.infer<typeof formularioEgresadoSchema>;

@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
-import departamentos from "../../utils/ciudadesColombia/colombia.json"; // Ruta relativa al archivo JSON
 import FormularioPersona from "./FormularioPersona";
 import FormularioEmpresa from "./FormularioEmpresa";
 import {
@@ -30,14 +28,12 @@ const LayoutFormularioSoli: React.FC = () => {
   };
 
   const handlePersonaSubmit = (data: FormularioPersonaType) => {
-    console.log("Datos Persona desde el layout:", data);
     const datosCompletos = { ...data, ...datosAdicionales };
     console.log("Datos completos Persona:", datosCompletos);
     // Maneja los datos completos aquí
   };
 
   const handleEmpresaSubmit = (data: FormularioEmpresaType) => {
-    console.log("Datos Empresa desde el layout:", data);
     const datosCompletos = { ...data, ...datosAdicionales };
     console.log("Datos completos Empresa:", datosCompletos);
     // Maneja los datos completos aquí
@@ -52,7 +48,7 @@ const LayoutFormularioSoli: React.FC = () => {
           Tipo de Identificación
         </label>
         <select
-          name="tipoIdentificacion"
+          name="tipoIdentificacionEgresado" // Cambio en el nombre
           className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
           required
           onChange={handleDatosAdicionalesChange}
@@ -74,7 +70,7 @@ const LayoutFormularioSoli: React.FC = () => {
         </label>
         <input
           type="text"
-          name="numeroIdentificacion"
+          name="numeroIdentificacionEgresado" // Cambio en el nombre
           className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
           required
           onChange={handleDatosAdicionalesChange}
@@ -86,7 +82,7 @@ const LayoutFormularioSoli: React.FC = () => {
           Formación Académica
         </label>
         <select
-          name="formacionAcademica"
+          name="formacionAcademicaEgresado" // Cambio en el nombre
           className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
           required
           onChange={handleDatosAdicionalesChange}

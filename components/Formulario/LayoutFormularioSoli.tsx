@@ -6,6 +6,7 @@ import {
   FormularioEmpresaType,
   FormularioPersonaType,
 } from "../../validations/validationSchema";
+import ExpandingButton from "../ui/ExpandingButton";
 const LayoutFormularioSoli: React.FC = () => {
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
   const [datosAdicionales, setDatosAdicionales] = useState({
@@ -41,41 +42,45 @@ const LayoutFormularioSoli: React.FC = () => {
 
   return (
     <div className="p-6 lg:w-[40%] bg-white shadow-md rounded-md">
-      <h2 className="text-xl font-semibold mb-4">Datos del Egresado</h2>
-      {/* Tipo de Identificación */}
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-700">
-          Tipo de Identificación
-        </label>
-        <select
-          name="tipoIdentificacionEgresado" // Cambio en el nombre
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-          required
-          onChange={handleDatosAdicionalesChange}
-          value={datosAdicionales.tipoIdentificacionEgresado}
-        >
-          <option disabled value="">
-            Seleccione una identificación
-          </option>
-          <option value="Targeta de Identidad">Targeta de Identidad</option>
-          <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
-          <option value="Cédula de Extranjería">Cédula de Extranjería</option>
-          <option value="Pasaporte">Pasaporte</option>
-        </select>
-      </div>
-      {/* Número de Identificación */}
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-700">
-          Número de Identificación
-        </label>
-        <input
-          type="text"
-          name="numeroIdentificacionEgresado" // Cambio en el nombre
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
-          required
-          onChange={handleDatosAdicionalesChange}
-          value={datosAdicionales.numeroIdentificacionEgresado}
-        />
+      <h2 className="text-xl font-semibold mb-4 text-center">
+        Datos del Egresado
+      </h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Tipo de Identificación */}
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Tipo de Identificación
+          </label>
+          <select
+            name="tipoIdentificacionEgresado" // Cambio en el nombre
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm "
+            required
+            onChange={handleDatosAdicionalesChange}
+            value={datosAdicionales.tipoIdentificacionEgresado}
+          >
+            <option disabled value="">
+              Seleccione una identificación
+            </option>
+            <option value="Targeta de Identidad">Targeta de Identidad</option>
+            <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
+            <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+            <option value="Pasaporte">Pasaporte</option>
+          </select>
+        </div>
+        {/* Número de Identificación */}
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Número de Identificación
+          </label>
+          <input
+            type="text"
+            name="numeroIdentificacionEgresado" // Cambio en el nombre
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+            required
+            onChange={handleDatosAdicionalesChange}
+            value={datosAdicionales.numeroIdentificacionEgresado}
+          />
+        </div>
       </div>
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -83,7 +88,7 @@ const LayoutFormularioSoli: React.FC = () => {
         </label>
         <select
           name="formacionAcademicaEgresado" // Cambio en el nombre
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
           required
           onChange={handleDatosAdicionalesChange}
           value={datosAdicionales.formacionAcademicaEgresado}
@@ -97,14 +102,16 @@ const LayoutFormularioSoli: React.FC = () => {
         </select>
       </div>
       {/* Datos del Solicitante */}
-      <h2 className="text-xl font-semibold mt-8 mb-4">Datos del Solicitante</h2>
+      <h2 className="text-base font-semibold mt-8 mb-4">
+        Datos del Solicitante
+      </h2>
       {/* Tipo de Solicitante */}
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-700">
           Tipo de Solicitante
         </label>
-        <div className="flex space-x-4">
-          <label className="flex items-center">
+        <div className="flex space-x-4 py-2">
+          <label className="flex items-center text-sm">
             <input
               type="radio"
               name="tipoSolicitante"
@@ -115,7 +122,7 @@ const LayoutFormularioSoli: React.FC = () => {
             />
             Persona natural
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center text-sm">
             <input
               type="radio"
               name="tipoSolicitante"
@@ -128,7 +135,17 @@ const LayoutFormularioSoli: React.FC = () => {
           </label>
         </div>
       </div>
-      {/* Formulario según tipo de solicitante */}
+      {/* <div className="flex flex-col gap-5 py-2">
+        <ExpandingButton
+          buttonText="Persona Natural"
+          expandedContent={<FormularioPersona onSubmit={handlePersonaSubmit} />}
+        />
+        <ExpandingButton
+          buttonText="Empresa"
+          expandedContent={<FormularioPersona onSubmit={handlePersonaSubmit} />}
+        />
+      </div> */}
+
       {tipoSolicitante === "persona" && (
         <FormularioPersona onSubmit={handlePersonaSubmit} />
       )}

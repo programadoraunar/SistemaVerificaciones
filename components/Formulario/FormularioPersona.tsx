@@ -21,7 +21,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 p-2">
         <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-5">
           {/* Nombres del Solicitante */}
           <div>

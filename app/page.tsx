@@ -1,5 +1,3 @@
-import FormularioEgresado from "@/components/Formulario/FormularioEgresado";
-import FormularioPersona from "@/components/Formulario/FormularioPersona";
 import LayoutFormularioSoli from "@/components/Formulario/LayoutFormularioSoli";
 import Hero from "@/components/hero";
 

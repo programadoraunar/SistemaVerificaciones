@@ -18,7 +18,7 @@ const FormularioEmpresa: React.FC<FormularioEmpresaProps> = ({ onSubmit }) => {
     resolver: zodResolver(formularioEmpresaSchema),
   });
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="pl-2">
       <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-5">
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">

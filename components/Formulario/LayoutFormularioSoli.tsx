@@ -42,10 +42,13 @@ const LayoutFormularioSoli: React.FC = () => {
 
   return (
     <div className="p-6 lg:w-[40%] bg-white shadow-md rounded-md">
-      <h2 className="text-xl font-semibold mb-4 text-center">
-        Datos del Egresado
+      <h2 className="text-center text-3xl font-bold">
+        Verifica el título académico
       </h2>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <p className="border-b-2 border-blue-950 py-2 my-2 font-bold">
+        <span className="pl-2">Datos del Egresado</span>
+      </p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 p-2">
         {/* Tipo de Identificación */}
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -82,7 +85,7 @@ const LayoutFormularioSoli: React.FC = () => {
           />
         </div>
       </div>
-      <div>
+      <div className="p-2">
         <label className="block mb-2 text-sm font-medium text-gray-700">
           Formación Académica
         </label>
@@ -102,11 +105,12 @@ const LayoutFormularioSoli: React.FC = () => {
         </select>
       </div>
       {/* Datos del Solicitante */}
-      <h2 className="text-base font-semibold mt-8 mb-4">
-        Datos del Solicitante
-      </h2>
+
+      <p className="border-b-2 border-blue-950 py-2 my-2 font-bold">
+        <span className="pl-2">Datos del Solicitante</span>
+      </p>
       {/* Tipo de Solicitante */}
-      <div>
+      <div className="pl-2">
         <label className="block mb-2 text-sm font-medium text-gray-700">
           Tipo de Solicitante
         </label>

@@ -14,6 +14,11 @@ const LayoutFormularioSoli: React.FC = () => {
     numeroIdentificacionEgresado: "",
     formacionAcademicaEgresado: "",
   });
+  const [errors, setErrors] = useState({
+    tipoIdentificacionEgresado: "",
+    numeroIdentificacionEgresado: "",
+    formacionAcademicaEgresado: "",
+  });
 
   const handleTipoSolicitanteChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -28,16 +33,49 @@ const LayoutFormularioSoli: React.FC = () => {
     setDatosAdicionales((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validate = () => {
+    const newErrors = {
+      tipoIdentificacionEgresado: "",
+      numeroIdentificacionEgresado: "",
+      formacionAcademicaEgresado: "",
+    };
+
+    if (!datosAdicionales.tipoIdentificacionEgresado) {
+      newErrors.tipoIdentificacionEgresado =
+        "El tipo de identificación es requerido.";
+    }
+
+    if (!datosAdicionales.numeroIdentificacionEgresado) {
+      newErrors.numeroIdentificacionEgresado =
+        "El número de identificación es requerido.";
+    } else if (!/^\d+$/.test(datosAdicionales.numeroIdentificacionEgresado)) {
+      newErrors.numeroIdentificacionEgresado =
+        "El número de identificación debe contener solo números.";
+    }
+
+    if (!datosAdicionales.formacionAcademicaEgresado) {
+      newErrors.formacionAcademicaEgresado =
+        "La formación académica es requerida.";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
   const handlePersonaSubmit = (data: FormularioPersonaType) => {
-    const datosCompletos = { ...data, ...datosAdicionales };
-    console.log("Datos completos Persona:", datosCompletos);
-    // Maneja los datos completos aquí
+    if (validate()) {
+      const datosCompletos = { ...data, ...datosAdicionales };
+      console.log("Datos completos Persona:", datosCompletos);
+      // Maneja los datos completos aquí
+    }
   };
 
   const handleEmpresaSubmit = (data: FormularioEmpresaType) => {
-    const datosCompletos = { ...data, ...datosAdicionales };
-    console.log("Datos completos Empresa:", datosCompletos);
-    // Maneja los datos completos aquí
+    if (validate()) {
+      const datosCompletos = { ...data, ...datosAdicionales };
+      console.log("Datos completos Empresa:", datosCompletos);
+      // Maneja los datos completos aquí
+    }
   };
 
   return (
@@ -55,8 +93,8 @@ const LayoutFormularioSoli: React.FC = () => {
             Tipo de Identificación
           </label>
           <select
-            name="tipoIdentificacionEgresado" // Cambio en el nombre
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm "
+            name="tipoIdentificacionEgresado"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
             required
             onChange={handleDatosAdicionalesChange}
             value={datosAdicionales.tipoIdentificacionEgresado}
@@ -69,6 +107,11 @@ const LayoutFormularioSoli: React.FC = () => {
             <option value="Cédula de Extranjería">Cédula de Extranjería</option>
             <option value="Pasaporte">Pasaporte</option>
           </select>
+          {errors.tipoIdentificacionEgresado && (
+            <p className="text-red-500 text-sm">
+              {errors.tipoIdentificacionEgresado}
+            </p>
+          )}
         </div>
         {/* Número de Identificación */}
         <div>
@@ -77,12 +120,17 @@ const LayoutFormularioSoli: React.FC = () => {
           </label>
           <input
             type="text"
-            name="numeroIdentificacionEgresado" // Cambio en el nombre
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+            name="numeroIdentificacionEgresado"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
             required
             onChange={handleDatosAdicionalesChange}
             value={datosAdicionales.numeroIdentificacionEgresado}
           />
+          {errors.numeroIdentificacionEgresado && (
+            <p className="text-red-500 text-sm">
+              {errors.numeroIdentificacionEgresado}
+            </p>
+          )}
         </div>
       </div>
       <div className="p-2">
@@ -90,7 +138,7 @@ const LayoutFormularioSoli: React.FC = () => {
           Formación Académica
         </label>
         <select
-          name="formacionAcademicaEgresado" // Cambio en el nombre
+          name="formacionAcademicaEgresado"
           className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
           required
           onChange={handleDatosAdicionalesChange}
@@ -103,6 +151,11 @@ const LayoutFormularioSoli: React.FC = () => {
           <option value="Técnico Laboral">Técnico Laboral</option>
           <option value="Curso de Extensión">Curso de Extensión</option>
         </select>
+        {errors.formacionAcademicaEgresado && (
+          <p className="text-red-500 text-sm">
+            {errors.formacionAcademicaEgresado}
+          </p>
+        )}
       </div>
       {/* Datos del Solicitante */}
 

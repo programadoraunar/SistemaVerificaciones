@@ -164,9 +164,11 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         {/* Select para País */}
         {!isLoading ? (
           <div>
-            <label htmlFor="country">País: </label>
+            <label className="text-sm" htmlFor="country">
+              País:{" "}
+            </label>
             <select
-              className="w-full"
+              className="w-full text-sm"
               id="pais"
               {...register("pais")}
               value={selectedCountry}
@@ -195,8 +197,11 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         {/* Select para Región/Subcountry */}
         {selectedCountry && (
           <div>
-            <label htmlFor="subcountry">Región/Estado/Departamento: </label>
+            <label className="text-sm" htmlFor="subcountry">
+              Región/Estado/Departamento:{" "}
+            </label>
             <select
+              className="text-sm"
               id="subcountry"
               {...register("subcountry")}
               value={selectedSubcountry}
@@ -218,8 +223,10 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         {/* Select para Ciudad */}
         {selectedSubcountry && (
           <div>
-            <label htmlFor="city">Ciudad: </label>
-            <select id="ciudad" {...register("ciudad")}>
+            <label className="text-sm" htmlFor="city">
+              Ciudad:{" "}
+            </label>
+            <select className="text-sm" id="ciudad" {...register("ciudad")}>
               <option value="">Selecciona una ciudad</option>
               {filteredCities.map((city) => (
                 <option key={city.geonameid} value={city.name}>

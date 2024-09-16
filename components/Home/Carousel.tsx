@@ -40,7 +40,7 @@ export default function Carousel() {
         <SwiperSlide>
           <div className="flex h-full w-full items-center justify-center">
             <Image
-              src={"/graduado2.jpg"}
+              src={"/graduado.jpg"}
               width={500}
               height={300}
               alt="escudo"
@@ -50,7 +50,7 @@ export default function Carousel() {
         <SwiperSlide>
           <div className="flex h-full w-full items-center justify-center">
             <Image
-              src={"/graduado2.jpg"}
+              src={"/Escudo_Aunar.png"}
               width={500}
               height={300}
               alt="escudo"

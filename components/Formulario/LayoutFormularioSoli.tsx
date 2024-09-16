@@ -139,17 +139,6 @@ const LayoutFormularioSoli: React.FC = () => {
           </label>
         </div>
       </div>
-      {/* <div className="flex flex-col gap-5 py-2">
-        <ExpandingButton
-          buttonText="Persona Natural"
-          expandedContent={<FormularioPersona onSubmit={handlePersonaSubmit} />}
-        />
-        <ExpandingButton
-          buttonText="Empresa"
-          expandedContent={<FormularioPersona onSubmit={handlePersonaSubmit} />}
-        />
-      </div> */}
-
       {tipoSolicitante === "persona" && (
         <FormularioPersona onSubmit={handlePersonaSubmit} />
       )}

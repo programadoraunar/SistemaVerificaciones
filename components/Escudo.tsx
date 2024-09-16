@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function DeployButton() {
+export default function Escudo() {
   return (
     <>
       <Link href="/">

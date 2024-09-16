@@ -58,7 +58,26 @@
     --chart-5: 340 75% 55%;
   }
 }
+.bg-hero {
+  position: relative;
+  min-height: 100vh;
+  z-index: 1; /* Asegura que el contenido esté encima del fondo */
+}
 
+.bg-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/graduado.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.3); /* Aplica el filtro solo a la imagen */
+  z-index: -1; /* Coloca la imagen detrás del contenido */
+}
 @layer base {
   * {
     @apply border-border;
@@ -66,4 +85,20 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+/* Estilos para los botones de navegación */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 30px !important; /* Ajusta el tamaño del botón */
+  height: 30px !important; /* Ajusta el tamaño del botón */
+  border-radius: 50%; /* Botones circulares opcional */
+  /* Agrega más estilos según sea necesario */
+}
+
+/* Ajustar el tamaño del icono dentro del botón */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px !important; /* Ajusta el tamaño del icono */
 }

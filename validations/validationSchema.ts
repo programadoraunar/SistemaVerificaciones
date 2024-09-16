@@ -24,6 +24,9 @@ export const formularioPersonaSchema = z.object({
     .string()
     .email("Correo electrónico inválido")
     .min(1, "Correo electrónico es requerido"), // Reemplaza nonempty() con min(1)
+  pais: z.string().min(1, "Seleccione un país"), // Validación de país
+  subcountry: z.string().min(1, "Seleccione una región"), // Validación de región
+  ciudad: z.string().min(1, "Seleccione una ciudad"), // Validación de ciudad
 });
 export type FormularioPersonaType = z.infer<typeof formularioPersonaSchema>;
 

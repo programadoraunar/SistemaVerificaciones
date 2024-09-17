@@ -35,6 +35,14 @@ function SlideBar() {
                   <MdHome className="text-xl" /> Inicio
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/profecionales"
+                  className="flex items-center gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                >
+                  <MdHome className="text-xl" /> Profecionales
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

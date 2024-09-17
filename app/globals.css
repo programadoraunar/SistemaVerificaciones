@@ -78,6 +78,9 @@
   filter: brightness(0.3); /* Aplica el filtro solo a la imagen */
   z-index: -1; /* Coloca la imagen detrás del contenido */
 }
+.slider-bar-container::-webkit-scrollbar {
+	display: none; /* Oculta la barra de desplazamiento */
+  }
 @layer base {
   * {
     @apply border-border;

@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        yellowBase: "#EDD12F",
         "blue-zodiac": {
           50: "#e9f8ff",
           100: "#cef0ff",

@@ -40,12 +40,10 @@ export default function RootLayout({
                 {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
               </div>
             </nav>
-            <div className="w-full px-10 py-3 mt-2 bg-blueBase text-white">
+            <div className="w-full px-10 py-3 mt-2 bg-blue-zodiac-950 text-xl text-white font-bold">
               Sistema de Verificacion
             </div>
             <div className="w-full">{children}</div>
-
-            <Footer />
           </div>
         </main>
       </body>

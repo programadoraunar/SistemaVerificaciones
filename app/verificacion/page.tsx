@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/Home/Footer";
+import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
 
 interface DatosGraduado {
   nombre: string;
@@ -17,8 +17,6 @@ function Verificacion() {
   const [datosGraduado, setDatosGraduado] = useState<DatosGraduado | null>(
     null
   );
-  const supabase = createClient();
-
   useEffect(() => {
     async function fetchDatosGraduado() {
       const { data, error } = await supabase.rpc("obtener_datos_profesional", {

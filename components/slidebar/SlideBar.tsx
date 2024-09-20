@@ -2,7 +2,10 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { CiMenuFries, CiMenuBurger } from "react-icons/ci";
+import { FaTools } from "react-icons/fa";
 import { MdHome, MdDashboard } from "react-icons/md"; // Importa el ícono de Dashboard
+import { PiStudent } from "react-icons/pi";
+import { FaWpforms } from "react-icons/fa6";
 
 function SlideBar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -16,31 +19,42 @@ function SlideBar() {
         >
           <div className="p-3">
             <ul>
-              <li className="text-lg py-2 px-4 text-gray-200">Menu</li>
+              <li className="text-xl lg:text-lg py-2 px-4 text-gray-200">
+                Menu
+              </li>
             </ul>
             <ul>
               <li>
                 <Link
                   href="/dashboard"
-                  className="flex items-center gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-md xl:text-lg"
                 >
-                  <MdDashboard className="text-xl" /> Dashboard
+                  <MdDashboard className="text-xl" /> Panel de Control
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/profecionales"
+                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                >
+                  <PiStudent className="text-xl" /> Profecionales
                 </Link>
               </li>
               <li>
                 <Link
                   href="/inicio"
-                  className="flex items-center gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
-                  <MdHome className="text-xl" /> Inicio
+                  <FaTools className="text-xl" /> Tecnicos
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/profecionales"
-                  className="flex items-center gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                  href="/adminCampos"
+                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
-                  <MdHome className="text-xl" /> Profecionales
+                  <FaWpforms className="text-xl" /> Administración
                 </Link>
               </li>
             </ul>
@@ -48,9 +62,9 @@ function SlideBar() {
         </div>
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="xl:hidden fixed bottom-4 right-4 bg-yellowBase text-black p-3 rounded-full z-50"
+          className="xl:hidden fixed bottom-4 right-4 bg-yellowBase text-black p-5 rounded-full z-50"
         >
-          {showMenu ? <CiMenuFries /> : <CiMenuBurger />}
+          {showMenu ? <CiMenuFries size={25} /> : <CiMenuBurger size={25} />}
         </button>
       </>
     </div>

@@ -1,27 +1,36 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { CiSearch } from "react-icons/ci";
+import DateRangePickerProps from "../ui/DateRangePickerProps ";
 
 function SearchHeader() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center border mb-5 shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-5  bg-white rounded-lg">
-      <div className="flex flex-col">
-        <Label className="text-base">Numero de Documento</Label>
-        <div className="flex">
-          <Input></Input>
-          <Button>q</Button>
+    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-5 bg-white rounded-lg mb-5">
+      {/* Primer hijo: ocupa 2 columnas en pantallas grandes */}
+      <div className="col-span-1 lg:col-span-2 p-4 flex flex-col gap-3 w-full">
+        <Label className="text-lg">Ingrese Numero de Documento</Label>
+        <div className="flex items-center w-full">
+          <Input
+            className="h-9 w-full"
+            type="text"
+            placeholder="Ingrese Numero de Documento"
+          />
+          <Button className="ml-2">
+            <CiSearch />
+          </Button>
         </div>
       </div>
-      <div>
-        <p>hola</p>
+
+      {/* Los otros hijos */}
+      <div className="p-4 flex flex-col justify-center items-center w-full">
+        <Label className="text-lg">Fechas</Label>
+        <DateRangePickerProps />
       </div>
-      <div>
-        <p>hola</p>
-      </div>
-      <div>
-        <p>hola</p>
-      </div>
+      <div className="bg-green-500 p-4 w-full">Filtro Por Definir</div>
+      <div className="bg-yellow-500 p-4 w-full">Filtro Por Definir</div>
     </div>
   );
 }

@@ -78,9 +78,7 @@
   filter: brightness(0.3); /* Aplica el filtro solo a la imagen */
   z-index: -1; /* Coloca la imagen detrás del contenido */
 }
-.slider-bar-container::-webkit-scrollbar {
-	display: none; /* Oculta la barra de desplazamiento */
-  }
+
 @layer base {
   * {
     @apply border-border;
@@ -89,7 +87,36 @@
     @apply bg-background text-foreground;
   }
 }
+.form-container::-webkit-scrollbar {
+	display: none; /* Oculta la barra de desplazamiento */
+  }
+/* Para navegadores basados en WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho del scrollbar */
+}
 
+/* Track del scrollbar */
+::-webkit-scrollbar-track {
+  background: transparent; /* Fondo del track */
+}
+
+/* Handle del scrollbar */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2); /* Color del handle */
+  border-radius: 4px; /* Esquinas redondeadas del handle */
+}
+
+/* Handle del scrollbar en hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5); /* Color del handle al pasar el ratón */
+}
+
+/* Para Firefox */
+html {
+  scrollbar-width: thin; /* Hace el scrollbar más delgado */
+  border-radius: 4px;
+  scrollbar-color: #002053 transparent; /* Color del handle y del track */
+}
 
 /* Estilos para los botones de navegación */
 .swiper-button-next,

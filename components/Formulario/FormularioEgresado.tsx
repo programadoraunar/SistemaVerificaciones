@@ -1,3 +1,7 @@
+import {
+  formaciones,
+  identificationOptionsFormulario,
+} from "@/constants/options";
 import React from "react";
 
 function FormularioEgresado() {
@@ -14,10 +18,11 @@ function FormularioEgresado() {
           required
         >
           <option disabled>Seleccione una identificación</option>
-          <option>Targeta de Identidad</option>
-          <option>Cédula de Ciudadanía</option>
-          <option>Cédula de Extranjería</option>
-          <option>Pasaporte</option>
+          {identificationOptionsFormulario.map((option, index) => (
+            <option key={index} disabled={index === 0}>
+              {option}
+            </option>
+          ))}
         </select>
       </div>
       {/* Número de Identificación */}
@@ -40,9 +45,11 @@ function FormularioEgresado() {
           required
         >
           <option disabled>Seleccione una identificación</option>
-          <option>Profecional </option>
-          <option>Tecnico Laboral</option>
-          <option>Curso de Extencion</option>
+          {formaciones.map((option, index) => (
+            <option key={index} disabled={index === 0}>
+              {option.nombre}
+            </option>
+          ))}
         </select>
       </div>
     </div>

@@ -26,4 +26,8 @@ export interface ProfesionalRegistro {
   acta_grado: string;
   folio: string;
   libro_registro_grado: string;
+  formacion: string;
+}
+export interface ProfecionalBusqueda {
+  numero: string;
 }

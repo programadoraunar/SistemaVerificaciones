@@ -7,6 +7,10 @@ import {
   FormularioPersonaType,
 } from "../../validations/validationSchema";
 import ExpandingButton from "../ui/ExpandingButton";
+import {
+  formaciones,
+  identificationOptionsFormulario,
+} from "@/constants/options";
 const LayoutFormularioSoli: React.FC = () => {
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
   const [datosAdicionales, setDatosAdicionales] = useState({
@@ -99,13 +103,10 @@ const LayoutFormularioSoli: React.FC = () => {
             onChange={handleDatosAdicionalesChange}
             value={datosAdicionales.tipoIdentificacionEgresado}
           >
-            <option disabled value="">
-              Seleccione una identificación
-            </option>
-            <option value="Targeta de Identidad">Targeta de Identidad</option>
-            <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
-            <option value="Cédula de Extranjería">Cédula de Extranjería</option>
-            <option value="Pasaporte">Pasaporte</option>
+            <option disabled>Seleccione una identificación</option>
+            {identificationOptionsFormulario.map((option, index) => (
+              <option key={index}>{option}</option>
+            ))}
           </select>
           {errors.tipoIdentificacionEgresado && (
             <p className="text-red-500 text-sm">
@@ -147,9 +148,9 @@ const LayoutFormularioSoli: React.FC = () => {
           <option disabled value="">
             Seleccione una formación
           </option>
-          <option value="Profesional">Profesional</option>
-          <option value="Técnico Laboral">Técnico Laboral</option>
-          <option value="Curso de Extensión">Curso de Extensión</option>
+          {formaciones.map((option, index) => (
+            <option key={index}>{option.nombre}</option>
+          ))}
         </select>
         {errors.formacionAcademicaEgresado && (
           <p className="text-red-500 text-sm">

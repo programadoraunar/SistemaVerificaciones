@@ -31,12 +31,6 @@ const DateRangePicker: React.FC = () => {
         className="bg-white appearance-none px-4 py-4 rounded-lg shadow border-black text-black"
         showIcon
         withPortal
-        excludeDateIntervals={[
-          {
-            start: new Date(),
-            end: new Date(new Date().setDate(new Date().getDate() + 2)),
-          },
-        ]}
         monthsShown={1}
         renderCustomHeader={({
           date,

@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import Loading from "../ui/Loading";
+import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctions";
 
 const columnHelper = createColumnHelper<ProfesionalConTitulo>();
 
@@ -75,7 +76,11 @@ const columns = [
   }),
 ];
 
-function TableProfecionales() {
+function TableProfecionales({
+  searchResults,
+}: {
+  searchResults: ProfesionalConTitulo[];
+}) {
   const [data, setData] = useState<ProfesionalConTitulo[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -83,15 +88,9 @@ function TableProfecionales() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data, error } = await supabase.rpc(
-          "obtener_informacion_profesionales"
-        );
+        const result = await obtenerInformacionProfesionales();
         setIsLoading(false);
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          setData(data);
-        }
+        setData(result);
       } catch (err) {
         console.log(err);
       }
@@ -99,8 +98,9 @@ function TableProfecionales() {
 
     fetchData();
   }, []);
+  const tableData = searchResults.length > 0 ? searchResults : data;
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {

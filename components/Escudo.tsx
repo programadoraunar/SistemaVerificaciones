@@ -10,6 +10,7 @@ export default function Escudo() {
           width={350}
           height={350}
           alt="Picture of the author"
+          priority
         />
       </Link>
     </>

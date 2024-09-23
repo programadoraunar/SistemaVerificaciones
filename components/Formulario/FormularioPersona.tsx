@@ -7,6 +7,7 @@ import {
   FormularioPersonaType,
 } from "../../validations/validationSchema";
 import cities from "@/utils/dataPaises/dataPaises.json";
+import { identificationSolicitanteOptionsFormulario } from "@/constants/options";
 
 interface FormularioPersonaProps {
   onSubmit: (data: FormularioPersonaType) => void;
@@ -63,7 +64,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+              className="w-full text-sm  p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
               {...register("nombres")}
             />
             {errors.nombres && (
@@ -78,7 +79,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+              className="w-full text-sm  p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
               {...register("apellidos")}
             />
             {errors.apellidos && (
@@ -96,12 +97,12 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
               className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm "
               {...register("tipoIdentificacion")}
             >
-              <option value="">Seleccione una identificación</option>
-              <option value="Cedula de Ciudadania">Cédula de Ciudadanía</option>
-              <option value="Cedula de Extranjeria">
-                Cédula de Extranjería
-              </option>
-              <option value="Pasaporte">Pasaporte</option>
+              <option disabled>Seleccione una identificación</option>
+              {identificationSolicitanteOptionsFormulario.map(
+                (option, index) => (
+                  <option key={index}>{option}</option>
+                )
+              )}
             </select>
             {errors.tipoIdentificacion && (
               <p className="text-red-600 text-sm">
@@ -117,7 +118,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm "
               {...register("numeroDocumento")}
             />
             {errors.numeroDocumento && (
@@ -136,7 +137,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             </label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+              className="w-full text-sm  p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
               {...register("telefono")}
             />
             {errors.telefono && (
@@ -151,7 +152,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             </label>
             <input
               type="email"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+              className="w-full text-sm  p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
               {...register("correoElectronico")}
             />
             {errors.correoElectronico && (

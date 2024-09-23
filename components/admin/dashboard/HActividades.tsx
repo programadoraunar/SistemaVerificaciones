@@ -65,8 +65,8 @@ function HActividades() {
       <span className="font-bold text-lg mb-4">Historial de Acciones</span>
       <br />
       <span>
-        En este historial se enseñan las ultimas acciones realisadas por el
-        administador en el sistema
+        En este historial se muestran las últimas acciones realizadas por el
+        administrador en el sistema.
       </span>
       <div className="flex flex-col space-y-4">
         {actividades.length > 0 ? (

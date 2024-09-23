@@ -7,7 +7,7 @@ function Footer() {
         <div className="flex justify-center">
           <img
             src="/Escudo_Aunar.png"
-            alt="Logo De La Auitonoma"
+            alt="Logo De La Autónoma"
             loading="lazy"
             className="w-full max-w-[300px] sm:max-w-[300px] md:max-w-[350px]  lg:max-w-[350px] xl:w-[450px]"
           />

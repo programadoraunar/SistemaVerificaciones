@@ -13,8 +13,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formularioRegistroSchema } from "@/validations/validationAdminSchemas";
 import Loading from "../ui/Loading";
 import { registrarProfesionalConTitulo } from "@/lib/supabaseAdminPostFunctions";
-
-function FormularioRegistro() {
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+interface FormularioRegistroProps {
+  onSuccess: () => void; // Nueva prop para cerrar el modal
+}
+function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -38,6 +42,8 @@ function FormularioRegistro() {
     try {
       const result = await registrarProfesionalConTitulo(data);
       console.log(result);
+      onSuccess(); // Cerrar el modal al registrar con éxito
+      toast.success("¡Profesional Registrado!");
     } catch (error) {
       console.error("Error al registrar el profesional:", error);
       // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
@@ -97,7 +103,7 @@ function FormularioRegistro() {
           {/* Nombre */}
           <div className="mb-4  w-[100%] lg:w-[50%]">
             <label className="block text-gray-700 text-md font-bold mb-2">
-              Nombre
+              Nombres
             </label>
             <input
               type="text"
@@ -117,7 +123,7 @@ function FormularioRegistro() {
           {/* Apellido */}
           <div className="mb-4 w-[100%] lg:w-[50%]">
             <label className="block text-gray-700 text-md font-bold mb-2">
-              Apellido
+              Apellidos
             </label>
             <input
               type="text"
@@ -276,6 +282,7 @@ function FormularioRegistro() {
           <Button type="submit">Registrar</Button>
         </div>
       </form>
+      <ToastContainer />
     </>
   );
 }

@@ -21,17 +21,17 @@ export default function DashboardPage() {
         <Cards
           title="Total de Profesionales"
           value={300}
-          text="Total egresados con titulo profecional"
+          text="Total egresados con titulo profesional"
           icon={<FaBriefcase size={50} />}
         />
         <Cards
-          title="Total de Tecnicos Laborales"
+          title="Total de Técnicos Laborales"
           value={1500}
           text="Total egresados con titulo laboral"
           icon={<FaTools size={50} />}
         />
         <Cards
-          title="Total de Cursos de Extencion"
+          title="Total de Cursos de Extension"
           value={20}
           text="Total egresados con titulo de curso"
           icon={<FaBookOpen size={50} />}

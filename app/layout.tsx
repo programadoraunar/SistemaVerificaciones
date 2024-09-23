@@ -41,7 +41,7 @@ export default function RootLayout({
               </div>
             </nav>
             <div className="w-full px-10 py-3 mt-2 bg-blue-zodiac-950 text-xl text-white font-bold">
-              Sistema de Verificacion
+              Sistema de Verificación
             </div>
             <div className="w-full">{children}</div>
           </div>

@@ -1,6 +1,7 @@
 import {
-  ProfecionalBusqueda,
+  ProfecionalBusquedaDocumento,
   ProfesionalRegistro,
+  ProfecionalBusquedaNombres,
 } from "@/interfaces/Profesionales";
 import { supabase } from "@/utils/supabase/client";
 
@@ -14,12 +15,26 @@ export const obtenerInformacionProfesionales = async () => {
 };
 
 export const obtenerProfesionalPorDocumento = async (
-  data: ProfecionalBusqueda
+  data: ProfecionalBusquedaDocumento
 ) => {
   const { data: result, error } = await supabase.rpc(
     "obtener_profesional_por_numero_identificacion",
     {
-      numero_identificacion: data.numero_identificacion,
+      p_numero_identificacion: data.numero_identificacion,
+    }
+  );
+  if (error) throw error;
+  return result;
+};
+
+export const obtnerProfesionalPorNombreApellido = async (
+  data: ProfecionalBusquedaNombres
+) => {
+  const { data: result, error } = await supabase.rpc(
+    "obtener_profesional_por_nombre_apellido",
+    {
+      p_apellido: data.apellidos || null,
+      p_nombre: data.nombres || null,
     }
   );
   if (error) throw error;

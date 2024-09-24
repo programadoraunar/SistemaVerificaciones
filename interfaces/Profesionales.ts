@@ -25,6 +25,10 @@ export interface ProfesionalRegistro {
   folio: string;
   libro_registro_grado: string;
 }
-export interface ProfecionalBusqueda {
+export interface ProfecionalBusquedaDocumento {
   numero_identificacion: string;
+}
+export interface ProfecionalBusquedaNombres {
+  nombres: string | null;
+  apellidos: string | null;
 }

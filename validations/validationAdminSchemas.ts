@@ -26,23 +26,3 @@ export const formularioRegistroSchema = z.object({
 });
 
 export type FormularioRegistroSchema = z.infer<typeof formularioRegistroSchema>;
-
-//schema de validacion para los filtros de la tablas
-
-// Define el esquema de validación
-export const filterSchema = z.object({
-  numero_identificacion: z
-    .string()
-    .min(5, {
-      message: "El número de documento debe tener al menos 5 caracteres",
-    })
-    .max(20, {
-      message: "El número de documento no puede tener más de 20 caracteres",
-    })
-    .regex(/^\d+$/, {
-      message: "El número de documento solo debe contener numeros",
-    }),
-});
-
-// Exportamos el tipo inferido del esquema
-export type FilterFormData = z.infer<typeof filterSchema>;

@@ -19,7 +19,7 @@ export const obtenerProfesionalPorDocumento = async (
   const { data: result, error } = await supabase.rpc(
     "obtener_profesional_por_numero_identificacion",
     {
-      numero_identificacion: data.numero,
+      numero_identificacion: data.numero_identificacion,
     }
   );
   if (error) throw error;

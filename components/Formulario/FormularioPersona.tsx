@@ -46,13 +46,16 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         .filter((city) => city.country === selectedCountry)
         .map((city) => city.subcountry)
     )
-  );
+  ).sort();
 
   // Filtrar ciudades según la región/estado seleccionado
-  const filteredCities = cities.filter(
-    (city) =>
-      city.country === selectedCountry && city.subcountry === selectedSubcountry
-  );
+  const filteredCities = cities
+    .filter(
+      (city) =>
+        city.country === selectedCountry &&
+        city.subcountry === selectedSubcountry
+    )
+    .sort();
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-5 p-2">

@@ -1,5 +1,5 @@
 export const identificationOptionsFormulario = [
-  "Targeta de Identidad",
+  "Tarjeta de Identidad",
   "Cédula de Ciudadanía",
   "Cédula de Extranjería",
   "Pasaporte",
@@ -11,7 +11,7 @@ export const identificationSolicitanteOptionsFormulario = [
 ];
 
 export const formaciones = [
-  { id: "1", nombre: "Profecional" },
-  { id: "2", nombre: "Tecnico Laboral" },
-  { id: "3", nombre: "Curso de Extencion" },
+  { id: "1", nombre: "Profesional" },
+  { id: "2", nombre: "Técnico Laboral" },
+  { id: "3", nombre: "Curso de Extension" },
 ];

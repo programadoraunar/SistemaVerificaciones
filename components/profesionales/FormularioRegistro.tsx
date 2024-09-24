@@ -5,16 +5,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
-import {
-  formaciones,
-  identificationOptionsFormulario,
-} from "@/constants/options";
+import { identificationOptionsFormulario } from "@/constants/options";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formularioRegistroSchema } from "@/validations/validationAdminSchemas";
 import Loading from "../ui/Loading";
 import { registrarProfesionalConTitulo } from "@/lib/supabaseAdminPostFunctions";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast, Toaster } from "react-hot-toast";
+
 interface FormularioRegistroProps {
   onSuccess: () => void; // Nueva prop para cerrar el modal
 }
@@ -34,18 +31,25 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
     return data;
   };
 
-  const { data: programas } = useSWR("programas", fetcher);
   const { data: titulos } = useSWR("titulos", fetcher);
 
   const onSubmit: SubmitHandler<ProfesionalRegistro> = async (data) => {
+    console.log(data);
     setIsLoading(true);
     try {
-      const result = await registrarProfesionalConTitulo(data);
-      console.log(result);
+      await registrarProfesionalConTitulo(data);
+
       onSuccess(); // Cerrar el modal al registrar con éxito
-      toast.success("¡Profesional Registrado!");
     } catch (error) {
-      console.error("Error al registrar el profesional:", error);
+      // Verifica si el error tiene la estructura esperada
+      if (typeof error === "object" && error !== null && "message" in error) {
+        const customError = error as { message: string; code?: string }; // Cast para acceder a 'message' y 'code'
+
+        toast.error(`${customError.message}`); // Muestra el mensaje de error
+      } else {
+        // Si no tiene la estructura esperada, muestra un mensaje genérico
+        toast.error("Ocurrió un error inesperado.");
+      }
       // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
     } finally {
       setIsLoading(false);
@@ -85,20 +89,21 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
             </label>
             <input
               type="text"
-              {...register("numero")}
+              {...register("numero_identificacion")}
               className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.numero ? "border-red-500" : "border-gray-300"
+                errors.numero_identificacion
+                  ? "border-red-500"
+                  : "border-gray-300"
               }`}
               placeholder="Número de documento"
             />
-            {errors.numero && (
+            {errors.numero_identificacion && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.numero.message}
+                {errors.numero_identificacion.message}
               </p>
             )}
           </div>
         </div>
-
         <div className="flex flex-col lg:flex-row w-full lg:gap-8">
           {/* Nombre */}
           <div className="mb-4  w-[100%] lg:w-[50%]">
@@ -144,25 +149,19 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
           {/* Programa */}
           <div className="mb-4 w-[100%] lg:w-[50%]">
             <label className="block text-gray-700 text-md font-bold mb-2">
-              Programa
+              Numero de Diploma
             </label>
-            <select
-              {...register("id_programa")}
+            <input
+              type="text"
+              {...register("numero_diploma")}
               className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.id_programa ? "border-red-500" : "border-gray-300"
+                errors.numero_diploma ? "border-red-500" : "border-gray-300"
               }`}
-            >
-              <option value="">Seleccionar Programa</option>
-              {programas &&
-                programas.map((programa: any) => (
-                  <option key={programa.id} value={programa.id}>
-                    {programa.nombre}
-                  </option>
-                ))}
-            </select>
-            {errors.id_programa && (
+              placeholder="Número de Diploma"
+            />
+            {errors.numero_diploma && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.id_programa.message}
+                {errors.numero_diploma.message}
               </p>
             )}
           </div>
@@ -192,7 +191,6 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
             )}
           </div>
         </div>
-
         <div className="flex flex-col lg:flex-row w-full lg:gap-8">
           {/* Acta de Grado */}
           <div className="mb-4 w-[100%] lg:w-[50%]">
@@ -234,7 +232,6 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
             )}
           </div>
         </div>
-
         <div className="flex flex-col lg:flex-row w-full lg:gap-8">
           {/* Fecha de Grado */}
           <div className="mb-4w-[100%] lg:w-[50%]">
@@ -277,12 +274,11 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
             )}
           </div>
         </div>
-
         <div className="flex justify-end">
           <Button type="submit">Registrar</Button>
         </div>
+        <Toaster />
       </form>
-      <ToastContainer />
     </>
   );
 }

@@ -45,14 +45,16 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
               className="h-9 w-full"
               type="text"
               placeholder="Ingrese Número de Documento"
-              {...register("numero")}
+              {...register("numero_identificacion")}
             />
             <Button className="ml-2" type="submit">
               <CiSearch />
             </Button>
           </div>
-          {errors.numero && (
-            <p className="text-red-500 text-sm mt-1">{errors.numero.message}</p>
+          {errors.numero_identificacion && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.numero_identificacion.message}
+            </p>
           )}
         </div>
         <div className="p-4 flex flex-col justify-center items-center w-full">

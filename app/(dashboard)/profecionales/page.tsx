@@ -5,19 +5,22 @@ import TableProfecionales from "@/components/profesionales/TableProfecionales";
 import Modal from "@/components/ui/Modal";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-
-import "react-toastify/dist/ReactToastify.css";
+import { toast, Toaster } from "react-hot-toast";
 function profecionalesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  // Función para manejar el éxito del registro
+  const handleRegistroExitoso = () => {
+    // Puedes realizar acciones adicionales aquí si es necesario
+    toast.success("¡Registro exitoso!");
+    closeModal(); // Cierra el modal
+  };
   const [searchResults, setSearchResults] = useState<ProfesionalConTitulo[]>(
     []
   );
-  const notify = () => toast("Registro Exitoso !");
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">
@@ -38,12 +41,9 @@ function profecionalesPage() {
         onClose={closeModal}
         title="Registro de Profesional"
       >
-        <FormularioRegistro onSuccess={closeModal} />
+        <FormularioRegistro onSuccess={handleRegistroExitoso} />
       </Modal>
-      <div>
-        <button onClick={notify}>Notify !</button>
-        <ToastContainer />
-      </div>
+      <Toaster />
     </div>
   );
 }

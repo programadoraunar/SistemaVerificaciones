@@ -26,8 +26,8 @@ const columns = [
     header: "Tipo Identificación",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("numero", {
-    header: "Número",
+  columnHelper.accessor("numero_identificacion", {
+    header: "Número Identificación",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("nombre_profesional", {
@@ -38,12 +38,12 @@ const columns = [
     header: "Apellido",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("programa_nombre", {
-    header: "Programa",
-    cell: (info) => info.getValue(),
-  }),
   columnHelper.accessor("titulo_nombre", {
     header: "Titulo",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("numero_diploma", {
+    header: "N° de Diploma",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("acta_grado", {
@@ -91,6 +91,7 @@ function TableProfecionales({
         const result = await obtenerInformacionProfesionales();
         setIsLoading(false);
         setData(result);
+        console.log(result);
       } catch (err) {
         console.log(err);
       }

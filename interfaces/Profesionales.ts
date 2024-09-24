@@ -1,33 +1,30 @@
 export interface ProfesionalConTitulo {
   id_profesional: number;
   tipo_identificacion: string;
-  numero: string;
+  numero_identificacion: string; // Asegurarse de usar "numero_identificacion"
   nombre_profesional: string;
   apellido_profesional: string;
-  id_titulo: number | null; // Puede ser null si no hay título
-  programa_nombre: string;
-  titulo_nombre: string; // Asegúrate de que este campo esté presente en la respuesta
-  fecha_grado: Date | null; // Puede ser null si no hay fecha
+  titulo_nombre: string;
+  numero_diploma: string;
   acta_grado: string;
   folio: string;
+  fecha_grado: Date | null; // Puede ser null si no hay fecha
   libro_registro_grado: string;
 }
 
 export interface ProfesionalRegistro {
   tipo_identificacion: string;
-  numero: string;
+  numero_identificacion: string;
   nombre: string;
   apellido: string;
   id_titulo?: number | null; // Puede ser null si no hay título
-  id_programa?: number | null; // Puede ser null si no hay programa
-  nombre_titulo?: string; // Asegúrate de que este campo esté presente en la respuesta
   descripcion_titulo?: string; // Asegúrate de que este campo esté presente en la respuesta
   fecha_grado?: Date | null; // Puede ser null si no hay fecha
+  numero_diploma: string;
   acta_grado: string;
   folio: string;
   libro_registro_grado: string;
-  formacion: string;
 }
 export interface ProfecionalBusqueda {
-  numero: string;
+  numero_identificacion: string;
 }

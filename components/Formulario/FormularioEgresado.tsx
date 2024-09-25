@@ -19,8 +19,8 @@ function FormularioEgresado() {
         >
           <option disabled>Seleccione una identificación</option>
           {identificationOptionsFormulario.map((option, index) => (
-            <option key={index} disabled={index === 0}>
-              {option}
+            <option value={option.id} key={index} disabled={index === 0}>
+              {option.nombre}
             </option>
           ))}
         </select>

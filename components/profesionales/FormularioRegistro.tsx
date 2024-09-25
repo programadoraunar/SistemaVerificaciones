@@ -32,6 +32,7 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
   };
 
   const { data: titulos } = useSWR("titulos", fetcher);
+  const { data: extensiones } = useSWR("extension", fetcher);
 
   const onSubmit: SubmitHandler<ProfesionalRegistro> = async (data) => {
     console.log(data);
@@ -41,6 +42,7 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
 
       onSuccess(); // Cerrar el modal al registrar con éxito
     } catch (error) {
+      console.log(error);
       // Verifica si el error tiene la estructura esperada
       if (typeof error === "object" && error !== null && "message" in error) {
         const customError = error as { message: string; code?: string }; // Cast para acceder a 'message' y 'code'
@@ -71,15 +73,26 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
 
             <select
               {...register("tipo_identificacion")}
-              className="w-full text-sm p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
+              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
+                errors.numero_identificacion
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             >
               <option disabled selected>
                 Seleccione una identificación
               </option>
               {identificationOptionsFormulario.map((option, index) => (
-                <option key={index}>{option}</option>
+                <option key={index} value={option.id}>
+                  {option.nombre}
+                </option>
               ))}
             </select>
+            {errors.tipo_identificacion && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.tipo_identificacion.message}
+              </p>
+            )}
           </div>
 
           {/* Número de Documento */}
@@ -270,6 +283,32 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
             {errors.libro_registro_grado && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.libro_registro_grado.message}
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+          <div className="mb-4 w-[100%] lg:w-[50%]">
+            <label className="block text-gray-700 text-md font-bold mb-2">
+              Extension
+            </label>
+            <select
+              {...register("id_extension")}
+              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
+                errors.id_titulo ? "border-red-500" : "border-gray-300"
+              }`}
+            >
+              <option value="">Seleccionar la Extension</option>
+              {extensiones &&
+                extensiones.map((extension: any) => (
+                  <option key={extension.id} value={extension.id}>
+                    {extension.nombre}
+                  </option>
+                ))}
+            </select>
+            {errors.id_titulo && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.id_titulo.message}
               </p>
             )}
           </div>

@@ -3,9 +3,7 @@ import { z } from "zod";
 import { identificationOptionsFormulario } from "@/constants/options";
 
 export const formularioRegistroSchema = z.object({
-  tipo_identificacion: z.enum(
-    identificationOptionsFormulario as [string, ...string[]]
-  ),
+  tipo_identificacion: z.string().min(1, "Debe seleccionar una Identificación"), // Asegúrate de que esté validando correctamente
   numero_identificacion: z
     .string()
     .min(1, "El número de documento es requerido")
@@ -20,6 +18,7 @@ export const formularioRegistroSchema = z.object({
   acta_grado: z.string().min(1, "El acta de grado es requerida"),
   folio: z.string().min(1, "El folio es requerido"),
   fecha_grado: z.string().min(1, "La fecha de grado es requerida"),
+  id_extension: z.string().min(1, "La fecha de grado es requerida"),
   libro_registro_grado: z
     .string()
     .min(1, "El libro de registro de grado es requerido"),

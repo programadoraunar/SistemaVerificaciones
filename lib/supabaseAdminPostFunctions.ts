@@ -18,6 +18,7 @@ export const registrarProfesionalConTitulo = async (
       p_numero_diploma: data.numero_diploma,
       p_numero_identificacion: data.numero_identificacion,
       p_tipo_identificacion: data.tipo_identificacion,
+      p_id_extension: data.id_extension,
     }
   );
 

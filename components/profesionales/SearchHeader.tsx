@@ -162,13 +162,14 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         {/* Campo de búsqueda por rango de fechas */}
         <div className="p-4 flex flex-col justify-center items-center w-full">
           <Label className="text-lg">Buscar por Rango de Fechas</Label>
-          <div className="p-4">
+          <div className="p-4 flex">
             <DateRangePickerProps onDateChange={handleDateChange} />{" "}
             {/* Pasar la función al hijo */}
+            <Button onClick={handleSearchByDateRange} type="button">
+              <CiSearch />
+            </Button>
           </div>
-          <Button onClick={handleSearchByDateRange} type="button">
-            <CiSearch /> Buscar
-          </Button>
+
           {errorDateRange && (
             <p className="text-red-500 text-sm mt-1">{errorDateRange}</p>
           )}

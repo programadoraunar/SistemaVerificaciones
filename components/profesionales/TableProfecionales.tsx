@@ -42,6 +42,10 @@ const columns = [
     header: "Titulo",
     cell: (info) => info.getValue(),
   }),
+  columnHelper.accessor("nombre_extension", {
+    header: "Extension",
+    cell: (info) => info.getValue(),
+  }),
   columnHelper.accessor("numero_diploma", {
     header: "N° de Diploma",
     cell: (info) => info.getValue(),
@@ -89,6 +93,7 @@ function TableProfecionales({
     const fetchData = async () => {
       try {
         const result = await obtenerInformacionProfesionales();
+        console.log(result);
         setData(result);
       } catch (err) {
         console.log(err);

@@ -35,13 +35,14 @@ const UploadExcel: React.FC = () => {
             nombre_profesional: row.getCell(3).value as string,
             apellido_profesional: row.getCell(4).value as string,
             titulo_nombre: row.getCell(5).value as string,
-            numero_diploma: row.getCell(6).value as string, // Corrige el índice para 'Número Diploma'
-            acta_grado: row.getCell(7).value as string, // Corrige el índice para 'Acta Grado'
-            folio: row.getCell(8).value as string, // Corrige el índice para 'Folio'
-            fecha_grado: row.getCell(7)?.value
-              ? new Date(row.getCell(7).value as string)
+            nombre_extension: row.getCell(6).value as string,
+            numero_diploma: row.getCell(7).value as string, // Corrige el índice para 'Número Diploma'
+            acta_grado: row.getCell(8).value as string, // Corrige el índice para 'Acta Grado'
+            folio: row.getCell(9).value as string, // Corrige el índice para 'Folio'
+            fecha_grado: row.getCell(10)?.value
+              ? new Date(row.getCell(10).value as string)
               : null,
-            libro_registro_grado: row.getCell(10).value as string,
+            libro_registro_grado: row.getCell(11).value as string,
           };
           jsonData.push(rowData);
         }

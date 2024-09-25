@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.min.css";
-
-const DateRangePicker: React.FC = () => {
+interface DateRangePickerProps {
+  onDateChange: (dates: [Date | null, Date | null]) => void; // Nueva prop
+}
+const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateChange }) => {
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
@@ -10,14 +12,7 @@ const DateRangePicker: React.FC = () => {
 
   const handleChange = (dates: [Date | null, Date | null]) => {
     setDateRange(dates);
-    console.log(
-      "Fecha de inicio:",
-      dates[0] ? dates[0].toLocaleDateString() : "No seleccionada"
-    );
-    console.log(
-      "Fecha de fin:",
-      dates[1] ? dates[1].toLocaleDateString() : "No seleccionada"
-    );
+    onDateChange(dates); // Pasar fechas al padre
   };
 
   return (
@@ -28,7 +23,7 @@ const DateRangePicker: React.FC = () => {
         endDate={dateRange[1] || undefined}
         onChange={handleChange}
         wrapperClassName="input-attribute"
-        className="bg-white appearance-none px-4 py-4 rounded-lg shadow border-black text-black"
+        className="bg-white appearance-none px-4 py-4 rounded-lg shadow border-black text-black "
         showIcon
         withPortal
         monthsShown={1}

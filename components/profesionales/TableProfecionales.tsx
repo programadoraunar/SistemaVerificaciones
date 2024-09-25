@@ -1,5 +1,4 @@
 "use client";
-import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 import {
   createColumnHelper,
@@ -14,6 +13,7 @@ import Link from "next/link";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import Loading from "../ui/Loading";
 import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctions";
+import { toast, Toaster } from "react-hot-toast";
 
 const columnHelper = createColumnHelper<ProfesionalConTitulo>();
 
@@ -84,22 +84,37 @@ function TableProfecionales({
   const [data, setData] = useState<ProfesionalConTitulo[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [primeraVez, setPrimeraVez] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await obtenerInformacionProfesionales();
-        setIsLoading(false);
         setData(result);
-        console.log(result);
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  // Usa searchResults si hay, de lo contrario, usa data
   const tableData = searchResults.length > 0 ? searchResults : data;
+  useEffect(() => {
+    // Mostrar toast si no hay datos después de que el componente se haya montado
+    if (searchResults.length === 0 && primeraVez == false) {
+      toast.error("No hay datos disponibles.");
+      console.log("no hay datos");
+    }
+  }, [searchResults]); // Solo depender de searchResults
+  useEffect(() => {
+    // Se ejecuta cuando el componente se monta
+    if (primeraVez) {
+      setPrimeraVez(false); // Cambia el estado para que no vuelva a ejecutarse
+    }
+  }, []);
   const table = useReactTable({
     data: tableData,
     columns,
@@ -152,7 +167,6 @@ function TableProfecionales({
                 </tr>
               ))}
             </thead>
-
             <tbody>
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id} className="border-b">
@@ -168,7 +182,8 @@ function TableProfecionales({
               ))}
             </tbody>
           </table>
-          <div className="flex sm:flex-row flex-col w-full mt-8 items-center gap-2 text-md">
+
+          <div className="px-3 flex sm:flex-row flex-col w-full mt-8 items-center gap-2 text-md">
             <div className="sm:mr-auto sm:mb-0 mb-2">
               <span className="mr-2">Items por página</span>
               <select
@@ -190,7 +205,7 @@ function TableProfecionales({
                 className={`${
                   !table.getCanPreviousPage()
                     ? "bg-gray-100"
-                    : "hover:bg-gray-200 hover:curstor-pointer bg-gray-100"
+                    : "hover:bg-gray-200 hover:cursor-pointer bg-gray-100"
                 } rounded p-1`}
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
@@ -201,7 +216,7 @@ function TableProfecionales({
                 className={`${
                   !table.getCanPreviousPage()
                     ? "bg-gray-100"
-                    : "hover:bg-gray-200 hover:curstor-pointer bg-gray-100"
+                    : "hover:bg-gray-200 hover:cursor-pointer bg-gray-100"
                 } rounded p-2`}
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
@@ -228,7 +243,7 @@ function TableProfecionales({
                 className={`${
                   !table.getCanNextPage()
                     ? "bg-gray-100"
-                    : "hover:bg-gray-200 hover:curstor-pointer bg-gray-100"
+                    : "hover:bg-gray-200 hover:cursor-pointer bg-gray-100"
                 } rounded p-2`}
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
@@ -239,7 +254,7 @@ function TableProfecionales({
                 className={`${
                   !table.getCanNextPage()
                     ? "bg-gray-100"
-                    : "hover:bg-gray-200 hover:curstor-pointer bg-gray-100"
+                    : "hover:bg-gray-200 hover:cursor-pointer bg-gray-100"
                 } rounded p-2`}
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
@@ -252,6 +267,7 @@ function TableProfecionales({
       ) : (
         <Loading />
       )}
+      <Toaster />
     </div>
   );
 }

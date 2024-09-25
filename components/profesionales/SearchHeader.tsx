@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import {
   obtenerProfesionalPorDocumento,
   obtnerProfesionalPorNombreApellido,
+  obtnerProfesionalPorRangoFechas,
 } from "@/lib/supabaseAdminGetFunctions";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
@@ -19,6 +20,11 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   const [nombreApellido, setNombreApellido] = useState(""); // Estado para nombres o apellido
   const [errorIdentificacion, setErrorIdentificacion] = useState("");
   const [errorNombre, setErrorNombre] = useState(""); // Estado para errores de nombre
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [errorDateRange, setErrorDateRange] = useState<string>("");
 
   const validateIdentificacion = (value: string) => {
     if (!value) {
@@ -39,7 +45,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     }
     return ""; // Sin errores
   };
-
+  // Función para recibir el rango de fechas desde el hijo
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    setDateRange(dates);
+  };
   const handleSearchByIdentificacion = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
@@ -55,6 +64,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       const result = await obtenerProfesionalPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
+      console.log(result);
       onSearch(result);
     } catch (err) {
       console.error(err);
@@ -87,6 +97,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         nombres: nombresData || null, // Enviar el nombre o NULL
         apellidos: apellidosData || null, // Enviar los apellidos o NULL
       });
+      console.log(result);
       onSearch(result); // Callback para manejar los resultados
     } catch (err) {
       console.log(err);
@@ -97,9 +108,33 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     console.log("Apellidos ingresados:", apellidosData); // Imprimir los apellidos
   };
 
+  const handleSearchByDateRange = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!dateRange[0] || !dateRange[1]) {
+      setErrorDateRange("Por favor, selecciona un rango de fechas válido.");
+      return;
+    }
+
+    setErrorDateRange(""); // Limpiar el error si las fechas son válidas
+
+    try {
+      const FechaInicioData = dateRange[0]?.toISOString().split("T")[0];
+      const FechaFinData = dateRange[1]?.toISOString().split("T")[0];
+      const result = await obtnerProfesionalPorRangoFechas({
+        fechaFin: FechaFinData,
+        fechaInicio: FechaInicioData,
+      });
+      console.log(result);
+      onSearch(result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <form>
-      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-5 bg-white rounded-lg mb-5">
+      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-4 bg-white rounded-lg mb-5">
         {/* Campo de búsqueda por número de documento */}
         <div className="col-span-1 lg:col-span-2 p-4 flex flex-col gap-3 w-full">
           <Label className="text-lg">Ingrese Número de Documento</Label>
@@ -127,7 +162,16 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         {/* Campo de búsqueda por rango de fechas */}
         <div className="p-4 flex flex-col justify-center items-center w-full">
           <Label className="text-lg">Buscar por Rango de Fechas</Label>
-          <DateRangePickerProps />
+          <div className="p-4">
+            <DateRangePickerProps onDateChange={handleDateChange} />{" "}
+            {/* Pasar la función al hijo */}
+          </div>
+          <Button onClick={handleSearchByDateRange} type="button">
+            <CiSearch /> Buscar
+          </Button>
+          {errorDateRange && (
+            <p className="text-red-500 text-sm mt-1">{errorDateRange}</p>
+          )}
         </div>
 
         {/* Campo de búsqueda por nombre o apellido */}

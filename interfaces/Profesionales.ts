@@ -11,7 +11,18 @@ export interface ProfesionalConTitulo {
   fecha_grado: Date | null; // Puede ser null si no hay fecha
   libro_registro_grado: string;
 }
-
+export interface ProfesionalConTituloImport {
+  tipo_identificacion: string;
+  numero_identificacion: string; // Asegurarse de usar "numero_identificacion"
+  nombre_profesional: string;
+  apellido_profesional: string;
+  titulo_nombre: string;
+  numero_diploma: string;
+  acta_grado: string;
+  folio: string;
+  fecha_grado: Date | null; // Puede ser null si no hay fecha
+  libro_registro_grado: string;
+}
 export interface ProfesionalRegistro {
   tipo_identificacion: string;
   numero_identificacion: string;
@@ -31,4 +42,9 @@ export interface ProfecionalBusquedaDocumento {
 export interface ProfecionalBusquedaNombres {
   nombres: string | null;
   apellidos: string | null;
+}
+
+export interface ProfecionalBusquedaFechas {
+  fechaInicio: string | null;
+  fechaFin: string | null;
 }

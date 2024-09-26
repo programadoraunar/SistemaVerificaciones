@@ -105,7 +105,9 @@ const LayoutFormularioSoli: React.FC = () => {
           >
             <option disabled>Seleccione una identificación</option>
             {identificationOptionsFormulario.map((option, index) => (
-              <option key={index}>{option}</option>
+              <option value={option.id} key={index}>
+                {option.nombre}
+              </option>
             ))}
           </select>
           {errors.tipoIdentificacionEgresado && (

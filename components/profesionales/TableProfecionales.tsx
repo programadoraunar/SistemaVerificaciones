@@ -14,71 +14,8 @@ import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import Loading from "../ui/Loading";
 import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctions";
 import { toast, Toaster } from "react-hot-toast";
-
-const columnHelper = createColumnHelper<ProfesionalConTitulo>();
-
-const columns = [
-  columnHelper.accessor("id_profesional", {
-    header: "ID",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("tipo_identificacion", {
-    header: "Tipo Identificación",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("numero_identificacion", {
-    header: "Número Identificación",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("nombre_profesional", {
-    header: "Nombre",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("apellido_profesional", {
-    header: "Apellido",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("titulo_nombre", {
-    header: "Titulo",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("nombre_extension", {
-    header: "Extension",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("numero_diploma", {
-    header: "N° de Diploma",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("acta_grado", {
-    header: "Acta de Grado",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("folio", {
-    header: "Folio",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("fecha_grado", {
-    header: "Fecha de Grado",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("libro_registro_grado", {
-    header: "Libro Registro",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.display({
-    id: "details",
-    header: "Detalles",
-    cell: (info) => (
-      <Link
-        href={`/profesional/${info.row.original.id_profesional}`}
-        className="bg-blue-zodiac-950 text-white p-2 rounded"
-      >
-        Detalles
-      </Link>
-    ),
-  }),
-];
+import Modal from "../ui/Modal";
+import FormularioActualizacion from "./details/FormularioActualizacion";
 
 function TableProfecionales({
   searchResults,
@@ -89,6 +26,75 @@ function TableProfecionales({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [primeraVez, setPrimeraVez] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
+  const [selectedProfessional, setSelectedProfessional] = useState<
+    string | null
+  >(null);
+  const columnHelper = createColumnHelper<ProfesionalConTitulo>();
+
+  const columns = [
+    columnHelper.accessor("id_profesional", {
+      header: "ID",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("tipo_identificacion", {
+      header: "Tipo Identificación",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("numero_identificacion", {
+      header: "Número Identificación",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("nombre_profesional", {
+      header: "Nombre",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("apellido_profesional", {
+      header: "Apellido",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("titulo_nombre", {
+      header: "Titulo",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("nombre_extension", {
+      header: "Extension",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("numero_diploma", {
+      header: "N° de Diploma",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("acta_grado", {
+      header: "Acta de Grado",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("folio", {
+      header: "Folio",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("fecha_grado", {
+      header: "Fecha de Grado",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("libro_registro_grado", {
+      header: "Libro Registro",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.display({
+      id: "details",
+      header: "Actualizar",
+      cell: (info) => (
+        <button
+          onClick={() => openModal(info.row.original.numero_identificacion)} // Pasamos solo el número de identificación
+          className="bg-blue-zodiac-950 text-white p-2 rounded"
+        >
+          Actualizar
+        </button>
+      ),
+    }),
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -131,7 +137,15 @@ function TableProfecionales({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+  const openModal = (numeroIdentificacion: string) => {
+    setSelectedProfessional(numeroIdentificacion); // Establece el profesional seleccionado
+    setModalOpen(true); // Abre el modal
+  };
 
+  const closeModal = () => {
+    setModalOpen(false); // Cierra el modal
+    setSelectedProfessional(null); // Reinicia el profesional seleccionado
+  };
   return (
     <div className="bg-white w-full overflow-x-auto rounded-lg">
       {!isLoading ? (
@@ -273,6 +287,19 @@ function TableProfecionales({
         <Loading />
       )}
       <Toaster />
+
+      {/* Modal para mostrar el formulario de actualización */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="Actualizar Profesional"
+      >
+        {selectedProfessional && (
+          <FormularioActualizacion
+            numeroIdentificacion={selectedProfessional}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

@@ -35,10 +35,10 @@ function SlideBar() {
 
               <li>
                 <Link
-                  href="/profecionales"
+                  href="/profesionales"
                   className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
-                  <PiStudent className="text-xl" /> Profecionales
+                  <PiStudent className="text-xl" /> Profesionales
                 </Link>
               </li>
               <li>
@@ -46,7 +46,7 @@ function SlideBar() {
                   href="/inicio"
                   className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
-                  <FaTools className="text-xl" /> Tecnicos
+                  <FaTools className="text-xl" /> Técnicos
                 </Link>
               </li>
               <li>

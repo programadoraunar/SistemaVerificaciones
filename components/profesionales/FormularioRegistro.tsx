@@ -189,7 +189,7 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
                 errors.id_titulo ? "border-red-500" : "border-gray-300"
               }`}
             >
-              <option value="">Seleccionar Título</option>
+              <option>Seleccionar Título</option>
               {titulos &&
                 titulos.map((titulo: any) => (
                   <option key={titulo.id} value={titulo.id}>

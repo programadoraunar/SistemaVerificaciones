@@ -18,11 +18,13 @@ function FormularioEgresado() {
           required
         >
           <option disabled>Seleccione una identificación</option>
-          {identificationOptionsFormulario.map((option, index) => (
-            <option value={option.id} key={index} disabled={index === 0}>
-              {option.nombre}
-            </option>
-          ))}
+          {identificationOptionsFormulario.map((option, index) => {
+            return (
+              <option value={option.id} key={index}>
+                {option.nombre}
+              </option>
+            );
+          })}
         </select>
       </div>
       {/* Número de Identificación */}
@@ -46,7 +48,7 @@ function FormularioEgresado() {
         >
           <option disabled>Seleccione una identificación</option>
           {formaciones.map((option, index) => (
-            <option key={index} disabled={index === 0}>
+            <option value={option.id} key={index} disabled={index === 0}>
               {option.nombre}
             </option>
           ))}

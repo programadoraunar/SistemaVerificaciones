@@ -53,3 +53,19 @@ export interface ProfecionalBusquedaFechas {
   fechaInicio: string | null;
   fechaFin: string | null;
 }
+
+export interface ProfesionalActualizar {
+  id_profesional: number;
+  tipo_identificacion: string;
+  numero_identificacion: string;
+  nombre_profesional: string;
+  apellido_profesional: string;
+  titulo_nombre: string;
+  id_titulo: number; // Incluye el ID del título
+  acta_grado: string;
+  folio: string;
+  fecha_grado: string;
+  libro_registro_grado: string;
+  numero_diploma: string;
+  id_extension: number;
+}

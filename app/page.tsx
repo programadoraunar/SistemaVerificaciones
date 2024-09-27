@@ -1,5 +1,5 @@
 import LayoutFormularioSoli from "@/components/Formulario/LayoutFormularioSoli";
-import Hero from "@/components/hero";
+import Hero from "@/components/Home/hero";
 import Footer from "@/components/Home/Footer";
 
 export default async function Index() {

@@ -1,8 +1,8 @@
 export const identificationOptionsFormulario = [
-  { id: "1", nombre: "Tarjeta de Identidad" },
-  { id: "2", nombre: "Cédula de Ciudadanía" },
-  { id: "3", nombre: "Cédula de Extranjería" },
-  { id: "4", nombre: "Pasaporte" },
+  { id: "TI", nombre: "Tarjeta de Identidad" },
+  { id: "CC", nombre: "Cédula de Ciudadanía" },
+  { id: "CE", nombre: "Cédula de Extranjería" },
+  { id: "PA", nombre: "Pasaporte" },
 ];
 
 export const identificationSolicitanteOptionsFormulario = [

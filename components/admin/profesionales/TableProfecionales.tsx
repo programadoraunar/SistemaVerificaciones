@@ -11,10 +11,10 @@ import {
 } from "@tanstack/react-table";
 import Link from "next/link";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
-import Loading from "../ui/Loading";
+import Loading from "../../ui/Loading";
 import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctions";
 import { toast, Toaster } from "react-hot-toast";
-import Modal from "../ui/Modal";
+import Modal from "../../ui/Modal";
 import FormularioActualizacion from "./details/FormularioActualizacion";
 
 function TableProfecionales({

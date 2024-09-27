@@ -5,8 +5,8 @@ import {
 } from "@/lib/supabaseAdminGetFunctions";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import FormularioDatosPersonales from "./FormularioDatosPersonales";
-import FormularioTitulos from "./FormularioTitulos";
+import FormularioDatosPersonales from "../details/FormularioDatosPersonales";
+import FormularioTitulos from "../details/FormularioTitulos";
 import ExpandingButton from "@/components/ui/ExpandingButton";
 
 interface FormularioActualizacionProps {

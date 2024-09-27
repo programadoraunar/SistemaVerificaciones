@@ -2,13 +2,13 @@
 import { ProfesionalRegistro } from "@/interfaces/Profesionales";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import { identificationOptionsFormulario } from "@/constants/options";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formularioRegistroSchema } from "@/validations/validationAdminSchemas";
-import Loading from "../ui/Loading";
+import Loading from "../../ui/Loading";
 import { registrarProfesionalConTitulo } from "@/lib/supabaseAdminPostFunctions";
 import { toast, Toaster } from "react-hot-toast";
 

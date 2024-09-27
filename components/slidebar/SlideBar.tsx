@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { CiMenuFries, CiMenuBurger } from "react-icons/ci";
-import { FaTools } from "react-icons/fa";
+import { FaBookOpen, FaTools } from "react-icons/fa";
 import { MdHome, MdDashboard } from "react-icons/md"; // Importa el ícono de Dashboard
 import { PiStudent } from "react-icons/pi";
 import { FaWpforms } from "react-icons/fa6";
@@ -43,7 +43,7 @@ function SlideBar() {
               </li>
               <li>
                 <Link
-                  href="/inicio"
+                  href="/tecnicos"
                   className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
                   <FaTools className="text-xl" /> Técnicos
@@ -55,6 +55,14 @@ function SlideBar() {
                   className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
                   <FaWpforms className="text-xl" /> Administración
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/extension"
+                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                >
+                  <FaBookOpen className="text-xl" /> Extension
                 </Link>
               </li>
             </ul>

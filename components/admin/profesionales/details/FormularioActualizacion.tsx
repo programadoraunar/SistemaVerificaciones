@@ -8,12 +8,16 @@ import { useForm } from "react-hook-form";
 import FormularioDatosPersonales from "../details/FormularioDatosPersonales";
 import FormularioTitulos from "../details/FormularioTitulos";
 import ExpandingButton from "@/components/ui/ExpandingButton";
+import { supabase } from "@/utils/supabase/client";
+import toast from "react-hot-toast";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
+  onSuccess: () => void;
 }
 const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   numeroIdentificacion,
+  onSuccess,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [professionalData, setProfessionalData] =
@@ -44,13 +48,28 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   }
 
   const onSubmit = async (data: ProfesionalActualizar) => {
-    try {
-      console.log(data);
-      // Lógica para actualizar los datos aquí
-      alert("Datos actualizados correctamente");
-    } catch (error) {
-      console.error("Error al actualizar los datos:", error);
-      alert("Hubo un error al actualizar los datos");
+    // si contiene un nombre lo que llega es por que hay que actualizar los datos personales de los administradores
+    if (data.nombre_profesional) {
+      try {
+        const { error } = await supabase.rpc("actualizar_profesionaldatos", {
+          p_numero_identificacion: data.numero_identificacion,
+          p_tipo_identificacion: data.tipo_identificacion,
+          p_nombre: data.nombre_profesional,
+          p_apellido: data.apellido_profesional,
+          p_id_extension: data.id_extension,
+        });
+
+        if (error) throw error;
+        console.log(error);
+
+        toast.success("Datos actualizados correctamente");
+        onSuccess();
+      } catch (error) {
+        console.error("Error al actualizar los datos:", error);
+        alert("Hubo un error al actualizar los datos");
+      }
+    } else {
+      // si no hay es para actualizar los títulos del profesional
     }
   };
 

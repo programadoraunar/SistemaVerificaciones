@@ -16,20 +16,28 @@ import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctions
 import { toast, Toaster } from "react-hot-toast";
 import Modal from "../../ui/Modal";
 import FormularioActualizacion from "./details/FormularioActualizacion";
+import GenerarDocumentoWord from "../GenerarDocumentoWord";
+import useSWR from "swr";
+// Función de fetch para SWR
+const fetcher = async () => {
+  const result = await obtenerInformacionProfesionales();
+  return result;
+};
 
 function TableProfecionales({
   searchResults,
 }: {
   searchResults: ProfesionalConTitulo[];
 }) {
-  const [data, setData] = useState<ProfesionalConTitulo[]>([]);
+  const { data, error, isLoading, mutate } = useSWR("profesionales", fetcher, {
+    revalidateOnFocus: false,
+  });
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [primeraVez, setPrimeraVez] = useState(true);
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const [selectedProfessional, setSelectedProfessional] = useState<
     string | null
   >(null);
+
   const columnHelper = createColumnHelper<ProfesionalConTitulo>();
 
   const columns = [
@@ -86,48 +94,22 @@ function TableProfecionales({
       header: "Actualizar",
       cell: (info) => (
         <button
-          onClick={() => openModal(info.row.original.numero_identificacion)} // Pasamos solo el número de identificación
+          onClick={() => openModal(info.row.original.numero_identificacion)}
           className="bg-blue-zodiac-950 text-white p-2 rounded"
         >
           Actualizar
         </button>
       ),
     }),
+    columnHelper.display({
+      id: "generarDocumento",
+      header: "Descargar Verificación de Título",
+      cell: (info) => <GenerarDocumentoWord profesional={info.row.original} />,
+    }),
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await obtenerInformacionProfesionales();
-        console.log(result);
-        setData(result);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Usa searchResults si hay, de lo contrario, usa data
-  const tableData = searchResults.length > 0 ? searchResults : data;
-  useEffect(() => {
-    // Mostrar toast si no hay datos después de que el componente se haya montado
-    if (searchResults.length === 0 && primeraVez == false) {
-      toast.error("No hay datos disponibles.");
-      console.log("no hay datos");
-    }
-  }, [searchResults]); // Solo depender de searchResults
-  useEffect(() => {
-    // Se ejecuta cuando el componente se monta
-    if (primeraVez) {
-      setPrimeraVez(false); // Cambia el estado para que no vuelva a ejecutarse
-    }
-  }, []);
   const table = useReactTable({
-    data: tableData,
+    data: searchResults.length > 0 ? searchResults : data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
@@ -137,6 +119,7 @@ function TableProfecionales({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
   const openModal = (numeroIdentificacion: string) => {
     setSelectedProfessional(numeroIdentificacion); // Establece el profesional seleccionado
     setModalOpen(true); // Abre el modal
@@ -145,7 +128,12 @@ function TableProfecionales({
   const closeModal = () => {
     setModalOpen(false); // Cierra el modal
     setSelectedProfessional(null); // Reinicia el profesional seleccionado
+    mutate(); // Revalida los datos de SWR para que se actualice la tabla
   };
+
+  if (error) {
+    return <div>Error al cargar los datos.</div>;
+  }
   return (
     <div className="bg-white w-full overflow-x-auto rounded-lg">
       {!isLoading ? (
@@ -297,6 +285,7 @@ function TableProfecionales({
         {selectedProfessional && (
           <FormularioActualizacion
             numeroIdentificacion={selectedProfessional}
+            onSuccess={closeModal}
           />
         )}
       </Modal>

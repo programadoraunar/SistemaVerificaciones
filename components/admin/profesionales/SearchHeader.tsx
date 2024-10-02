@@ -77,35 +77,47 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     const validationError = validateNombreApellido(nombreApellido);
     if (validationError) {
       setErrorNombre(validationError);
-      return; // Detener el envío si hay errores
+      return;
     }
 
-    // Separar el nombre completo en partes
-    const nombresApellidos = nombreApellido.trim().split(" ");
-
-    let nombresData = "";
-    let apellidosData = "";
-
-    // Asumimos que el primer elemento es el nombre y el resto son apellidos
-    if (nombresApellidos.length > 0) {
-      nombresData = nombresApellidos[0]; // Primer elemento como nombre
-      apellidosData = nombresApellidos.slice(1).join(" "); // Unir el resto como apellidos
-    }
+    const searchTerm = nombreApellido.trim();
+    console.log(searchTerm);
 
     try {
-      const result = await obtnerProfesionalPorNombreApellido({
-        nombres: nombresData || null, // Enviar el nombre o NULL
-        apellidos: apellidosData || null, // Enviar los apellidos o NULL
+      // Primero intentamos buscar como apellido
+      let result = await obtnerProfesionalPorNombreApellido({
+        nombres: null,
+        apellidos: searchTerm,
       });
-      console.log(result);
-      onSearch(result); // Callback para manejar los resultados
+
+      // Si no hay resultados, intentamos buscar como nombre
+      if (!result || result.length === 0) {
+        console.log("nombre");
+        result = await obtnerProfesionalPorNombreApellido({
+          nombres: searchTerm,
+          apellidos: null,
+        });
+      }
+
+      // Si aún no hay resultados y hay un espacio en el término de búsqueda,
+      // dividimos en nombre y apellido
+      if ((!result || result.length === 0) && searchTerm.includes(" ")) {
+        const [firstWord, ...restWords] = searchTerm.split(" ");
+        const lastWords = restWords.join(" ");
+
+        result = await obtnerProfesionalPorNombreApellido({
+          nombres: firstWord,
+          apellidos: lastWords,
+        });
+      }
+
+      console.log("Resultados de la búsqueda:", result);
+      onSearch(result);
     } catch (err) {
-      console.log(err);
+      console.error("Error en la búsqueda:", err);
     }
 
-    setErrorNombre(""); // Limpiar el error si la búsqueda es exitosa
-    console.log("Nombre ingresado:", nombresData); // Imprimir el nombre
-    console.log("Apellidos ingresados:", apellidosData); // Imprimir los apellidos
+    setErrorNombre("");
   };
 
   const handleSearchByDateRange = async (e: React.FormEvent) => {

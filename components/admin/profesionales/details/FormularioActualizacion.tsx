@@ -13,10 +13,12 @@ import toast from "react-hot-toast";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
+  tituloId: number;
   onSuccess: () => void;
 }
 const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   numeroIdentificacion,
+  tituloId,
   onSuccess,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,6 +31,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
         setLoading(true);
         const result = await obtenerDetallesActualizacionProfesional({
           numero_identificacion: numeroIdentificacion,
+          titulo_id: tituloId,
         });
         console.log(result);
         // Establece los datos del profesional

@@ -64,7 +64,7 @@ function UltimasVerificaciones() {
   return (
     <div className="bg-white p-5 rounded-lg">
       <h2 className="text-lg font-bold mb-4">
-        Últimas 10 Verificaciones de Títulos
+        Resumen de Consulta de Verificación de Titulo
       </h2>
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse min-w-[640px]">

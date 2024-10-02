@@ -34,9 +34,8 @@ function TableProfecionales({
   });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
-  const [selectedProfessional, setSelectedProfessional] = useState<
-    string | null
-  >(null);
+  const [identificacion, setIdentificacion] = useState<string | null>(null);
+  const [titulo, setTitulo] = useState<number | null>(null);
 
   const columnHelper = createColumnHelper<ProfesionalConTitulo>();
 
@@ -94,7 +93,12 @@ function TableProfecionales({
       header: "Actualizar",
       cell: (info) => (
         <button
-          onClick={() => openModal(info.row.original.numero_identificacion)}
+          onClick={() =>
+            openModal(
+              info.row.original.numero_identificacion,
+              info.row.original.titulo_id
+            )
+          }
           className="bg-blue-zodiac-950 text-white p-2 rounded"
         >
           Actualizar
@@ -120,14 +124,16 @@ function TableProfecionales({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const openModal = (numeroIdentificacion: string) => {
-    setSelectedProfessional(numeroIdentificacion); // Establece el profesional seleccionado
+  const openModal = (numeroIdentificacion: string, titulo_id: number) => {
+    setIdentificacion(numeroIdentificacion); // Establece el profesional seleccionado
+    setTitulo(titulo_id);
     setModalOpen(true); // Abre el modal
   };
 
   const closeModal = () => {
     setModalOpen(false); // Cierra el modal
-    setSelectedProfessional(null); // Reinicia el profesional seleccionado
+    setIdentificacion(null); // Reinicia el profesional seleccionado
+    setTitulo(null);
     mutate(); // Revalida los datos de SWR para que se actualice la tabla
   };
 
@@ -282,9 +288,10 @@ function TableProfecionales({
         onClose={closeModal}
         title="Actualizar Profesional"
       >
-        {selectedProfessional && (
+        {identificacion && titulo !== null && (
           <FormularioActualizacion
-            numeroIdentificacion={selectedProfessional}
+            numeroIdentificacion={identificacion}
+            tituloId={titulo}
             onSuccess={closeModal}
           />
         )}

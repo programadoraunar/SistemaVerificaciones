@@ -75,6 +75,7 @@ export interface ProfesionalConTitulo {
    * @type {string}
    */
   libro_registro_grado: string;
+  titulo_id: number;
 }
 
 /**
@@ -384,4 +385,12 @@ export interface ProfesionalActualizarDatos {
 
   /** ID de la extensión del profesional. */
   id_extension?: number; // Ahora es opcional
+}
+export interface ProfecionalBusquedaActualizacion {
+  /**
+   * Número de identificación del profesional.
+   * @type {string}
+   */
+  numero_identificacion: string;
+  titulo_id: number;
 }

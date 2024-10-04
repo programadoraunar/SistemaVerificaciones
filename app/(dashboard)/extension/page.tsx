@@ -33,7 +33,6 @@ function cursoExtensionPage() {
           </button>
         </div>
       </div>
-      <SearchHeader />
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

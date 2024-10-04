@@ -14,7 +14,10 @@ import {
 import { supabase } from "@/utils/supabase/client";
 import { verificarEgresado } from "@/lib/SupabasePublicFunctions";
 import Modal from "../ui/Modal";
+import { useRouter } from "next/navigation";
+
 const LayoutFormularioSoli: React.FC = () => {
+  const router = useRouter();
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -97,6 +100,7 @@ const LayoutFormularioSoli: React.FC = () => {
       if (datos) {
         // Si existe el egresado, se procede a guardar la información de la persona
         console.log("si  existe el egresado");
+        router.push("/verificacion");
       } else {
         console.log("no existe");
         openModal();

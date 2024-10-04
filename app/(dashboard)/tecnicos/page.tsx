@@ -1,10 +1,11 @@
 "use client";
 
-import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
+import FormularioRegistro from "@/components/admin/FormularioRegistro";
+import SearchHeader from "@/components/admin/profesionales/SearchHeader";
 import Modal from "@/components/ui/Modal";
+import { TecnicoConTitulo } from "@/interfaces/Tecnicos";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
-
+import toast, { Toaster } from "react-hot-toast";
 function tecnicosPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -17,6 +18,8 @@ function tecnicosPage() {
     toast.success("¡Registro exitoso!");
     closeModal(); // Cierra el modal
   };
+  const [searchResults, setSearchResults] = useState<TecnicoConTitulo[]>([]);
+  console.log(searchResults);
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">
@@ -30,6 +33,7 @@ function tecnicosPage() {
           </button>
         </div>
       </div>
+      <SearchHeader onSearch={setSearchResults} />
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
@@ -37,6 +41,7 @@ function tecnicosPage() {
       >
         <FormularioRegistro onSuccess={handleRegistroExitoso} />
       </Modal>
+      <Toaster />
     </div>
   );
 }

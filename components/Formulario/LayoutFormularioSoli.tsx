@@ -11,8 +11,16 @@ import {
   formaciones,
   identificationOptionsFormulario,
 } from "@/constants/options";
+import { supabase } from "@/utils/supabase/client";
+import { verificarEgresado } from "@/lib/SupabasePublicFunctions";
+import Modal from "../ui/Modal";
 const LayoutFormularioSoli: React.FC = () => {
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const [datosAdicionales, setDatosAdicionales] = useState({
     tipoIdentificacionEgresado: "",
     numeroIdentificacionEgresado: "",
@@ -34,7 +42,12 @@ const LayoutFormularioSoli: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setDatosAdicionales((prev) => ({ ...prev, [name]: value }));
+
+    // Convertir a número si es el campo de formación académica
+    const newValue =
+      name === "formacionAcademicaEgresado" ? Number(value) : value;
+
+    setDatosAdicionales((prev) => ({ ...prev, [name]: newValue }));
   };
 
   const validate = () => {
@@ -66,10 +79,33 @@ const LayoutFormularioSoli: React.FC = () => {
     return Object.values(newErrors).every((error) => error === "");
   };
 
-  const handlePersonaSubmit = (data: FormularioPersonaType) => {
+  const handlePersonaSubmit = async (data: FormularioPersonaType) => {
     if (validate()) {
       const datosCompletos = { ...data, ...datosAdicionales };
       console.log("Datos completos Persona:", datosCompletos);
+      // Prepara los datos  para verificar si existe el egresado
+      const datosVerificacion = {
+        tipoIdentificacionEgresado: datosAdicionales.tipoIdentificacionEgresado,
+        numeroIdentificacionEgresado:
+          datosAdicionales.numeroIdentificacionEgresado,
+        formacionAcademicaEgresado: Number(
+          datosAdicionales.formacionAcademicaEgresado
+        ), // Convertir a número
+      };
+      const datos = await verificarEgresado(datosVerificacion);
+      console.log(datos);
+      if (datos) {
+        // Si existe el egresado, se procede a guardar la información de la persona
+        console.log("si  existe el egresado");
+      } else {
+        console.log("no existe");
+        openModal();
+      }
+      try {
+      } catch (err) {
+        console.log(err);
+      }
+
       // Maneja los datos completos aquí
     }
   };
@@ -103,7 +139,9 @@ const LayoutFormularioSoli: React.FC = () => {
             onChange={handleDatosAdicionalesChange}
             value={datosAdicionales.tipoIdentificacionEgresado}
           >
-            <option disabled>Seleccione una identificación</option>
+            <option disabled value="">
+              Seleccione una identificación
+            </option>
             {identificationOptionsFormulario.map((option, index) => (
               <option value={option.id} key={index}>
                 {option.nombre}
@@ -151,7 +189,9 @@ const LayoutFormularioSoli: React.FC = () => {
             Seleccione una formación
           </option>
           {formaciones.map((option, index) => (
-            <option key={index}>{option.nombre}</option>
+            <option value={option.id} key={index}>
+              {option.nombre}
+            </option>
           ))}
         </select>
         {errors.formacionAcademicaEgresado && (
@@ -201,6 +241,16 @@ const LayoutFormularioSoli: React.FC = () => {
       {tipoSolicitante === "empresa" && (
         <FormularioEmpresa onSubmit={handleEmpresaSubmit} />
       )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="¡Egresado No Encontrado!"
+      >
+        El egresado no ha sido encontrado. Por favor, verifique que ha ingresado
+        correctamente su número de identificación, que ha seleccionado el tipo
+        de identificación correcto y que ha escogido la formación académica
+        adecuada.
+      </Modal>
     </div>
   );
 };

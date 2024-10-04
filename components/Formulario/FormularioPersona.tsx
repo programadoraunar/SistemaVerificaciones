@@ -100,7 +100,9 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
               className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm "
               {...register("tipoIdentificacion")}
             >
-              <option disabled>Seleccione una identificación</option>
+              <option disabled selected value="">
+                Seleccione una identificación
+              </option>
               {identificationSolicitanteOptionsFormulario.map(
                 (option, index) => (
                   <option key={index}>{option}</option>

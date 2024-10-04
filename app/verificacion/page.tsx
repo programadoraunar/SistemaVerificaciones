@@ -1,5 +1,5 @@
-"use client";
 import Footer from "@/components/Home/Footer";
+import NavBar from "@/components/Home/NavBar";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 
@@ -16,6 +16,7 @@ interface DatosGraduado {
 function Verificacion() {
   return (
     <div>
+      <NavBar />
       <Footer />
     </div>
   );

@@ -1,8 +1,8 @@
 "use client";
-import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
+import FormularioRegistro from "@/components/admin/FormularioRegistro";
 import SearchHeader from "@/components/admin/profesionales/SearchHeader";
 import TableProfecionales from "@/components/admin/profesionales/TableProfecionales";
-import UploadExcel from "@/components/admin/profesionales/UploadExcel";
+import UploadExcel from "@/components/admin/UploadExcel";
 import Modal from "@/components/ui/Modal";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import { useState } from "react";

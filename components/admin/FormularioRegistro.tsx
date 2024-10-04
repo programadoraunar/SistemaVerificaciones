@@ -2,19 +2,49 @@
 import { ProfesionalRegistro } from "@/interfaces/Profesionales";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "../../ui/button";
+import { Button } from "../ui/button";
 import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import { identificationOptionsFormulario } from "@/constants/options";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formularioRegistroSchema } from "@/validations/validationAdminSchemas";
-import Loading from "../../ui/Loading";
+import Loading from "../ui/Loading";
 import { registrarProfesionalConTitulo } from "@/lib/supabaseAdminPostFunctions";
 import { toast, Toaster } from "react-hot-toast";
 
 interface FormularioRegistroProps {
   onSuccess: () => void; // Nueva prop para cerrar el modal
 }
+/**
+ * Componente de formulario para registrar profesionales con título, técnicos o cursos de extensión.
+ * Este formulario permite ingresar la información de identificación, datos personales, y detalles académicos
+ * para registrar un profesional, técnico o curso de extension en el sistema.
+ *
+ * @component
+ * @param {Object} props - Props del componente.
+ * @param {function} props.onSuccess - Función que se ejecuta después de registrar exitosamente un profesional.
+ *
+ * @typedef {Object} ProfesionalRegistro
+ * @property {string} tipo_identificacion - Tipo de identificación seleccionado.
+ * @property {string} numero_identificacion - Número de identificación del profesional.
+ * @property {string} nombre - Nombre del profesional.
+ * @property {string} apellido - Apellido del profesional.
+ * @property {string} numero_diploma - Número del diploma obtenido.
+ * @property {string} id_titulo - ID del título seleccionado del profesional.
+ * @property {string} acta_grado - Número del acta de grado.
+ * @property {string} folio - Número del folio.
+ * @property {string} fecha_grado - Fecha de grado en formato 'YYYY-MM-DD'.
+ * @property {string} libro_registro_grado - Número del libro de registro de grado.
+ * @property {string} id_extension - ID de la extensión seleccionada.
+ *
+ * @typedef {Object} FormularioRegistroProps
+ * @property {function} onSuccess - Función que se llama al registrar exitosamente el profesional.
+ *
+ * @returns {JSX.Element} Formulario de registro de profesionales y técnicos.
+ *
+ * @example
+ * <FormularioRegistro onSuccess={() => console.log("Registro exitoso")} />
+ */
 function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
   const [isLoading, setIsLoading] = useState(false);
   const {

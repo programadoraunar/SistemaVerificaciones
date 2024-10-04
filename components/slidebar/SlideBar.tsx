@@ -51,18 +51,18 @@ function SlideBar() {
               </li>
               <li>
                 <Link
-                  href="/adminCampos"
-                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
-                >
-                  <FaWpforms className="text-xl" /> Administración
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/extension"
                   className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
                 >
                   <FaBookOpen className="text-xl" /> Extension
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/adminCampos"
+                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
+                >
+                  <FaWpforms className="text-xl" /> Administración
                 </Link>
               </li>
             </ul>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Verificacion } from "@/interfaces/Verificacion";
+import { Verificacion } from "@/interfaces/Dashboard";
 import { Button } from "@/components/ui/button";
 
 function UltimasVerificaciones() {

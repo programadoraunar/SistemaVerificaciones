@@ -1,3 +1,4 @@
+import AgregarTitulo from "@/components/admin/administrador/AgregarTitulo";
 import React from "react";
 
 function page() {
@@ -12,6 +13,14 @@ function page() {
           sistema actualizado y adaptado a los nuevos requerimientos que puedan
           surgir en el futuro
         </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="bg-white shadow-lg rounded-lg px-6 py-5 flex flex-col space-x-4 my-5">
+          <AgregarTitulo />
+        </div>
+        <div className="bg-white shadow-lg rounded-lg px-6 py-5 flex flex-col space-x-4 my-5">
+          <AgregarTitulo />
+        </div>
       </div>
     </div>
   );

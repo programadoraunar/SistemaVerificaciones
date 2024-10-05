@@ -95,17 +95,17 @@ const LayoutFormularioSoli: React.FC = () => {
           datosAdicionales.formacionAcademicaEgresado
         ), // Convertir a número
       };
-      const datos = await verificarEgresado(datosVerificacion);
-      console.log(datos);
-      if (datos) {
-        // Si existe el egresado, se procede a guardar la información de la persona
-        console.log("si  existe el egresado");
-        router.push("/verificacion");
-      } else {
-        console.log("no existe");
-        openModal();
-      }
       try {
+        const datos = await verificarEgresado(datosVerificacion);
+        console.log(datos);
+        if (datos) {
+          // Si existe el egresado, se procede a guardar la información de la persona
+          console.log("si  existe el egresado");
+          router.push("/verificacion");
+        } else {
+          console.log("no existe");
+          openModal();
+        }
       } catch (err) {
         console.log(err);
       }
@@ -114,11 +114,33 @@ const LayoutFormularioSoli: React.FC = () => {
     }
   };
 
-  const handleEmpresaSubmit = (data: FormularioEmpresaType) => {
+  const handleEmpresaSubmit = async (data: FormularioEmpresaType) => {
     if (validate()) {
       const datosCompletos = { ...data, ...datosAdicionales };
       console.log("Datos completos Empresa:", datosCompletos);
       // Maneja los datos completos aquí
+      // Prepara los datos  para verificar si existe el egresado
+      const datosVerificacion = {
+        tipoIdentificacionEgresado: datosAdicionales.tipoIdentificacionEgresado,
+        numeroIdentificacionEgresado:
+          datosAdicionales.numeroIdentificacionEgresado,
+        formacionAcademicaEgresado: Number(
+          datosAdicionales.formacionAcademicaEgresado
+        ), // Convertir a número
+      };
+      try {
+        const datos = await verificarEgresado(datosVerificacion);
+        console.log(datos);
+        if (datos) {
+          // Si existe el egresado, se procede a guardar la información de la persona
+          router.push("/verificacion");
+        } else {
+          console.log("no existe");
+          openModal();
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

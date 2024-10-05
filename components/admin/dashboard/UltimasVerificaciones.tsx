@@ -2,70 +2,54 @@
 import React, { useEffect, useState } from "react";
 import { Verificacion } from "@/interfaces/Dashboard";
 import { Button } from "@/components/ui/button";
-
-function UltimasVerificaciones() {
-  const [verificaciones, setVerificaciones] = useState<Verificacion[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // Simulación de la obtención de las últimas verificaciones
-  useEffect(() => {
-    // Simulación de datos
-    const mockVerificaciones: Verificacion[] = [
-      {
-        id: 1,
-        tipoSolicitante: "Persona natural",
-        nombresSolicitante: "Juan",
-        apellidosSolicitante: "Pérez",
-        fechaConsulta: "2024-09-01",
-      },
-      {
-        id: 2,
-        tipoSolicitante: "Empresa",
-        nombresSolicitante: "Softech Ltda.",
-        apellidosSolicitante: "",
-        fechaConsulta: "2024-09-02",
-      },
-      {
-        id: 3,
-        tipoSolicitante: "Empresa",
-        nombresSolicitante: "Softech Ltda.",
-        apellidosSolicitante: "",
-        fechaConsulta: "2024-09-02",
-      },
-      {
-        id: 4,
-        tipoSolicitante: "Persona natural",
-        nombresSolicitante: "Juan",
-        apellidosSolicitante: "Pérez",
-        fechaConsulta: "2024-09-01",
-      },
-      {
-        id: 5,
-        tipoSolicitante: "Persona natural",
-        nombresSolicitante: "Juan",
-        apellidosSolicitante: "Pérez",
-        fechaConsulta: "2024-09-01",
-      },
-
-      // Más datos simulados aquí
-    ];
-
-    // Simula la carga de datos
-    setTimeout(() => {
-      setVerificaciones(mockVerificaciones);
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  if (loading) {
-    return <p>Cargando las últimas verificaciones...</p>;
+import { supabase } from "@/utils/supabase/client";
+import useSWR from "swr";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+// Función que obtiene los datos de verificaciones desde Supabase
+const fetcher = async () => {
+  const { data, error } = await supabase
+    .from("consultas") // Nombre de tu tabla 'consultas'
+    .select(
+      "id, tipo_solicitante, nombres_solicitante, apellidos_solicitante, fecha_consulta"
+    )
+    .order("fecha_consulta", { ascending: false })
+    .limit(10);
+  if (error) {
+    console.log(error);
+    throw new Error(error.message);
   }
+
+  return (
+    data?.map((verificacion) => ({
+      id: verificacion.id,
+      tipoSolicitante: verificacion.tipo_solicitante,
+      nombresSolicitante: verificacion.nombres_solicitante,
+      apellidosSolicitante: verificacion.apellidos_solicitante,
+      fechaConsulta: verificacion.fecha_consulta,
+    })) ?? []
+  );
+};
+function UltimasVerificaciones() {
+  // Utilizando SWR para obtener los datos de Supabase
+  const {
+    data: verificaciones,
+    error,
+    isValidating,
+  } = useSWR("ultimas-verificaciones", fetcher);
+
+  // Mostrar mensaje de error si ocurre algún problema
+  if (error)
+    return <p>Error al cargar las últimas verificaciones: {error.message}</p>;
+
+  // Mostrar mensaje mientras los datos se están cargando
+  if (!verificaciones) return <p>Cargando las últimas verificaciones...</p>;
 
   return (
     <div className="bg-white p-5 rounded-lg">
       <h2 className="text-lg font-bold mb-4">
-        Resumen de Consulta de Verificación de Titulo
+        Resumen de Consulta de Verificación de Título
       </h2>
+      {isValidating && <LoadingSpinner />}
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse min-w-[640px]">
           <thead>

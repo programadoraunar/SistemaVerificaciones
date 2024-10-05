@@ -5,6 +5,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import HeaderImage from "@/components/HeaderImage";
 import Escudo from "@/components/Escudo";
+import { EgresadoProvider } from "@/context/EgresadoContext";
 
 const myFont = localFont({ src: "./century-gothic.woff2" });
 
@@ -26,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={myFont.className} suppressHydrationWarning>
       <body className={`bg-background text-foreground`}>
-        <main className="min-h-screen flex flex-col items-center">
-          <div className="flex-1 w-full flex flex-col items-center">
-            <div className="w-full">{children}</div>
-          </div>
-        </main>
+        <EgresadoProvider>
+          <main className="min-h-screen flex flex-col items-center">
+            <div className="flex-1 w-full flex flex-col items-center">
+              <div className="w-full">{children}</div>
+            </div>
+          </main>
+        </EgresadoProvider>
       </body>
     </html>
   );

@@ -15,11 +15,16 @@ import { supabase } from "@/utils/supabase/client";
 import { verificarEgresado } from "@/lib/SupabasePublicFunctions";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
+import { useEgresado } from "@/context/EgresadoContext";
+import Loading from "../ui/Loading";
 
 const LayoutFormularioSoli: React.FC = () => {
   const router = useRouter();
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { egresado, setEgresado } = useEgresado();
+  const [isLoading, setIsLoading] = useState(false);
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
@@ -96,14 +101,18 @@ const LayoutFormularioSoli: React.FC = () => {
         ), // Convertir a número
       };
       try {
+        setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
         console.log(datos);
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
           console.log("si  existe el egresado");
+          setIsLoading(false);
           router.push("/verificacion");
+          setEgresado(datos);
         } else {
           console.log("no existe");
+          setIsLoading(false);
           openModal();
         }
       } catch (err) {
@@ -277,6 +286,8 @@ const LayoutFormularioSoli: React.FC = () => {
         de identificación correcto y que ha escogido la formación académica
         adecuada.
       </Modal>
+
+      {!isLoading ? <></> : <Loading />}
     </div>
   );
 };

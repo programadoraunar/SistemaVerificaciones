@@ -154,7 +154,7 @@ const AgregarTitulo = () => {
                   <td className="border border-gray-400 p-2">
                     <Button
                       onClick={() => editarTitulo(titulo)}
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 rounded w-full"
+                      className="y-2 rounded w-full"
                     >
                       Editar
                     </Button>

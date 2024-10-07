@@ -1,8 +1,15 @@
 "use client";
 import Carousel from "@/components/Home/Carousel";
+import { motion } from "framer-motion";
+
 export default function Header() {
   return (
-    <div className="lg:px-8 lg:mx-8 lg:pt-8 pb-10 text-gray-200">
+    <motion.div
+      className="lg:px-8 lg:mx-8 lg:pt-8 pb-10 text-gray-200"
+      initial={{ x: "-100vw" }} // Inicia fuera de la pantalla a la izquierda
+      animate={{ x: 0 }} // Se mueve a su posición original
+      transition={{ type: "spring", stiffness: 50, duration: 1.7, delay: 1.2 }}
+    >
       <div className="flex flex-col">
         <h2 className="text-3xl font-semibold mt-8 mb-4">Bienvenido</h2>
         <p>
@@ -16,6 +23,6 @@ export default function Header() {
         </p>
         <Carousel />
       </div>
-    </div>
+    </motion.div>
   );
 }

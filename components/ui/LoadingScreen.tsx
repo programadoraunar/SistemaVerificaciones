@@ -8,9 +8,17 @@ const LoadingScreen = () => {
       className="fixed top-0 left-0 right-0 bottom-0 bg-white z-50 flex justify-center items-center"
       initial={{ x: 0 }} // La cortina inicia cubriendo la pantalla
       animate={{ x: "-100vw" }} // Se desplaza hacia la derecha
-      transition={{ ease: "easeInOut", duration: 1.5 }} // Transición suave
+      transition={{ ease: "easeInOut", duration: 1.5, delay: 0.7 }} // Transición suave
     >
-      <img src="/gif.gif" alt="Cargando..." className="w-[800px]" />
+      <video
+        src="/imagen.mp4" // Cambia esta ruta por la de tu video
+        autoPlay
+        loop
+        muted
+        className="w-[800px] object-cover" // Ajusta el tamaño según sea necesario
+      >
+        Tu navegador no soporta videos.
+      </video>
     </motion.div>
   );
 };

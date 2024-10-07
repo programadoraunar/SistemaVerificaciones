@@ -118,7 +118,7 @@ const AgregarTitulo = () => {
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
             placeholder="Descripción del título"
-            className="p-2 border border-gray-400 rounded mb-2"
+            className="p-2 border border-gray-400 rounded mb-2 textarea1"
             required
           />
           <div className="flex gap-2">

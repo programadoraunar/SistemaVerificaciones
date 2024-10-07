@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Titulo, TituloInsert } from "@/interfaces/Titulos";
+import { Titulo } from "@/interfaces/Titulos";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";

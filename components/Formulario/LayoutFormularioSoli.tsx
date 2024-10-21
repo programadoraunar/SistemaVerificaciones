@@ -102,25 +102,19 @@ const LayoutFormularioSoli: React.FC = () => {
         ), // Convertir a número
       };
       try {
-        setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
         console.log(datos);
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
-          console.log("si  existe el egresado");
-          setIsLoading(false);
-          router.push("/verificacion");
+          setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
           setEgresado(datos);
+          router.push("/verificacion");
         } else {
-          console.log("no existe");
-          setIsLoading(false);
           openModal();
         }
       } catch (err) {
         console.log(err);
       }
-
-      // Maneja los datos completos aquí
     }
   };
 

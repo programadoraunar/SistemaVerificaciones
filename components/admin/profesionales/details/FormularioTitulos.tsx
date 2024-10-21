@@ -1,5 +1,7 @@
+import { supabase } from "@/utils/supabase/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import useSWR from "swr";
 interface FormularioTitulosProps {
   idTitulo?: number;
   actaGrado?: string;
@@ -20,6 +22,12 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   onSubmit,
 }) => {
   const { register, handleSubmit, reset } = useForm();
+  const fetcher = async (url: string) => {
+    const { data, error } = await supabase.from(url).select();
+    if (error) throw new Error(error.message);
+    return data;
+  };
+  const { data: titulos } = useSWR("titulos", fetcher);
 
   // Resetea el formulario cuando se reciben nuevas propiedades
   React.useEffect(() => {
@@ -47,13 +55,20 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
       <div className="flex flex-col lg:flex-row w-full lg:gap-8">
         <div className="mb-4 w-[100%] lg:w-[50%]">
           <label className="block text-sm font-medium text-gray-700">
-            ID Título:
+            Titulo
           </label>
-          <input
-            type="number"
+          <select
             {...register("id_titulo")}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
+            className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring`}
+          >
+            <option>Seleccionar Título</option>
+            {titulos &&
+              titulos.map((titulo: any) => (
+                <option key={titulo.id} value={titulo.id}>
+                  {titulo.nombre}
+                </option>
+              ))}
+          </select>
         </div>
         <div className="mb-4 w-[100%] lg:w-[50%]">
           <label className="block text-sm font-medium text-gray-700">

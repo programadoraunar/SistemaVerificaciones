@@ -33,7 +33,6 @@ function tecnicosPage() {
           </button>
         </div>
       </div>
-      <SearchHeader onSearch={setSearchResults} />
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

@@ -51,7 +51,53 @@ export const formularioEmpresaSchema = z.object({
   correoElectronico: z
     .string()
     .email("Correo electrónico inválido")
-    .min(1, "Correo electrónico es requerido"),
+    .min(1, "Correo electrónico es requerido")
+    .refine(
+      (email) => {
+        const partes = email.split("@");
+        if (partes.length !== 2) {
+          return false;
+        }
+
+        const domain = partes[1];
+        const domainPartes = domain.split(".");
+
+        // Verifica que el dominio contenga al menos dos partes (dominio y TLD)
+        if (domainPartes.length < 2) {
+          return false;
+        }
+
+        const dominiosNoPermitidos = [
+          "gmail.com",
+          "yahoo.com",
+          "yahoo.es",
+          "hotmail.com",
+          "hotmail.es",
+          "outlook.com",
+          "outlook.es",
+          "live.com",
+          "aol.com",
+          "icloud.com",
+          "protonmail.com",
+          "zoho.com",
+          "mail.com",
+          "gmx.com",
+          "yandex.com",
+          "yandex.ru",
+          "tutanota.com",
+          "rocketmail.com",
+          "inbox.com",
+          "msn.com",
+          "me.com",
+          "fastmail.com",
+        ];
+
+        return !dominiosNoPermitidos.includes(domain);
+      },
+      {
+        message: "Solo se permiten correos electrónicos empresariales",
+      }
+    ),
 });
 
 export type FormularioEmpresaType = z.infer<typeof formularioEmpresaSchema>;

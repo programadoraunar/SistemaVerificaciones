@@ -27,6 +27,8 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
 
   useEffect(() => {
     const fetchProfessional = async () => {
+      console.log(numeroIdentificacion);
+      console.log(tituloId);
       try {
         setLoading(true);
         const result = await obtenerDetallesActualizacionProfesional({

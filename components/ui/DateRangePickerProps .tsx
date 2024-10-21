@@ -27,8 +27,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateChange }) => {
         showIcon
         withPortal
         monthsShown={1}
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select" // Esto permite los dropdowns
         renderCustomHeader={({
           date,
+          changeYear,
+          changeMonth,
           decreaseMonth,
           increaseMonth,
           prevMonthButtonDisabled,
@@ -39,10 +44,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateChange }) => {
               onClick={decreaseMonth}
               disabled={prevMonthButtonDisabled}
               type="button"
-              className={`
-                p-1 rounded-full 
-                ${prevMonthButtonDisabled ? "text-gray-300" : "text-gray-700 hover:bg-gray-100"}
-              `}
+              className={`p-1 rounded-full ${prevMonthButtonDisabled ? "text-gray-300" : "text-gray-700 hover:bg-gray-100"}`}
             >
               <svg
                 className="w-6 h-6"
@@ -58,20 +60,52 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateChange }) => {
                 />
               </svg>
             </button>
-            <div className="text-lg font-bold text-gray-800">
-              {date.toLocaleString("default", {
-                month: "long",
-                year: "numeric",
-              })}
+            <div className="flex space-x-2 items-center">
+              <select
+                value={date.getFullYear()}
+                onChange={({ target: { value } }) => changeYear(Number(value))}
+                className="border-none bg-transparent text-lg font-bold"
+              >
+                {Array.from(
+                  { length: 100 },
+                  (_, i) => new Date().getFullYear() - i
+                ).map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={date.getMonth()}
+                onChange={({ target: { value } }) => changeMonth(Number(value))}
+                className="border-none bg-transparent text-lg font-bold"
+              >
+                {[
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December",
+                ].map((month, index) => (
+                  <option key={month} value={index}>
+                    {month}
+                  </option>
+                ))}
+              </select>
             </div>
             <button
               onClick={increaseMonth}
               disabled={nextMonthButtonDisabled}
               type="button"
-              className={`
-                p-1 rounded-full 
-                ${nextMonthButtonDisabled ? "text-gray-300" : "text-gray-700 hover:bg-gray-100"}
-              `}
+              className={`p-1 rounded-full ${nextMonthButtonDisabled ? "text-gray-300" : "text-gray-700 hover:bg-gray-100"}`}
             >
               <svg
                 className="w-6 h-6"

@@ -75,7 +75,7 @@ export interface ProfesionalConTitulo {
    * @type {string}
    */
   libro_registro_grado: string;
-  titulo_id: number;
+  id_titulo: number;
 }
 
 /**

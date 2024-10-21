@@ -1,26 +1,42 @@
 "use client";
 import { useEgresado } from "@/context/EgresadoContext";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { obtenerInformacionEgresado } from "@/lib/SupabasePublicFunctions";
+import { EgresadoVerificado } from "@/interfaces/Verificacion";
 const Egresado = () => {
   const router = useRouter();
-  const datosGraduado = {
-    nombre: "Juan",
-    apellido: "Pérez",
-    programa: "Ingeniería Informatica",
-    titulo: "Ingeniero Informatico",
-    fechaGrado: "2023-06-15",
-    actaGrado: "ACTA-12345",
-  };
-  const { egresado, setEgresado } = useEgresado();
+  const { egresado, identificacion } = useEgresado();
+  const [datosGraduado, setDatosGraduado] = useState<EgresadoVerificado | null>(
+    null
+  ); // Aplica la interfaz en el estado
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // Verifica si egresado es null o no existe
-    if (!egresado) {
-      // Redirige a la página de inicio
-      router.push("/"); // Cambia '/' a la ruta de inicio que necesites
-    }
-  }, [egresado, router]);
-  if (!egresado) {
+    const fetchEgresado = async () => {
+      if (!egresado) {
+        router.push("/"); // Redirige si no hay egresado
+        return;
+      }
+
+      try {
+        const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
+          numero_documento: identificacion,
+        });
+        setDatosGraduado(data?.[0] || null); // Establece los datos del egresado
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    fetchEgresado();
+  }, [egresado, identificacion, router]);
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!datosGraduado) {
     return (
       <div className="flex justify-center items-center lg:py-36 bg-gray-100 min-h-screen">
         <div className="bg-white shadow-md rounded-lg p-8 max-w-2xl w-full">
@@ -45,22 +61,13 @@ const Egresado = () => {
               Verificación de Graduado
             </h2>
             <div className="space-y-4 text-gray-700">
-              <div className="flex flex-col lg:flex-row lg:items-center gap-7">
+              <div>
                 <label className="block text-gray-700 font-semibold mb-2">
                   Nombre
                 </label>
                 <input
                   type="text"
                   value={`${datosGraduado.nombre} ${datosGraduado.apellido}`}
-                  disabled
-                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                />
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Programa
-                </label>
-                <input
-                  type="text"
-                  value={datosGraduado.programa}
                   disabled
                   className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
                 />
@@ -83,7 +90,7 @@ const Egresado = () => {
                 <input
                   type="text"
                   value={new Date(
-                    datosGraduado.fechaGrado
+                    datosGraduado.fecha_grado
                   ).toLocaleDateString()}
                   disabled
                   className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
@@ -95,7 +102,7 @@ const Egresado = () => {
                 </label>
                 <input
                   type="text"
-                  value={datosGraduado.actaGrado}
+                  value={datosGraduado.acta_grado}
                   disabled
                   className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
                 />

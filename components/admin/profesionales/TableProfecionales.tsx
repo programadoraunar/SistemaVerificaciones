@@ -96,7 +96,7 @@ function TableProfecionales({
           onClick={() =>
             openModal(
               info.row.original.numero_identificacion,
-              info.row.original.titulo_id
+              info.row.original.id_titulo
             )
           }
           className="bg-blue-zodiac-950 text-white p-2 rounded"
@@ -124,9 +124,10 @@ function TableProfecionales({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const openModal = (numeroIdentificacion: string, titulo_id: number) => {
+  const openModal = (numeroIdentificacion: string, id_titulo: number) => {
+    console.log(id_titulo);
     setIdentificacion(numeroIdentificacion); // Establece el profesional seleccionado
-    setTitulo(titulo_id);
+    setTitulo(id_titulo); // Establece el título seleccionado
     setModalOpen(true); // Abre el modal
   };
 

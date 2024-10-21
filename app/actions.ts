@@ -4,6 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 // Acción de inicio de sesión
 export const signInAction = async (formData: FormData) => {

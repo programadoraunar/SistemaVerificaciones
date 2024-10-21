@@ -12,6 +12,8 @@ import {
 interface EgresadoContextType {
   egresado: any; // Puedes especificar un tipo más específico según tu caso
   setEgresado: Dispatch<SetStateAction<any>>; // Asegúrate de usar el tipo correcto aquí
+  identificacion: any;
+  setIdentificacion: Dispatch<SetStateAction<any>>;
 }
 
 // Crea el contexto con un valor inicial de null
@@ -19,9 +21,12 @@ export const EgresadoContext = createContext<EgresadoContextType | null>(null);
 
 export const EgresadoProvider = ({ children }: { children: ReactNode }) => {
   const [egresado, setEgresado] = useState<any>(null); // Usa el tipo adecuado aquí
+  const [identificacion, setIdentificacion] = useState<any>(null);
 
   return (
-    <EgresadoContext.Provider value={{ egresado, setEgresado }}>
+    <EgresadoContext.Provider
+      value={{ egresado, setEgresado, identificacion, setIdentificacion }}
+    >
       {children}
     </EgresadoContext.Provider>
   );

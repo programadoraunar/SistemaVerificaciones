@@ -12,7 +12,10 @@ import {
   identificationOptionsFormulario,
 } from "@/constants/options";
 import { supabase } from "@/utils/supabase/client";
-import { verificarEgresado } from "@/lib/SupabasePublicFunctions";
+import {
+  registrarConsultaConEgresado,
+  verificarEgresado,
+} from "@/lib/SupabasePublicFunctions";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
 import { useEgresado } from "@/context/EgresadoContext";
@@ -108,6 +111,21 @@ const LayoutFormularioSoli: React.FC = () => {
           // Si existe el egresado, se procede a guardar la información de la persona
           setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
           setEgresado(datos);
+          await registrarConsultaConEgresado({
+            nombresSolicitante: datosCompletos.nombres,
+            apellidosSolicitante: datosCompletos.apellidos,
+            tipoIdentificacionSolicitante: datosCompletos.tipoIdentificacion,
+            numeroIdentificacionSolicitante: datosCompletos.numeroDocumento,
+            telefonoSolicitante: datosCompletos.telefono,
+            correoElectronicoSolicitante: datosCompletos.correoElectronico,
+            paisSolicitante: datosCompletos.pais,
+            regionSolicitante: datosCompletos.subcountry,
+            ciudadSolicitante: datosCompletos.ciudad,
+            formacionAcademicaEgresado:
+              datosVerificacion.formacionAcademicaEgresado,
+            numeroIdentificacionEgresado:
+              datosVerificacion.numeroIdentificacionEgresado,
+          });
           router.push("/verificacion");
         } else {
           openModal();
@@ -134,7 +152,6 @@ const LayoutFormularioSoli: React.FC = () => {
       };
       try {
         const datos = await verificarEgresado(datosVerificacion);
-        console.log(datos);
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
           router.push("/verificacion");

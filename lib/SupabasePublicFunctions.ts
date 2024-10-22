@@ -1,4 +1,8 @@
-import { BuscarEgresado, Verificacion } from "@/interfaces/Verificacion";
+import {
+  BuscarEgresado,
+  DataRegistro,
+  Verificacion,
+} from "@/interfaces/Verificacion";
 import { supabase } from "@/utils/supabase/client";
 
 export const verificarEgresado = async (dataBusqueda: Verificacion) => {
@@ -22,4 +26,43 @@ export const obtenerInformacionEgresado = async (
   );
   if (error) throw error; // Lanza el error para que se maneje en el
   return data; // Devuelve los datos
+};
+
+// Función para registrar la consulta con el egresado
+export const registrarConsultaConEgresado = async (
+  dataRegistro: DataRegistro
+) => {
+  try {
+    const { data, error } = await supabase.rpc(
+      "registrar_consulta_persona_natural",
+      {
+        p_nombres_solicitante: dataRegistro.nombresSolicitante,
+        p_apellidos_solicitante: dataRegistro.apellidosSolicitante,
+        p_tipo_identificacion_solicitante:
+          dataRegistro.tipoIdentificacionSolicitante,
+        p_numero_identificacion_solicitante:
+          dataRegistro.numeroIdentificacionSolicitante,
+        p_telefono_solicitante: dataRegistro.telefonoSolicitante,
+        p_correo_electronico_solicitante:
+          dataRegistro.correoElectronicoSolicitante,
+        p_pais_solicitante: dataRegistro.paisSolicitante,
+        p_region_solicitante: dataRegistro.regionSolicitante,
+        p_ciudad_solicitante: dataRegistro.ciudadSolicitante,
+        p_formacion_academica_egresado: dataRegistro.formacionAcademicaEgresado,
+        p_numero_identificacion_egresado:
+          dataRegistro.numeroIdentificacionEgresado,
+      }
+    );
+
+    // Manejo de errores
+    if (error) {
+      console.error("Error al registrar la consulta:", error);
+      throw new Error(error.message);
+    }
+
+    return data; // Retornar los datos de la respuesta
+  } catch (err) {
+    console.error("Error en la función registrarConsultaConEgresado:", err);
+    throw err; // Propagar el error para manejarlo en el componente que llama a esta función
+  }
 };

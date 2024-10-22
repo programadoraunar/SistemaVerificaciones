@@ -14,6 +14,7 @@ import {
 import { supabase } from "@/utils/supabase/client";
 import {
   registrarConsultaConEgresado,
+  registrarConsultaConEgresadoEmpresas,
   verificarEgresado,
 } from "@/lib/SupabasePublicFunctions";
 import Modal from "../ui/Modal";
@@ -105,6 +106,7 @@ const LayoutFormularioSoli: React.FC = () => {
         ), // Convertir a número
       };
       try {
+        setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
         console.log(datos);
         if (datos) {
@@ -126,8 +128,10 @@ const LayoutFormularioSoli: React.FC = () => {
             numeroIdentificacionEgresado:
               datosVerificacion.numeroIdentificacionEgresado,
           });
+          setIsLoading(false);
           router.push("/verificacion");
         } else {
+          setIsLoading(false);
           openModal();
         }
       } catch (err) {
@@ -151,14 +155,29 @@ const LayoutFormularioSoli: React.FC = () => {
         ), // Convertir a número
       };
       try {
+        setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
-          router.push("/verificacion");
           setEgresado(datos);
           setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
+          await registrarConsultaConEgresadoEmpresas({
+            apellidosSolicitante: datosCompletos.apellidosSolicitante,
+            cargo: datosCompletos.cargoSolicitante,
+            correoElectronicoSolicitante: datosCompletos.correoElectronico,
+            formacionAcademicaEgresado:
+              datosVerificacion.formacionAcademicaEgresado,
+            nit: datosCompletos.nit,
+            nombresSolicitante: datosCompletos.nombresSolicitante,
+            numeroIdentificacionEgresado:
+              datosCompletos.numeroIdentificacionEgresado,
+            razon: datosCompletos.nit,
+            telefonoSolicitante: datosCompletos.telefono,
+          });
+          setIsLoading(false);
+          router.push("/verificacion");
         } else {
-          console.log("no existe");
+          setIsLoading(false);
           openModal();
         }
       } catch (err) {

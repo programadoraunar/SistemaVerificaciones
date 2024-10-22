@@ -14,7 +14,7 @@ export interface BuscarEgresado {
   numero_documento: string;
 }
 
-export interface DataRegistro {
+export interface DataRegistroNatural {
   nombresSolicitante: string;
   apellidosSolicitante: string;
   tipoIdentificacionSolicitante: string;
@@ -26,4 +26,15 @@ export interface DataRegistro {
   ciudadSolicitante: string;
   formacionAcademicaEgresado: number; // 1 para profesional, 2 para técnico, 3 para curso
   numeroIdentificacionEgresado: string;
+}
+export interface DataRegistroEmpresa {
+  nombresSolicitante: string;
+  apellidosSolicitante: string;
+  telefonoSolicitante: string;
+  correoElectronicoSolicitante: string;
+  formacionAcademicaEgresado: number; // 1 para profesional, 2 para técnico, 3 para curso
+  numeroIdentificacionEgresado: string;
+  cargo: string;
+  nit: string;
+  razon: string;
 }

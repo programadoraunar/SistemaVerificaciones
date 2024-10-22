@@ -38,3 +38,38 @@ export interface DataRegistroEmpresa {
   nit: string;
   razon: string;
 }
+
+export interface Consulta {
+  id: number;
+  tipo_solicitante?: string | null;
+  nombres_solicitante?: string | null;
+  apellidos_solicitante?: string | null;
+  telefono_solicitante?: string | null;
+  correo_electronico_solicitante?: string | null;
+  fecha_consulta?: string; // Timestamp como string
+}
+export interface ConsultaDetalles {
+  id: number;
+  tipo_solicitante: string;
+  nombres_solicitante: string;
+  apellidos_solicitante: string;
+  tipo_identificacion_solicitante: string;
+  numero_identificacion_solicitante: string;
+  telefono_solicitante: string;
+  correo_electronico_solicitante: string;
+  pais_solicitante: string;
+  region_solicitante: string;
+  ciudad_solicitante: string;
+  nit_empresa: string;
+  razon_social_empresa: string;
+  cargo_solicitante: string;
+  fecha_consulta: string; // O Date dependiendo de cómo manejes las fechas
+  profesional_nombre: string;
+  profesional_apellido: string;
+  profesional_tipo_identificacion: string;
+  profesional_numero_identificacion: string;
+}
+
+export interface ConsultaBusquedaId {
+  id: number;
+}

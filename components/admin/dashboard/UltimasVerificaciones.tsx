@@ -6,6 +6,7 @@ import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { convertirAHoraColombiana } from "@/utils/fechas";
+import Link from "next/link";
 // Función que obtiene los datos de verificaciones desde Supabase
 const fetcher = async () => {
   const { data, error } = await supabase
@@ -47,9 +48,14 @@ function UltimasVerificaciones() {
 
   return (
     <div className="bg-white p-5 rounded-lg">
-      <h2 className="text-lg font-bold mb-4">
-        Resumen de Consulta de Verificación de Título
-      </h2>
+      <div className="flex justify-between items-center py-3">
+        <h2 className="text-lg font-bold mb-4">
+          Resumen de Consulta de Verificación de Título
+        </h2>
+        <Link className="p-2 bg-blue-950 text-white" href="/Consultas">
+          Todas +
+        </Link>
+      </div>
       {isValidating && <LoadingSpinner />}
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse min-w-[640px]">

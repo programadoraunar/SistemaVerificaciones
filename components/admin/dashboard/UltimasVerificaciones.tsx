@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { convertirAHoraColombiana } from "@/utils/fechas";
 // Función que obtiene los datos de verificaciones desde Supabase
 const fetcher = async () => {
   const { data, error } = await supabase
@@ -73,7 +74,7 @@ function UltimasVerificaciones() {
                   {verificacion.apellidosSolicitante}
                 </td>
                 <td className="border border-gray-300 p-2">
-                  {new Date(verificacion.fechaConsulta).toLocaleDateString()}
+                  {convertirAHoraColombiana(verificacion.fechaConsulta)}
                 </td>
                 <td className="border border-gray-300 p-2 text-center">
                   <Button

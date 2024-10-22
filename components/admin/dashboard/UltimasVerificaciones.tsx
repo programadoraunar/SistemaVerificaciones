@@ -82,17 +82,6 @@ function UltimasVerificaciones() {
                 <td className="border border-gray-300 p-2">
                   {convertirAHoraColombiana(verificacion.fechaConsulta)}
                 </td>
-                <td className="border border-gray-300 p-2 text-center">
-                  <Button
-                    onClick={() =>
-                      alert(
-                        `Ver detalles de la verificación ID: ${verificacion.id}`
-                      )
-                    }
-                  >
-                    Ver Detalles
-                  </Button>
-                </td>
               </tr>
             ))}
           </tbody>

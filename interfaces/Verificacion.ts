@@ -73,3 +73,8 @@ export interface ConsultaDetalles {
 export interface ConsultaBusquedaId {
   id: number;
 }
+export interface ConsultaTipoFecha {
+  tipo: string;
+  fechaInicio: string;
+  fechaHasta: string;
+}

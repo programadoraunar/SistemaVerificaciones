@@ -23,48 +23,46 @@ function SlideBar() {
                 Menu
               </li>
             </ul>
-            <ul>
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-md xl:text-lg"
-                >
-                  <MdDashboard className="text-xl" /> Panel de Control
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/profesionales"
-                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
-                >
-                  <PiStudent className="text-xl" /> Profesionales
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tecnicos"
-                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
-                >
-                  <FaTools className="text-xl" /> Técnicos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/extension"
-                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
-                >
-                  <FaBookOpen className="text-xl" /> Extension
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/adminCampos"
-                  className="flex items-center text-xl gap-4 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors lg:text-sm xl:text-lg"
-                >
-                  <FaWpforms className="text-xl" /> Administración
-                </Link>
-              </li>
+            <ul className="flex flex-col space-y-2">
+              {[
+                {
+                  href: "/dashboard",
+                  label: "Panel de Control",
+                  icon: <MdDashboard />,
+                },
+                {
+                  href: "/profesionales",
+                  label: "Profesionales",
+                  icon: <PiStudent />,
+                },
+                {
+                  href: "/tecnicos",
+                  label: "Técnicos Laborales",
+                  icon: <FaTools />,
+                },
+                {
+                  href: "/extension",
+                  label: "Extensión",
+                  icon: <FaBookOpen />,
+                },
+                {
+                  href: "/adminCampos",
+                  label: "Administración",
+                  icon: <FaWpforms />,
+                },
+              ].map(({ href, label, icon }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="flex items-center text-lg lg:text-md xl:text-lg gap-3 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors"
+                  >
+                    {React.cloneElement(icon, {
+                      className: "text-lg lg:text-xl",
+                    })}{" "}
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

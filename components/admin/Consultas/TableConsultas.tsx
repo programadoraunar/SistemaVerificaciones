@@ -16,17 +16,13 @@ import {
 } from "@tanstack/react-table";
 import React, { useState } from "react";
 import Detalles from "./details/Detalles";
-const TableConsultas = () => {
+const TableConsultas = ({ searchResults }: { searchResults: Consulta[] }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const { consultas, isLoading, isError, mutate } = useConsultas();
   const columnHelper = createColumnHelper<Consulta>();
   const [id, setId] = useState<number | null>(null);
   const columns = [
-    columnHelper.accessor("id", {
-      header: "ID",
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.accessor("tipo_solicitante", {
       header: "Tipo Solicitante",
 
@@ -79,7 +75,7 @@ const TableConsultas = () => {
     }),
   ];
   const table = useReactTable({
-    data: consultas || [],
+    data: searchResults.length > 0 ? searchResults : consultas || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {

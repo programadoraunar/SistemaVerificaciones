@@ -188,9 +188,7 @@ const LayoutFormularioSoli: React.FC = () => {
 
   return (
     <div className="p-6 lg:w-[40%] bg-white shadow-md rounded-md">
-      <h2 className="text-center text-3xl font-bold">
-        Verifica el título académico
-      </h2>
+      <h2 className="text-center text-3xl font-bold">Verificacion de Titulo</h2>
       <p className="border-b-2 border-blue-950 py-2 my-2 font-bold">
         <span className="pl-2">Datos del Egresado</span>
       </p>

@@ -1,18 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { CiSearch } from "react-icons/ci";
-import {
-  obtenerProfesionalPorDocumento,
-  obtnerProfesionalPorNombreApellido,
-  obtnerProfesionalPorRangoFechas,
-} from "@/lib/supabaseAdminGetFunctions";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
+import { obtenerConsultasPorTipoFecha } from "@/lib/SupabaseAdminGetConsultas";
+import { Consulta } from "@/interfaces/Verificacion";
 interface SearchHeaderProps {
-  onSearch: (data: ProfesionalConTitulo[]) => void; // Cambiado aquí
+  onSearch: (data: Consulta[]) => void; // Cambiado aquí
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
@@ -21,6 +16,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     null,
   ]);
   const [errorDateRange, setErrorDateRange] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("persona_natural");
 
   // Función para recibir el rango de fechas desde el hijo
   const handleDateChange = (dates: [Date | null, Date | null]) => {
@@ -30,21 +26,25 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   const handleSearchByDateRange = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validar que ambas fechas estén seleccionadas
     if (!dateRange[0] || !dateRange[1]) {
       setErrorDateRange("Por favor, selecciona un rango de fechas válido.");
       return;
     }
 
-    setErrorDateRange(""); // Limpiar el error si las fechas son válidas
+    // Limpiar el mensaje de error
+    setErrorDateRange("");
 
     try {
-      const FechaInicioData = dateRange[0]?.toISOString().split("T")[0];
-      const FechaFinData = dateRange[1]?.toISOString().split("T")[0];
-      const result = await obtnerProfesionalPorRangoFechas({
-        fechaFin: FechaFinData,
-        fechaInicio: FechaInicioData,
-      });
-      console.log(result);
+      const startDate = dateRange[0].toISOString().split("T")[0];
+      const endDate = dateRange[1].toISOString().split("T")[0];
+      // Crear el objeto para  enviar a la función que obtiene las consultas
+      const consultaData = {
+        tipo: selectedType,
+        fechaInicio: startDate,
+        fechaHasta: endDate,
+      };
+      const result = await obtenerConsultasPorTipoFecha(consultaData);
       onSearch(result);
     } catch (err) {
       console.error(err);
@@ -52,13 +52,17 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   };
 
   return (
-    <form className="my-5">
+    <form className="my-5" onSubmit={handleSearchByDateRange}>
       <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-4 bg-white rounded-lg mb-5">
-        {/* Campo de búsqueda por número de documento */}
+        {/* Campo de búsqueda por tipo */}
         <div className="col-span-1 lg:col-span-1 p-4 flex flex-col gap-3 w-full">
           <Label className="text-lg font-bold">Por Tipo</Label>
           <div className="flex items-center w-full">
-            <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+            >
               <option value="persona_natural">Persona Natural</option>
               <option value="empresa">Empresa</option>
             </select>
@@ -71,9 +75,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
             Buscar por Rango de Fechas
           </Label>
           <div className="p-4 flex">
-            <DateRangePickerProps onDateChange={handleDateChange} />{" "}
-            {/* Pasar la función al hijo */}
-            <Button onClick={handleSearchByDateRange} type="button">
+            <DateRangePickerProps onDateChange={handleDateChange} />
+            <Button type="submit">
               <CiSearch />
             </Button>
           </div>

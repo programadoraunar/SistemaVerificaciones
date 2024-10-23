@@ -3,6 +3,7 @@ import React from "react";
 import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
+import { formatearFecha } from "@/utils/fechas";
 
 interface GenerarDocumentoWordProps {
   profesional: ProfesionalConTitulo;
@@ -53,7 +54,7 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
               alignment: AlignmentType.JUSTIFIED,
               children: [
                 new TextRun({
-                  text: `El (la) señor (a) ${profesional.nombre_profesional} ${profesional.apellido_profesional}, identificado (a) con cédula de ciudadanía No. ${profesional.numero_identificacion}, obtuvo el título de ${profesional.titulo_nombre} con fecha de grado ${profesional.fecha_grado}, se encuentra inscrito (a) en el Acta No. ${profesional.acta_grado}, folio No. ${profesional.folio} del libro de Diplomas No. ${profesional.libro_registro_grado} de los Registros Institucionales.`,
+                  text: `El (la) señor (a) ${profesional.nombre_profesional} ${profesional.apellido_profesional}, identificado (a) con cédula de ciudadanía No. ${profesional.numero_identificacion}, obtuvo el título de ${profesional.titulo_nombre} con fecha de grado ${formatearFecha(profesional.fecha_grado)}, se encuentra inscrito (a) en el Acta No. ${profesional.acta_grado}, folio No. ${profesional.folio} del libro de Diplomas No. ${profesional.libro_registro_grado} de los Registros Institucionales.`,
                   font: "Century Gothic",
                   size: 24,
                 }),

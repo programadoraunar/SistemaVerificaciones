@@ -104,9 +104,13 @@ const Egresado = () => {
                 />
               </div>
             ))}
+            <span className="text-blue-zodiac-950">
+              Si usted(es) requiere de una de una certificación firmada dar
+              click aquí
+            </span>
             <div className="flex justify-center">
               <button className="p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center">
-                Solicitar Verificacion
+                Solicitar Verificación
               </button>
             </div>
           </div>

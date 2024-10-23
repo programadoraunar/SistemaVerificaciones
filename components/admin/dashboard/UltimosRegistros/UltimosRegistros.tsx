@@ -81,7 +81,7 @@ function UltimosRegistros() {
                 <td className="border border-gray-300 p-2">
                   {registro.descripcion}
                 </td>
-                <td className="border border-gray-300p-2">
+                <td className="border border-gray-300p-2 text-center">
                   <Button onClick={() => openModal(registro.id)}>
                     Ver Detalles
                   </Button>

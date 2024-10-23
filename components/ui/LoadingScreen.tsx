@@ -10,15 +10,18 @@ const LoadingScreen = () => {
       animate={{ x: "-100vw" }} // Se desplaza hacia la derecha
       transition={{ ease: "easeInOut", duration: 1.5, delay: 0.7 }} // Transición suave
     >
-      <video
-        src="/imagen.mp4" // Cambia esta ruta por la de tu video
-        autoPlay
-        loop
-        muted
-        className="w-[800px] object-cover" // Ajusta el tamaño según sea necesario
-      >
-        Tu navegador no soporta videos.
-      </video>
+      <div className="flex flex-col justify-center items-center">
+        <span className="text-2xl font-bold">Aunar</span>
+        <video
+          src="/imagen.mp4" // Cambia esta ruta por la de tu video
+          autoPlay
+          loop
+          muted
+          className="w-[800px] object-cover" // Ajusta el tamaño según sea necesario
+        >
+          Tu navegador no soporta videos.
+        </video>
+      </div>
     </motion.div>
   );
 };

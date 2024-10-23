@@ -1,13 +1,11 @@
 "use client";
 import SearchHeader from "@/components/admin/Consultas/SearchHeader";
 import TableConsultas from "@/components/admin/Consultas/TableConsultas";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
+import { Consulta } from "@/interfaces/Verificacion";
 import React, { useState } from "react";
 
 function page() {
-  const [searchResults, setSearchResults] = useState<ProfesionalConTitulo[]>(
-    []
-  );
+  const [searchResults, setSearchResults] = useState<Consulta[]>([]);
   return (
     <div className="p-6">
       <div className="bg-white shadow-lg rounded-lg px-6 py-5 flex flex-col space-x-4">
@@ -21,7 +19,7 @@ function page() {
       </div>
 
       <SearchHeader onSearch={setSearchResults} />
-      <TableConsultas />
+      <TableConsultas searchResults={searchResults} />
     </div>
   );
 }

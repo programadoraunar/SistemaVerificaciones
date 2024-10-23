@@ -66,7 +66,6 @@ function UltimasVerificaciones() {
                 Nombres Solicitante
               </th>
               <th className="border border-gray-300 p-2">Fecha Consulta</th>
-              <th className="border border-gray-300 p-2">Detalles</th>
             </tr>
           </thead>
           <tbody>

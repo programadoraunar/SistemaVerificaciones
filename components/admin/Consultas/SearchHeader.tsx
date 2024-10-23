@@ -55,10 +55,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     <form className="my-5">
       <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-4 bg-white rounded-lg mb-5">
         {/* Campo de búsqueda por número de documento */}
-        <div className="col-span-1 lg:col-span-2 p-4 flex flex-col gap-3 w-full">
-          <Label className="text-lg">Por Tipo</Label>
+        <div className="col-span-1 lg:col-span-1 p-4 flex flex-col gap-3 w-full">
+          <Label className="text-lg font-bold">Por Tipo</Label>
           <div className="flex items-center w-full">
-            <select name="" id="">
+            <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value="persona_natural">Persona Natural</option>
               <option value="empresa">Empresa</option>
             </select>
@@ -66,8 +66,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         </div>
 
         {/* Campo de búsqueda por rango de fechas */}
-        <div className="p-4 flex flex-col justify-center items-center w-full">
-          <Label className="text-lg">Buscar por Rango de Fechas</Label>
+        <div className="col-span-1 lg:col-span-3 p-4 flex flex-col justify-center items-center w-full">
+          <Label className="text-lg font-bold">
+            Buscar por Rango de Fechas
+          </Label>
           <div className="p-4 flex">
             <DateRangePickerProps onDateChange={handleDateChange} />{" "}
             {/* Pasar la función al hijo */}

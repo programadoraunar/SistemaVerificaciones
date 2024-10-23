@@ -107,7 +107,7 @@ const TableConsultas = () => {
     <div className="bg-white w-full overflow-x-auto rounded-lg">
       {!isLoading ? (
         <>
-          <table className="border">
+          <table className="border w-full">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr

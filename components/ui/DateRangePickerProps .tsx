@@ -23,7 +23,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateChange }) => {
         endDate={dateRange[1] || undefined}
         onChange={handleChange}
         wrapperClassName="input-attribute"
-        className="bg-white appearance-none px-4 py-4 rounded-lg shadow border-black text-black "
+        className="bg-white appearance-none px-4 py-4 rounded-lg shadow border-black text-black"
         showIcon
         withPortal
         monthsShown={1}

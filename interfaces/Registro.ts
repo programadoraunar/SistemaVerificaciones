@@ -3,5 +3,4 @@ export interface Registro {
   id: number;
   tipo: string;
   descripcion: string;
-  fechaCreacion: string;
 }

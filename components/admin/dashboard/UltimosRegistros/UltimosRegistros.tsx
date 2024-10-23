@@ -1,12 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import Modal from "@/components/ui/Modal";
 import { Registro } from "@/interfaces/Registro";
 import React, { useEffect, useState } from "react";
+import Detalles from "./Detalles";
 
 function UltimosRegistros() {
   const [registros, setRegistros] = useState<Registro[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const [id, setId] = useState<number | null>(null);
+  const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   // Simulación de la obtención de los últimos registros
   useEffect(() => {
     // Datos simulados para los últimos registros
@@ -15,31 +18,26 @@ function UltimosRegistros() {
         id: 1,
         tipo: "Profesional",
         descripcion: "Juan Pérez, Ingeniero de Sistemas",
-        fechaCreacion: "2024-09-01",
       },
       {
         id: 2,
         tipo: "Técnico Laboral",
         descripcion: "Ana Gómez, Técnico en Redes",
-        fechaCreacion: "2024-09-02",
       },
       {
         id: 3,
         tipo: "Curso de Extensión",
         descripcion: "Curso de Programación en Python",
-        fechaCreacion: "2024-09-03",
       },
       {
         id: 4,
         tipo: "Formación Académica",
         descripcion: "Maestría en Inteligencia Artificial",
-        fechaCreacion: "2024-09-04",
       },
       {
         id: 4,
         tipo: "Formación Académica",
         descripcion: "Maestría en Inteligencia Artificial",
-        fechaCreacion: "2024-09-04",
       },
       // Más datos simulados aquí
     ];
@@ -54,6 +52,16 @@ function UltimosRegistros() {
   if (loading) {
     return <p>Cargando los últimos registros...</p>;
   }
+
+  const openModal = (id: number) => {
+    setId(id); // Establece el profesional seleccionado
+    setModalOpen(true); // Abre el modal
+  };
+
+  const closeModal = () => {
+    setModalOpen(false); // Cierra el modal
+    setId(null); // Reinicia el profesional seleccionado
+  };
   return (
     <div className="bg-white p-5 rounded-lg">
       <h2 className="text-lg font-bold mb-4">Últimos Registros Agregados</h2>
@@ -61,26 +69,20 @@ function UltimosRegistros() {
         <table className="table-auto w-full border-collaps">
           <thead>
             <tr>
-              <th className="border border-gray-300">Tipo</th>
-              <th className="border border-gray-300">Descripción</th>
-              <th className="border border-gray-300">Fecha de Creación</th>
-              <th className="border border-gray-300">Detalles</th>
+              <th className="border border-gray-300 p-2">Tipo</th>
+              <th className="border border-gray-300 p-2">Descripción</th>
+              <th className="border border-gray-300 p-2">Detalles</th>
             </tr>
           </thead>
           <tbody>
             {registros.map((registro) => (
               <tr key={registro.id}>
-                <td className="p-2">{registro.tipo}</td>
-                <td className="p-2">{registro.descripcion}</td>
-                <td className="p-2">
-                  {new Date(registro.fechaCreacion).toLocaleDateString()}
+                <td className="border border-gray-300 p-2">{registro.tipo}</td>
+                <td className="border border-gray-300 p-2">
+                  {registro.descripcion}
                 </td>
-                <td className="p-2">
-                  <Button
-                    onClick={() =>
-                      alert(`Ver detalles del registro ID: ${registro.id}`)
-                    }
-                  >
+                <td className="border border-gray-300p-2">
+                  <Button onClick={() => openModal(registro.id)}>
                     Ver Detalles
                   </Button>
                 </td>
@@ -89,6 +91,13 @@ function UltimosRegistros() {
           </tbody>
         </table>
       </div>
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="Detalle del Registro"
+      >
+        {id !== null && <Detalles id={id} onSuccess={closeModal} />}
+      </Modal>
     </div>
   );
 }

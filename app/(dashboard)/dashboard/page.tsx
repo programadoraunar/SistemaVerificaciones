@@ -1,12 +1,6 @@
-import Cards from "@/components/ui/Cards";
-import { PiFalloutShelter } from "react-icons/pi";
-import { FaGraduationCap } from "react-icons/fa";
-import { FaBriefcase } from "react-icons/fa";
-import { FaTools } from "react-icons/fa";
-import { FaBookOpen } from "react-icons/fa";
 import HActividades from "@/components/admin/dashboard/HActividades";
-import UltimasVerificaciones from "@/components/admin/dashboard/UltimasVerificaciones";
-import UltimosRegistros from "@/components/admin/dashboard/UltimosRegistros";
+import UltimasVerificaciones from "@/components/admin/dashboard/UltimasVerificaciones/UltimasVerificaciones";
+import UltimosRegistros from "@/components/admin/dashboard/UltimosRegistros/UltimosRegistros";
 import Metricas from "@/components/admin/dashboard/Metricas";
 
 export default function DashboardPage() {

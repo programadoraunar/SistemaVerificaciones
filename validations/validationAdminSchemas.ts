@@ -13,7 +13,7 @@ export const formularioRegistroSchema = z.object({
     }),
   nombre: z.string().min(1, "El nombre es requerido"),
   apellido: z.string().min(1, "El apellido es requerido"),
-  numero_diploma: z.string().min(1, "El Numero de diploma es requerido"),
+  numero_diploma: z.string().optional(),
   id_titulo: z.string().min(1, "Debe seleccionar un título"),
   acta_grado: z.string().min(1, "El acta de grado es requerida"),
   folio: z.string().min(1, "El folio es requerido"),

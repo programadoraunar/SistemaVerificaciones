@@ -3,9 +3,10 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { CiMenuFries, CiMenuBurger } from "react-icons/ci";
 import { FaBookOpen, FaTools } from "react-icons/fa";
-import { MdHome, MdDashboard } from "react-icons/md"; // Importa el ícono de Dashboard
+import { MdDashboard } from "react-icons/md"; // Importa el ícono de Dashboard
 import { PiStudent } from "react-icons/pi";
 import { FaWpforms } from "react-icons/fa6";
+import { IoInformationCircleSharp } from "react-icons/io5";
 
 function SlideBar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -49,6 +50,11 @@ function SlideBar() {
                   href: "/adminCampos",
                   label: "Administración",
                   icon: <FaWpforms />,
+                },
+                {
+                  href: "/informes",
+                  label: "Informes",
+                  icon: <IoInformationCircleSharp />,
                 },
               ].map(({ href, label, icon }) => (
                 <li key={href}>

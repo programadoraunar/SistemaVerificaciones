@@ -249,7 +249,7 @@ function TableProfecionales({
                       : 0;
                     table.setPageIndex(page);
                   }}
-                  className="border p-2 rounded w-10"
+                  className="border p-2 rounded w-16"
                 />
                 de {table.getPageCount()}
               </span>

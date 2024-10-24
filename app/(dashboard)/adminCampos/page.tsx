@@ -1,3 +1,4 @@
+import AdministraeExtensiones from "@/components/admin/administrador/AdministrarExtensiones";
 import AgregarTitulo from "@/components/admin/administrador/AgregarTitulo";
 import React from "react";
 
@@ -19,7 +20,7 @@ function page() {
           <AgregarTitulo />
         </div>
         <div className="bg-white shadow-lg rounded-lg px-6 py-5 flex flex-col space-x-4 my-5">
-          <AgregarTitulo />
+          <AdministraeExtensiones />
         </div>
       </div>
     </div>

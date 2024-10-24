@@ -76,30 +76,12 @@ const AgregarTitulo = () => {
     limpiarFormulario();
   };
 
-  const eliminarTitulo = async (id: number) => {
-    const confirmacion = window.confirm(
-      "¿Estás seguro de que quieres eliminar este título?"
-    );
-    if (confirmacion) {
-      try {
-        const { error } = await supabase.from("titulos").delete().eq("id", id);
-
-        if (error) throw error;
-
-        // Revalidar los datos
-        mutate("titulos");
-      } catch (error) {
-        console.error("Error al eliminar:", error);
-      }
-    }
-  };
-
   if (error) return <div>Error al cargar los títulos</div>;
   if (!titulos) return <div>Cargando...</div>;
 
   return (
     <div>
-      <h2 className="font-bold text-xl">Título</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Título</h2>
       <div className="container mx-auto p-4">
         <form
           ref={formularioRef}
@@ -132,37 +114,33 @@ const AgregarTitulo = () => {
         </form>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-400">
-            <thead>
+            <thead className="bg-gray-200">
               <tr>
-                <th className="border border-gray-400 p-2">Nombre</th>
-                <th className="border border-gray-400 p-2">Descripción</th>
-                <th className="border border-gray-400 p-2">Acciones</th>
+                <th className="p-4 text-left text-gray-700 font-semibold">
+                  Nombre
+                </th>
+                <th className="p-4 text-left text-gray-700 font-semibold">
+                  Descripción
+                </th>
+                <th className="p-4 text-left text-gray-700 font-semibold">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody>
               {titulos.map((titulo) => (
                 <tr
                   key={titulo.id}
-                  className={idEditar === titulo.id ? "bg-gray-100" : ""}
+                  className={`border-b ${idEditar === titulo.id ? "bg-gray-100" : ""}`}
                 >
-                  <td className="border border-gray-400 p-2">
-                    {titulo.nombre}
-                  </td>
-                  <td className="border border-gray-400 p-2">
-                    {titulo.descripcion}
-                  </td>
-                  <td className="border border-gray-400 p-2">
+                  <td className="border-gray-400 p-2">{titulo.nombre}</td>
+                  <td className="border-gray-400 p-2">{titulo.descripcion}</td>
+                  <td className="border-gray-400 p-2">
                     <Button
                       onClick={() => editarTitulo(titulo)}
                       className="y-2 rounded w-full"
                     >
                       Editar
-                    </Button>
-                    <Button
-                      onClick={() => eliminarTitulo(titulo.id)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2  rounded w-full"
-                    >
-                      Eliminar
                     </Button>
                   </td>
                 </tr>

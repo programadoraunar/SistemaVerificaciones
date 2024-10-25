@@ -1,6 +1,7 @@
 // formatearFecha.js
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
+import { utcToZonedTime } from "date-fns-tz";
 
 /**
  * Formatea una fecha en formato "MMMM dd 'del' yyyy"
@@ -9,13 +10,13 @@ import { es } from "date-fns/locale";
  */
 export const formatearFecha = (fecha: any) => {
   const fechaISO = parseISO(fecha);
-  return format(fechaISO, "MMMM dd 'del' yyyy", { locale: es });
+  return format(new Date(fecha), "MMMM d 'de' yyyy", { locale: es });
 };
 
 /**
- * Convierte una fecha en formato ISO 8601 a la hora en la zona horaria de Colombia (COT).
+ * Convierte una fecha en formato ISO 8601 a la hora en la zona horaria de Colombia (COT) en formato de 12 horas.
  * @param fechaIso - La fecha en formato ISO 8601.
- * @returns La fecha formateada en horario colombiano.
+ * @returns La fecha formateada en horario colombiano en formato de 12 horas con AM/PM.
  */
 export function convertirAHoraColombiana(fechaIso: string): string {
   const fechaUTC = new Date(fechaIso); // Crea un objeto Date en UTC
@@ -28,13 +29,18 @@ export function convertirAHoraColombiana(fechaIso: string): string {
   // Restar 5 horas para ajustar a la hora colombiana
   const fechaColombiana = new Date(fechaUTC.getTime() - 5 * 60 * 60 * 1000);
 
-  // Formatear la fecha a string legible (DD/MM/YYYY, HH:mm:ss)
+  // Formatear la fecha a string legible (DD/MM/YYYY, hh:mm:ss AM/PM)
   const dia = String(fechaColombiana.getDate()).padStart(2, "0");
   const mes = String(fechaColombiana.getMonth() + 1).padStart(2, "0"); // Los meses empiezan desde 0
   const anio = fechaColombiana.getFullYear();
-  const horas = String(fechaColombiana.getHours()).padStart(2, "0");
+
+  let horas = fechaColombiana.getHours();
   const minutos = String(fechaColombiana.getMinutes()).padStart(2, "0");
   const segundos = String(fechaColombiana.getSeconds()).padStart(2, "0");
 
-  return `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+  // Determinar si es AM o PM
+  const sufijo = horas >= 12 ? "PM" : "AM";
+  horas = horas % 12 || 12; // Convertir a formato de 12 horas y manejar el caso de medianoche
+
+  return `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos} ${sufijo}`;
 }

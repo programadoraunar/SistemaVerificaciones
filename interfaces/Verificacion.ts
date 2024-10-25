@@ -9,9 +9,12 @@ export interface EgresadoVerificado {
   titulo: string;
   fecha_grado: string;
   acta_grado: string;
+  folio: string;
+  libro_registro_grado: string;
 }
 export interface BuscarEgresado {
   numero_documento: string;
+  formacionAcademica: string;
 }
 
 export interface DataRegistroNatural {

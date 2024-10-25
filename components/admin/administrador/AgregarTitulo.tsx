@@ -81,7 +81,9 @@ const AgregarTitulo = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Título</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800  bg-white">
+        Título
+      </h2>
       <div className="container mx-auto p-4">
         <form
           ref={formularioRef}

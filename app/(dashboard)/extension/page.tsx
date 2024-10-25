@@ -1,5 +1,5 @@
 "use client";
-import FormularioRegistro from "@/components/admin/FormularioRegistro";
+import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
 import SearchHeader from "@/components/admin/tecnicos/SearchHeader";
 import Modal from "@/components/ui/Modal";
 import { ExtensionConTitulo } from "@/interfaces/CursosExtension";

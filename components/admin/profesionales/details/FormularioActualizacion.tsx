@@ -2,7 +2,7 @@ import { ProfesionalActualizar } from "@/interfaces/Profesionales";
 import {
   obtenerDetallesActualizacionProfesional,
   obtenerProfesionalPorDocumento,
-} from "@/lib/supabaseAdminGetFunctions";
+} from "@/lib/supabaseAdminGetFunctionsProfe";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormularioDatosPersonales from "../details/FormularioDatosPersonales";

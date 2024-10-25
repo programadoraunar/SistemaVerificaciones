@@ -2,65 +2,69 @@
 import React from "react";
 import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import { formatearFecha } from "@/utils/fechas";
+import { Persona } from "@/interfaces/Persona";
+import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 
 interface GenerarDocumentoWordProps {
-  profesional: ProfesionalConTitulo;
+  persona: Persona;
 }
 
 const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
-  profesional,
+  persona,
 }) => {
+  const esProfesional = (p: Persona): p is ProfesionalConTitulo =>
+    (p as ProfesionalConTitulo).id_profesional !== undefined;
+
   const generarDocumento = () => {
+    const nombre = esProfesional(persona)
+      ? `${persona.nombre_profesional} ${persona.apellido_profesional}`
+      : `${persona.nombre_tecnico} ${persona.apellido_tecnico}`;
+
     const doc = new Document({
       sections: [
         {
-          properties: {},
           children: [
-            // Título centrado y con fuente "Century Gothic"
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
                 new TextRun({
                   text: "VERIFICACIÓN DE TÍTULO",
                   bold: true,
-                  size: 32, // Tamaño de fuente
-                  font: "Century Gothic", // Fuente personalizada
+                  size: 32,
+                  font: "Century Gothic",
                 }),
               ],
               spacing: {
                 before: 300,
-                after: 600, // Espacio después del título
+                after: 600,
               },
             }),
-            // Primer párrafo
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
                 new TextRun({
                   text: "La Secretaria General de la Corporación Universitaria Autónoma de Nariño - AUNAR, hace constar que:",
-                  font: "Century Gothic", // Fuente personalizada
-                  size: 24, // Ajustar tamaño de fuente si es necesario
-                }),
-              ],
-              spacing: {
-                before: 300,
-                after: 300, // Espacio después del título
-              },
-            }),
-            // Párrafo con los datos del profesional
-            new Paragraph({
-              alignment: AlignmentType.JUSTIFIED,
-              children: [
-                new TextRun({
-                  text: `El (la) señor (a) ${profesional.nombre_profesional} ${profesional.apellido_profesional}, identificado (a) con cédula de ciudadanía No. ${profesional.numero_identificacion}, obtuvo el título de ${profesional.titulo_nombre} con fecha de grado ${formatearFecha(profesional.fecha_grado)}, se encuentra inscrito (a) en el Acta No. ${profesional.acta_grado}, folio No. ${profesional.folio} del libro de Diplomas No. ${profesional.libro_registro_grado} de los Registros Institucionales.`,
                   font: "Century Gothic",
                   size: 24,
                 }),
               ],
               spacing: {
-                after: 200, // Espacio después del texto
+                before: 300,
+                after: 300,
+              },
+            }),
+            new Paragraph({
+              alignment: AlignmentType.JUSTIFIED,
+              children: [
+                new TextRun({
+                  text: `El (la) señor (a) ${nombre}, identificado (a) con cédula de ciudadanía No. ${persona.numero_identificacion}, obtuvo el título de ${persona.titulo_nombre} con fecha de grado ${formatearFecha(persona.fecha_grado)}, se encuentra inscrito (a) en el Acta No. ${persona.acta_grado}, folio No. ${persona.folio} del libro de Diplomas No. ${persona.libro_registro_grado} de los Registros Institucionales.`,
+                  font: "Century Gothic",
+                  size: 24,
+                }),
+              ],
+              spacing: {
+                after: 200,
               },
             }),
           ],
@@ -68,12 +72,8 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
       ],
     });
 
-    // Generar y descargar el archivo
     Packer.toBlob(doc).then((blob) => {
-      saveAs(
-        blob,
-        `Verificacion_Titulo_${profesional.numero_identificacion}.docx`
-      );
+      saveAs(blob, `Verificacion_Titulo_${persona.numero_identificacion}.docx`);
     });
   };
 

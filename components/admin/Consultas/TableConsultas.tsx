@@ -4,7 +4,6 @@ import Modal from "@/components/ui/Modal";
 import { useConsultas } from "@/hooks/Consultas";
 import { Consulta } from "@/interfaces/Verificacion";
 import { convertirAHoraColombiana } from "@/utils/fechas";
-import { supabase } from "@/utils/supabase/client";
 import {
   createColumnHelper,
   flexRender,

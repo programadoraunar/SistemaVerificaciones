@@ -1,5 +1,5 @@
 "use client";
-import FormularioRegistro from "@/components/admin/FormularioRegistro";
+import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
 import SearchHeader from "@/components/admin/profesionales/SearchHeader";
 import TableProfecionales from "@/components/admin/profesionales/TableProfecionales";
 import UploadExcel from "@/components/admin/UploadExcel";

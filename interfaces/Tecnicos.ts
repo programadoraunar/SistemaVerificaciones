@@ -7,7 +7,7 @@ export interface TecnicoConTitulo {
    * Identificador único del profesional.
    * @type {number}
    */
-  id_profesional: number;
+  id_tecnico: number;
 
   /**
    * Tipo de identificación del profesional.
@@ -26,13 +26,13 @@ export interface TecnicoConTitulo {
    * Nombre del profesional.
    * @type {string}
    */
-  nombre_profesional: string;
+  nombre_tecnico: string;
 
   /**
    * Apellido del profesional.
    * @type {string}
    */
-  apellido_profesional: string;
+  apellido_tecnico: string;
 
   /**
    * Nombre del título del profesional.
@@ -75,5 +75,5 @@ export interface TecnicoConTitulo {
    * @type {string}
    */
   libro_registro_grado: string;
-  titulo_id: number;
+  id_titulo: number;
 }

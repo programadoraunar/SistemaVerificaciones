@@ -112,10 +112,10 @@ const AdministrarExtensiones = () => {
               {extensiones.map((extension) => (
                 <tr
                   key={extension.id}
-                  className={`${idEditar === extension.id ? "bg-gray-100" : ""}`}
+                  className={`border-b ${idEditar === extension.id ? "bg-gray-100" : ""}`}
                 >
-                  <td className="p-4 text-gray-600">{extension.nombre}</td>
-                  <td className="p-4 space-y-2 w-32">
+                  <td className="p-2">{extension.nombre}</td>
+                  <td className="p-2 space-y-2 w-32">
                     <Button
                       onClick={() => editarExtension(extension)}
                       className="y-2 rounded w-full"

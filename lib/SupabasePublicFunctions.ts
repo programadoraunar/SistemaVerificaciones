@@ -23,6 +23,7 @@ export const obtenerInformacionEgresado = async (
     "obtener_informacion_egresados_verificacion",
     {
       p_numero_identificacion: dataBusqueda.numero_documento,
+      _formacion_academica_egresado: dataBusqueda.formacionAcademica,
     }
   );
   if (error) throw error; // Lanza el error para que se maneje en el

@@ -1,5 +1,4 @@
-import AdministraeExtensiones from "@/components/admin/administrador/AdministrarExtensiones";
-import AgregarTitulo from "@/components/admin/administrador/AgregarTitulo";
+import LayoutAdministracion from "@/components/admin/administrador/LayoutAdministracion";
 import React from "react";
 
 function page() {
@@ -15,14 +14,7 @@ function page() {
           surgir en el futuro
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div className="bg-white shadow-lg rounded-lg px-6 py-5 flex flex-col space-x-4 my-5">
-          <AgregarTitulo />
-        </div>
-        <div className="bg-white shadow-lg rounded-lg px-6 py-5 flex flex-col space-x-4 my-5">
-          <AdministraeExtensiones />
-        </div>
-      </div>
+      <LayoutAdministracion />
     </div>
   );
 }

@@ -13,7 +13,7 @@ function page() {
           Gestión de Verificaciones de Títulos
         </h2>
         <p className="py-5">
-          En esta seccion podras consultar las verificaciones de titulos que han
+          En esta sección podrás consultar las verificaciones de títulos que han
           registrado empresas y personas naturales
         </p>
       </div>

@@ -26,8 +26,14 @@ const LayoutFormularioSoli: React.FC = () => {
   const router = useRouter();
   const [tipoSolicitante, setTipoSolicitante] = useState("persona");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { egresado, setEgresado, identificacion, setIdentificacion } =
-    useEgresado();
+  const {
+    egresado,
+    setEgresado,
+    identificacion,
+    setIdentificacion,
+    formacionAcademicaContext,
+    setFormacionAcademicaContext,
+  } = useEgresado();
   const [isLoading, setIsLoading] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -109,9 +115,14 @@ const LayoutFormularioSoli: React.FC = () => {
         setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
         console.log(datos);
+        setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
           setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
+          // enviamos al contexto el tipo de egresado para realizar búsquedas sobre eso
+          setFormacionAcademicaContext(
+            datosVerificacion.formacionAcademicaEgresado
+          );
           setEgresado(datos);
           await registrarConsultaConEgresado({
             nombresSolicitante: datosCompletos.nombres,
@@ -157,10 +168,17 @@ const LayoutFormularioSoli: React.FC = () => {
       try {
         setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
+        //guardamos el numero de identificación para informar a la modal si no se encontró
+        setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
+
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
           setEgresado(datos);
           setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
+          // enviamos al contexto el tipo de egresado para realizar búsquedas sobre eso
+          setFormacionAcademicaContext(
+            datosVerificacion.formacionAcademicaEgresado
+          );
           await registrarConsultaConEgresadoEmpresas({
             apellidosSolicitante: datosCompletos.apellidosSolicitante,
             cargo: datosCompletos.cargoSolicitante,
@@ -312,10 +330,11 @@ const LayoutFormularioSoli: React.FC = () => {
         onClose={closeModal}
         title="¡Egresado No Encontrado!"
       >
-        El egresado no ha sido encontrado. Por favor, verifique que ha ingresado
-        correctamente su número de identificación, que ha seleccionado el tipo
-        de identificación correcto y que ha escogido la formación académica
-        adecuada.
+        El egresado con numero de identificación{" "}
+        <strong>{identificacion}</strong> no ha sido encontrado. Por favor,
+        verifique que ha ingresado correctamente su número de identificación,
+        que ha seleccionado el tipo de identificación correcto y que ha escogido
+        la formación académica adecuada.
       </Modal>
 
       {!isLoading ? <></> : <Loading />}

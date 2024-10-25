@@ -4,14 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { obtenerInformacionEgresado } from "@/lib/SupabasePublicFunctions";
 import { EgresadoVerificado } from "@/interfaces/Verificacion";
-import { format } from "path";
-import { parseISO } from "date-fns";
-import { es } from "date-fns/locale";
 import { formatearFecha } from "@/utils/fechas";
 import Loading from "../ui/Loading";
 const Egresado = () => {
   const router = useRouter();
-  const { egresado, identificacion } = useEgresado();
+  const { egresado, identificacion, formacionAcademicaContext } = useEgresado();
   const [datosGraduado, setDatosGraduado] = useState<EgresadoVerificado[]>([]); // Aplica la interfaz en el estado
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +21,9 @@ const Egresado = () => {
       try {
         const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
           numero_documento: identificacion,
+          formacionAcademica: formacionAcademicaContext,
         });
+        console.log(data);
         setDatosGraduado(data); // Establece los datos del egresado como un array
         setLoading(false);
       } catch (error) {
@@ -102,9 +101,29 @@ const Egresado = () => {
                   disabled
                   className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
                 />
+
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Folio
+                </label>
+                <input
+                  type="text"
+                  value={item.folio}
+                  disabled
+                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                />
+
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Libro de Registros
+                </label>
+                <input
+                  type="text"
+                  value={item.libro_registro_grado}
+                  disabled
+                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                />
               </div>
             ))}
-            <span className="text-blue-zodiac-950">
+            <span className="text-red-400 font-bold py-2">
               Si usted(es) requiere de una de una certificación firmada dar
               click aquí
             </span>

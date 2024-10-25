@@ -1,46 +1,43 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import Loading from "@/components/ui/Loading";
+import { TecnicoConTitulo } from "@/interfaces/Tecnicos";
+import { obtenerInformacionTecnicos } from "@/lib/supabaseAdminGetFunctionTec";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
-import Link from "next/link";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
-import Loading from "../../ui/Loading";
-import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctionsProfe";
-import { toast, Toaster } from "react-hot-toast";
-import Modal from "../../ui/Modal";
-import FormularioActualizacion from "./details/FormularioActualizacion";
-import GenerarDocumentoWord from "../GenerarDocumentoWord";
+import React, { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
+import FormularioActualizacion from "./details/FormularioActualIzacion";
+import Modal from "@/components/ui/Modal";
+import GenerarDocumentoWord from "../GenerarDocumentoWord";
 // Función de fetch para SWR
 const fetcher = async () => {
-  const result = await obtenerInformacionProfesionales();
+  const result = await obtenerInformacionTecnicos();
   return result;
 };
-
-function TableProfecionales({
+const TableTecnicos = ({
   searchResults,
 }: {
-  searchResults: ProfesionalConTitulo[];
-}) {
-  const { data, error, isLoading, mutate } = useSWR("profesionales", fetcher, {
+  searchResults: TecnicoConTitulo[];
+}) => {
+  const { data, error, isLoading, mutate } = useSWR("tecnicos", fetcher, {
     revalidateOnFocus: false,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const [identificacion, setIdentificacion] = useState<string | null>(null);
   const [titulo, setTitulo] = useState<number | null>(null);
-
-  const columnHelper = createColumnHelper<ProfesionalConTitulo>();
+  const columnHelper = createColumnHelper<TecnicoConTitulo>();
 
   const columns = [
-    columnHelper.accessor("id_profesional", {
+    columnHelper.accessor("id_tecnico", {
       header: "ID",
       cell: (info) => info.getValue(),
     }),
@@ -52,11 +49,11 @@ function TableProfecionales({
       header: "Número Identificación",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("nombre_profesional", {
+    columnHelper.accessor("nombre_tecnico", {
       header: "Nombre",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("apellido_profesional", {
+    columnHelper.accessor("apellido_tecnico", {
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
@@ -112,6 +109,19 @@ function TableProfecionales({
     }),
   ];
 
+  const openModal = (numeroIdentificacion: string, id_titulo: number) => {
+    console.log(id_titulo);
+    setIdentificacion(numeroIdentificacion); // Establece el profesional seleccionado
+    setTitulo(id_titulo); // Establece el título seleccionado
+    setModalOpen(true); // Abre el modal
+  };
+  const closeModal = () => {
+    setModalOpen(false); // Cierra el modal
+    setIdentificacion(null); // Reinicia el profesional seleccionado
+    setTitulo(null);
+    mutate(); // Revalida los datos de SWR para que se actualice la tabla
+  };
+
   const table = useReactTable({
     data: searchResults.length > 0 ? searchResults : data || [],
     columns,
@@ -123,21 +133,6 @@ function TableProfecionales({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-
-  const openModal = (numeroIdentificacion: string, id_titulo: number) => {
-    console.log(id_titulo);
-    setIdentificacion(numeroIdentificacion); // Establece el profesional seleccionado
-    setTitulo(id_titulo); // Establece el título seleccionado
-    setModalOpen(true); // Abre el modal
-  };
-
-  const closeModal = () => {
-    setModalOpen(false); // Cierra el modal
-    setIdentificacion(null); // Reinicia el profesional seleccionado
-    setTitulo(null);
-    mutate(); // Revalida los datos de SWR para que se actualice la tabla
-  };
-
   if (error) {
     return <div>Error al cargar los datos.</div>;
   }
@@ -283,7 +278,6 @@ function TableProfecionales({
       )}
       <Toaster />
 
-      {/* Modal para mostrar el formulario de actualización */}
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}
@@ -299,5 +293,6 @@ function TableProfecionales({
       </Modal>
     </div>
   );
-}
-export default TableProfecionales;
+};
+
+export default TableTecnicos;

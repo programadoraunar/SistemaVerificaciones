@@ -1,7 +1,8 @@
 "use client";
 
-import FormularioRegistro from "@/components/admin/FormularioRegistro";
+import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
 import SearchHeader from "@/components/admin/tecnicos/SearchHeader";
+import TableTecnicos from "@/components/admin/tecnicos/TableTecnicos";
 import Modal from "@/components/ui/Modal";
 import { TecnicoConTitulo } from "@/interfaces/Tecnicos";
 import React, { useState } from "react";
@@ -34,6 +35,7 @@ function tecnicosPage() {
         </div>
       </div>
       <SearchHeader onSearch={setSearchResults} />
+      <TableTecnicos searchResults={searchResults} />
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

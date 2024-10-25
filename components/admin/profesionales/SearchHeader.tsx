@@ -8,7 +8,7 @@ import {
   obtenerProfesionalPorDocumento,
   obtnerProfesionalPorNombreApellido,
   obtnerProfesionalPorRangoFechas,
-} from "@/lib/supabaseAdminGetFunctions";
+} from "@/lib/supabaseAdminGetFunctionsProfe";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
 interface SearchHeaderProps {

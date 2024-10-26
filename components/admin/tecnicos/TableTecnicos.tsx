@@ -14,7 +14,7 @@ import {
 import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
-import FormularioActualizacion from "./details/FormularioActualIzacion";
+import FormularioActualizacion from "./details/FormularioActualizacion";
 import Modal from "@/components/ui/Modal";
 import GenerarDocumentoWord from "../GenerarDocumentoWord";
 // Función de fetch para SWR

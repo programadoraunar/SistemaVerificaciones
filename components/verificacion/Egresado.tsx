@@ -15,9 +15,10 @@ const Egresado = () => {
   useEffect(() => {
     const fetchEgresado = async () => {
       if (!egresado) {
-        router.push("/"); // Redirige si no hay egresado
+        router.push("/");
         return;
       }
+
       try {
         const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
           numero_documento: identificacion,
@@ -83,50 +84,69 @@ const Egresado = () => {
                   disabled
                   className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
                 />
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Fecha de Grado
-                </label>
-                <input
-                  type="text"
-                  value={formatearFecha(item.fecha_grado)}
-                  disabled
-                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                />
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Acta de Grado
-                </label>
-                <input
-                  type="text"
-                  value={item.acta_grado}
-                  disabled
-                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                />
+                <div className="flex flex-col py-5 md:flex-row md:gap-3 items-center w-full">
+                  <div className="flex flex-col w-[100%] md:w-[50%]">
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      Fecha de Grado
+                    </label>
+                    <input
+                      type="text"
+                      value={formatearFecha(item.fecha_grado)}
+                      disabled
+                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                    />
+                  </div>
+                  <div className="flex flex-col w-[100%] md:w-[50%]">
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      Acta de Grado
+                    </label>
+                    <input
+                      type="text"
+                      value={item.acta_grado}
+                      disabled
+                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
 
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Folio
-                </label>
-                <input
-                  type="text"
-                  value={item.folio}
-                  disabled
-                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                />
+                <div className="flex flex-col md:flex-row md:gap-3 items-center">
+                  <div className="flex flex-col w-[100%] md:w-[50%]">
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      Folio
+                    </label>
+                    <input
+                      type="text"
+                      value={item.folio}
+                      disabled
+                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                    />
+                  </div>
 
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Libro de Registros
-                </label>
-                <input
-                  type="text"
-                  value={item.libro_registro_grado}
-                  disabled
-                  className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                />
+                  <div className="flex flex-col w-[100%] md:w-[50%]">
+                    <label className="block text-gray-700 font-semibold mb-2">
+                      Libro de Registros
+                    </label>
+                    <input
+                      type="text"
+                      value={item.libro_registro_grado}
+                      disabled
+                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
               </div>
             ))}
-            <span className="text-red-400 font-bold py-2">
-              Si usted(es) requiere de una de una certificación firmada dar
-              click aquí
-            </span>
+            <div
+              className="py-3
+            
+            "
+            >
+              <span className="text-red-400 font-bold">
+                * Si usted(es) requiere de una de una certificación firmada dar
+                click aquí
+              </span>
+            </div>
+
             <div className="flex justify-center">
               <button className="p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center">
                 Solicitar Verificación

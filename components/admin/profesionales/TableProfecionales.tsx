@@ -9,7 +9,6 @@ import {
   SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import Link from "next/link";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 import Loading from "../../ui/Loading";
 import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctionsProfe";

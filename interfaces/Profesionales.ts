@@ -107,6 +107,11 @@ export interface ProfesionalConTituloImport {
    * @type {string}
    */
   apellido_profesional: string;
+  /**
+   * snies del título del profesional.
+   * @type {string}
+   */
+  snies: string;
 
   /**
    * Nombre del título del profesional.

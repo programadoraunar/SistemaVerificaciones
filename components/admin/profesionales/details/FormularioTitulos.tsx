@@ -1,138 +1,182 @@
+"use client";
+import { Titulos } from "@/interfaces/Titulos";
 import { supabase } from "@/utils/supabase/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import useSWR from "swr";
-interface FormularioTitulosProps {
-  idTitulo?: number;
-  actaGrado?: string;
-  folio?: string;
-  fechaGrado?: string;
-  libroRegistroGrado?: string;
-  numeroDiploma?: string;
-  onSubmit: (data: any) => void; // Asegúrate de definir un tipo adecuado para los datos
+interface ProfesionalTitulo {
+  id: number;
+  id_profesional: number; // Esta propiedad se mantiene pero no se utiliza en la función
+  id_titulo: number;
+  acta_grado: string;
+  folio: string;
+  fecha_grado: string;
+  libro_registro_grado: string;
+  numero_diploma: string;
 }
 
-const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
-  idTitulo,
-  actaGrado,
-  folio,
-  fechaGrado,
-  libroRegistroGrado,
-  numeroDiploma,
-  onSubmit,
-}) => {
-  const { register, handleSubmit, reset } = useForm();
-  const fetcher = async (url: string) => {
-    const { data, error } = await supabase.from(url).select();
-    if (error) throw new Error(error.message);
-    return data;
-  };
-  const { data: titulos } = useSWR("titulos", fetcher);
+interface FormularioTitulosProps {
+  titulos: ProfesionalTitulo[];
+}
 
-  // Resetea el formulario cuando se reciben nuevas propiedades
-  React.useEffect(() => {
+// Define el tipo para los valores del formulario
+interface FormValues {
+  [key: string]: string | number; // Permite claves dinámicas
+}
+// Función para obtener los nombres de los títulos
+const fetcher = async (url: string) => {
+  const { data, error } = await supabase.from(url).select();
+  if (error) throw new Error(error.message);
+  return data;
+};
+const FormularioTitulos: React.FC<FormularioTitulosProps> = ({ titulos }) => {
+  const { register, handleSubmit, reset } = useForm<FormValues>();
+  // Obtiene los nombres de los títulos
+  const { data: titulosNombres } = useSWR("titulos", fetcher);
+
+  // Crea un objeto de referencia para los nombres de los títulos
+  const titulosMap = titulosNombres?.reduce(
+    (
+      acc: { [key: number]: string },
+      titulo: { id: number; nombre: string }
+    ) => {
+      acc[titulo.id] = titulo.nombre; // Suponiendo que los títulos tienen 'id' y 'nombre'
+      return acc;
+    },
+    {}
+  );
+  const onSubmit = async (data: FormValues, index: number) => {
+    try {
+      const id = Number(data[`id_${index}`]);
+      const idTitulo = Number(data[`id_titulo_${index}`]);
+
+      // Log de depuración
+      console.log("Enviando datos para actualizar:", {
+        id,
+        idTitulo,
+        actaGrado: data[`acta_grado_${index}`],
+        folio: data[`folio_${index}`],
+        fechaGrado: data[`fecha_grado_${index}`],
+        libroRegistroGrado: data[`libro_registro_grado_${index}`],
+        numeroDiploma: data[`numero_diploma_${index}`],
+      });
+
+      if (isNaN(id) || isNaN(idTitulo)) {
+        throw new Error(
+          `Los IDs deben ser números válidos para el título ${index + 1}`
+        );
+      }
+
+      const { error } = await supabase.rpc("actualizar_titulo_profesional", {
+        p_id: id,
+        p_id_titulo: idTitulo,
+        p_acta_grado: data[`acta_grado_${index}`] || null,
+        p_folio: data[`folio_${index}`] || null,
+        p_fecha_grado: data[`fecha_grado_${index}`] || null,
+        p_libro_registro_grado: data[`libro_registro_grado_${index}`] || null,
+        p_numero_diploma: data[`numero_diploma_${index}`] || null,
+      });
+
+      if (error) throw new Error(error.message);
+      toast.success("Datos actualizados correctamente");
+    } catch (error) {
+      console.error(`Error al actualizar el título ${index + 1}:`, error);
+      // Mostrar un mensaje al usuario aquí
+    }
+  };
+
+  useEffect(() => {
     reset({
-      id_titulo: idTitulo,
-      acta_grado: actaGrado,
-      folio: folio,
-      fecha_grado: fechaGrado,
-      libro_registro_grado: libroRegistroGrado,
-      numero_diploma: numeroDiploma,
+      ...titulos.reduce((acc, titulo, index) => {
+        acc[`id_${index}`] = titulo.id;
+        acc[`id_titulo_${index}`] = titulo.id_titulo;
+        acc[`acta_grado_${index}`] = titulo.acta_grado;
+        acc[`folio_${index}`] = titulo.folio;
+        acc[`fecha_grado_${index}`] = titulo.fecha_grado;
+        acc[`libro_registro_grado_${index}`] = titulo.libro_registro_grado;
+        acc[`numero_diploma_${index}`] = titulo.numero_diploma;
+        return acc;
+      }, {} as FormValues),
     });
-  }, [
-    idTitulo,
-    actaGrado,
-    folio,
-    fechaGrado,
-    libroRegistroGrado,
-    numeroDiploma,
-    reset,
-  ]);
+  }, [titulos, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
-      <h2 className="font-bold mb-2">Títulos</h2>
-      <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-sm font-medium text-gray-700">
-            Titulo
-          </label>
-          <select
-            {...register("id_titulo")}
-            className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring`}
-          >
-            <option>Seleccionar Título</option>
-            {titulos &&
-              titulos.map((titulo: any) => (
-                <option key={titulo.id} value={titulo.id}>
-                  {titulo.nombre}
-                </option>
-              ))}
-          </select>
+    <form className="py-4">
+      {titulos.map((titulo, index) => (
+        <div key={index} className="mb-6 border-b-2 pb-4">
+          {/* Muestra el nombre del título en lugar del índice */}
+          <h3 className="font-semibold mb-2">
+            {titulosMap?.[titulo.id_titulo] || "Título desconocido"}
+          </h3>
+          <input type="hidden" {...register(`id_${index}`)} />
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Acta de Grado:
+              </label>
+              <input
+                type="text"
+                {...register(`acta_grado_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Folio:
+              </label>
+              <input
+                type="text"
+                {...register(`folio_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Fecha de Grado:
+              </label>
+              <input
+                type="date"
+                {...register(`fecha_grado_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Libro Registro Grado:
+              </label>
+              <input
+                type="text"
+                {...register(`libro_registro_grado_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Número de Diploma:
+              </label>
+              <input
+                type="text"
+                {...register(`numero_diploma_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="button" // Cambiado a "button" para manejar el envío por separado
+              onClick={handleSubmit((data) => onSubmit(data, index))}
+              className="bg-blue-zodiac-950 text-white p-2 rounded"
+            >
+              Guardar Cambios
+            </button>
+          </div>
         </div>
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-sm font-medium text-gray-700">
-            Acta de Grado:
-          </label>
-          <input
-            type="text"
-            {...register("acta_grado", { required: true })}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-sm font-medium text-gray-700">
-            Folio:
-          </label>
-          <input
-            type="text"
-            {...register("folio", { required: true })}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-sm font-medium text-gray-700">
-            Fecha de Grado:
-          </label>
-          <input
-            type="date"
-            {...register("fecha_grado", { required: true })}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-sm font-medium text-gray-700">
-            Libro Registro Grado:
-          </label>
-          <input
-            type="text"
-            {...register("libro_registro_grado", { required: true })}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-sm font-medium text-gray-700">
-            Número de Diploma:
-          </label>
-          <input
-            type="text"
-            {...register("numero_diploma", { required: true })}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="bg-blue-zodiac-950 text-white p-2 rounded"
-        >
-          Actualizar Títulos
-        </button>
-      </div>
+      ))}
     </form>
   );
 };

@@ -65,7 +65,6 @@ export const obtenerDetallesActualizacionProfesional = async (
     "obtener_detalles_actualizacion_profesional",
     {
       p_numero_identificacion: data.numero_identificacion,
-      p_id_titulo: data.titulo_id,
     }
   );
   if (error) throw error;

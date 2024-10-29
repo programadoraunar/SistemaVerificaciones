@@ -9,7 +9,10 @@ import {
   SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
+import {
+  InformacionProfesional,
+  ProfesionalConTitulo,
+} from "@/interfaces/Profesionales";
 import Loading from "../../ui/Loading";
 import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctionsProfe";
 import { toast, Toaster } from "react-hot-toast";
@@ -26,7 +29,7 @@ const fetcher = async () => {
 function TableProfecionales({
   searchResults,
 }: {
-  searchResults: ProfesionalConTitulo[];
+  searchResults: InformacionProfesional[];
 }) {
   const { data, error, isLoading, mutate } = useSWR("profesionales", fetcher, {
     revalidateOnFocus: false,
@@ -34,9 +37,8 @@ function TableProfecionales({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const [identificacion, setIdentificacion] = useState<string | null>(null);
-  const [titulo, setTitulo] = useState<number | null>(null);
 
-  const columnHelper = createColumnHelper<ProfesionalConTitulo>();
+  const columnHelper = createColumnHelper<InformacionProfesional>();
 
   const columns = [
     columnHelper.accessor("id_profesional", {
@@ -59,32 +61,9 @@ function TableProfecionales({
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("titulo_nombre", {
-      header: "Titulo",
-      cell: (info) => info.getValue(),
-    }),
+
     columnHelper.accessor("nombre_extension", {
       header: "Extension",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("numero_diploma", {
-      header: "N° de Diploma",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("acta_grado", {
-      header: "Acta de Grado",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("folio", {
-      header: "Folio",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("fecha_grado", {
-      header: "Fecha de Grado",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("libro_registro_grado", {
-      header: "Libro Registro",
       cell: (info) => info.getValue(),
     }),
     columnHelper.display({
@@ -92,22 +71,12 @@ function TableProfecionales({
       header: "Actualizar",
       cell: (info) => (
         <button
-          onClick={() =>
-            openModal(
-              info.row.original.numero_identificacion,
-              info.row.original.id_titulo
-            )
-          }
+          onClick={() => openModal(info.row.original.numero_identificacion)}
           className="bg-blue-zodiac-950 text-white p-2 rounded"
         >
           Actualizar
         </button>
       ),
-    }),
-    columnHelper.display({
-      id: "generarDocumento",
-      header: "Descargar Verificación de Título",
-      cell: (info) => <GenerarDocumentoWord persona={info.row.original} />,
     }),
   ];
 
@@ -123,17 +92,14 @@ function TableProfecionales({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const openModal = (numeroIdentificacion: string, id_titulo: number) => {
-    console.log(id_titulo);
+  const openModal = (numeroIdentificacion: string) => {
     setIdentificacion(numeroIdentificacion); // Establece el profesional seleccionado
-    setTitulo(id_titulo); // Establece el título seleccionado
     setModalOpen(true); // Abre el modal
   };
 
   const closeModal = () => {
     setModalOpen(false); // Cierra el modal
     setIdentificacion(null); // Reinicia el profesional seleccionado
-    setTitulo(null);
     mutate(); // Revalida los datos de SWR para que se actualice la tabla
   };
 
@@ -144,7 +110,7 @@ function TableProfecionales({
     <div className="bg-white w-full overflow-x-auto rounded-lg">
       {!isLoading ? (
         <>
-          <table className="border">
+          <table className="border w-full">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr
@@ -288,10 +254,9 @@ function TableProfecionales({
         onClose={closeModal}
         title="Actualizar Profesional"
       >
-        {identificacion && titulo !== null && (
+        {identificacion !== null && (
           <FormularioActualizacion
             numeroIdentificacion={identificacion}
-            tituloId={titulo}
             onSuccess={closeModal}
           />
         )}

@@ -1,10 +1,6 @@
 import { ProfesionalActualizar } from "@/interfaces/Profesionales";
-import {
-  obtenerDetallesActualizacionProfesional,
-  obtenerProfesionalPorDocumento,
-} from "@/lib/supabaseAdminGetFunctionsProfe";
+import { obtenerDetallesActualizacionProfesional } from "@/lib/supabaseAdminGetFunctionsProfe";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import FormularioDatosPersonales from "../details/FormularioDatosPersonales";
 import FormularioTitulos from "../details/FormularioTitulos";
 import ExpandingButton from "@/components/ui/ExpandingButton";
@@ -13,31 +9,27 @@ import toast from "react-hot-toast";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
-  tituloId: number;
   onSuccess: () => void;
 }
 const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   numeroIdentificacion,
-  tituloId,
   onSuccess,
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [professionalData, setProfessionalData] =
     useState<ProfesionalActualizar | null>(null);
-
+  const [titulos, setTitulos] = useState<any[]>([]);
   useEffect(() => {
     const fetchProfessional = async () => {
       console.log(numeroIdentificacion);
-      console.log(tituloId);
       try {
         setLoading(true);
         const result = await obtenerDetallesActualizacionProfesional({
           numero_identificacion: numeroIdentificacion,
-          titulo_id: tituloId,
         });
-        console.log(result);
         // Establece los datos del profesional
         setProfessionalData(result[0]);
+        setTitulos(result.filter((item: any) => item.id_titulo));
       } catch (error) {
         console.log(error);
       } finally {
@@ -93,17 +85,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
           <div className="py-4">
             <ExpandingButton
               buttonText="Titulo(s)"
-              expandedContent={
-                <FormularioTitulos
-                  idTitulo={professionalData.id_titulo}
-                  actaGrado={professionalData.acta_grado}
-                  folio={professionalData.folio}
-                  fechaGrado={professionalData.fecha_grado}
-                  libroRegistroGrado={professionalData.libro_registro_grado}
-                  numeroDiploma={professionalData.numero_diploma}
-                  onSubmit={onSubmit} // Igual aquí para manejar el envío
-                />
-              }
+              expandedContent={<FormularioTitulos titulos={titulos} />}
             />
           </div>
         </>

@@ -397,5 +397,13 @@ export interface ProfecionalBusquedaActualizacion {
    * @type {string}
    */
   numero_identificacion: string;
-  titulo_id: number;
+}
+
+export interface InformacionProfesional {
+  id_profesional: number;
+  tipo_identificacion: string;
+  numero_identificacion: string;
+  nombre_profesional: string;
+  apellido_profesional: string;
+  nombre_extension: number | null;
 }

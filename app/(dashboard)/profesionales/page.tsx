@@ -4,7 +4,7 @@ import SearchHeader from "@/components/admin/profesionales/SearchHeader";
 import TableProfecionales from "@/components/admin/profesionales/TableProfecionales";
 import UploadExcel from "@/components/admin/UploadExcel";
 import Modal from "@/components/ui/Modal";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
+import { InformacionProfesional } from "@/interfaces/Profesionales";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 function profecionalesPage() {
@@ -19,7 +19,7 @@ function profecionalesPage() {
     toast.success("¡Registro exitoso!");
     closeModal(); // Cierra el modal
   };
-  const [searchResults, setSearchResults] = useState<ProfesionalConTitulo[]>(
+  const [searchResults, setSearchResults] = useState<InformacionProfesional[]>(
     []
   );
   return (

@@ -9,10 +9,10 @@ import {
   obtnerProfesionalPorNombreApellido,
   obtnerProfesionalPorRangoFechas,
 } from "@/lib/supabaseAdminGetFunctionsProfe";
-import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
+import { InformacionProfesional } from "@/interfaces/Profesionales";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
 interface SearchHeaderProps {
-  onSearch: (data: ProfesionalConTitulo[]) => void; // Cambiado aquí
+  onSearch: (data: InformacionProfesional[]) => void; // Cambiado aquí
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
+import GenerarDocumentoWord from "../../GenerarDocumentoWord";
 interface ProfesionalTitulo {
   id: number;
   id_profesional: number; // Esta propiedad se mantiene pero no se utiliza en la función
@@ -18,6 +19,11 @@ interface ProfesionalTitulo {
 
 interface FormularioTitulosProps {
   titulos: ProfesionalTitulo[];
+  tipoIdentificacion: string; // Agregar esta línea
+  numeroIdentificacion: string; // Agregar esta línea
+  nombre: string; // Agregar esta línea
+  apellido: string; // Agregar esta línea
+  extension: number; // Agregar esta línea
 }
 
 // Define el tipo para los valores del formulario
@@ -30,7 +36,14 @@ const fetcher = async (url: string) => {
   if (error) throw new Error(error.message);
   return data;
 };
-const FormularioTitulos: React.FC<FormularioTitulosProps> = ({ titulos }) => {
+const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
+  titulos,
+  tipoIdentificacion,
+  numeroIdentificacion,
+  nombre,
+  apellido,
+  extension,
+}) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
   // Obtiene los nombres de los títulos
   const { data: titulosNombres } = useSWR("titulos", fetcher);
@@ -175,6 +188,22 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({ titulos }) => {
               Guardar Cambios
             </button>
           </div>
+          <GenerarDocumentoWord
+            persona={{
+              tipoIdentificacion,
+              numeroIdentificacion,
+              nombre,
+              apellido,
+              extension,
+              // Datos específicos del título
+              titulo_nombre: titulosMap?.[titulo.id_titulo] || "",
+              fecha_grado: titulo.fecha_grado,
+              acta_grado: titulo.acta_grado,
+              folio: titulo.folio,
+              libro_registro_grado: titulo.libro_registro_grado,
+              numero_diploma: titulo.numero_diploma,
+            }}
+          />
         </div>
       ))}
     </form>

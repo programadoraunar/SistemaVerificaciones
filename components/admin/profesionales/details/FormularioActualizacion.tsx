@@ -85,7 +85,11 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
           <div className="py-4">
             <ExpandingButton
               buttonText="Titulo(s)"
-              expandedContent={<FormularioTitulos titulos={titulos} />}
+              expandedContent={<FormularioTitulos titulos={titulos} tipoIdentificacion={professionalData.tipo_identificacion}
+              numeroIdentificacion={professionalData.numero_identificacion}
+              nombre={professionalData.nombre_profesional}
+              apellido={professionalData.apellido_profesional}
+              extension={professionalData.id_extension}/>}
             />
           </div>
         </>

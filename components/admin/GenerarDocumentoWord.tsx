@@ -7,19 +7,26 @@ import { Persona } from "@/interfaces/Persona";
 import { ProfesionalConTitulo } from "@/interfaces/Profesionales";
 
 interface GenerarDocumentoWordProps {
-  persona: Persona;
+  persona: {
+    tipoIdentificacion: string;
+    numeroIdentificacion: string;
+    nombre: string;
+    apellido: string;
+    extension: number;
+    titulo_nombre: string;
+    fecha_grado: string;
+    acta_grado: string;
+    folio: string;
+    libro_registro_grado: string;
+    numero_diploma: string;
+  };
 }
 
 const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
   persona,
 }) => {
-  const esProfesional = (p: Persona): p is ProfesionalConTitulo =>
-    (p as ProfesionalConTitulo).id_profesional !== undefined;
-
   const generarDocumento = () => {
-    const nombre = esProfesional(persona)
-      ? `${persona.nombre_profesional} ${persona.apellido_profesional}`
-      : `${persona.nombre_tecnico} ${persona.apellido_tecnico}`;
+    const nombreCompleto = `${persona.nombre} ${persona.apellido}`;
 
     const doc = new Document({
       sections: [
@@ -35,10 +42,7 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
                   font: "Century Gothic",
                 }),
               ],
-              spacing: {
-                before: 300,
-                after: 600,
-              },
+              spacing: { before: 300, after: 600 },
             }),
             new Paragraph({
               alignment: AlignmentType.CENTER,
@@ -49,23 +53,18 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
                   size: 24,
                 }),
               ],
-              spacing: {
-                before: 300,
-                after: 300,
-              },
+              spacing: { before: 300, after: 300 },
             }),
             new Paragraph({
               alignment: AlignmentType.JUSTIFIED,
               children: [
                 new TextRun({
-                  text: `El (la) señor (a) ${nombre}, identificado (a) con cédula de ciudadanía No. ${persona.numero_identificacion}, obtuvo el título de ${persona.titulo_nombre} con fecha de grado ${formatearFecha(persona.fecha_grado)}, se encuentra inscrito (a) en el Acta No. ${persona.acta_grado}, folio No. ${persona.folio} del libro de Diplomas No. ${persona.libro_registro_grado} de los Registros Institucionales.`,
+                  text: `El (la) señor (a) ${nombreCompleto}, identificado (a) con ${persona.tipoIdentificacion} No. ${persona.numeroIdentificacion}, obtuvo el título de ${persona.titulo_nombre} con fecha de grado ${formatearFecha(persona.fecha_grado)}, inscrito en el Acta No. ${persona.acta_grado}, folio No. ${persona.folio} del libro de Diplomas No. ${persona.libro_registro_grado} de los Registros Institucionales.`,
                   font: "Century Gothic",
                   size: 24,
                 }),
               ],
-              spacing: {
-                after: 200,
-              },
+              spacing: { after: 200 },
             }),
           ],
         },
@@ -73,16 +72,19 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
     });
 
     Packer.toBlob(doc).then((blob) => {
-      saveAs(blob, `Verificacion_Titulo_${persona.numero_identificacion}.docx`);
+      saveAs(blob, `Verificacion_Titulo_${persona.numeroIdentificacion}.docx`);
     });
   };
 
   return (
     <button
-      onClick={generarDocumento}
+      onClick={(e) => {
+        e.preventDefault(); // Esto previene el envío del formulario.
+        generarDocumento();
+      }}
       className="bg-blue-zodiac-950 text-white p-2 rounded"
     >
-      Descargar
+      Descargar Título
     </button>
   );
 };

@@ -102,11 +102,6 @@ const TableTecnicos = ({
         </button>
       ),
     }),
-    columnHelper.display({
-      id: "generarDocumento",
-      header: "Descargar Verificación de Título",
-      cell: (info) => <GenerarDocumentoWord persona={info.row.original} />,
-    }),
   ];
 
   const openModal = (numeroIdentificacion: string, id_titulo: number) => {

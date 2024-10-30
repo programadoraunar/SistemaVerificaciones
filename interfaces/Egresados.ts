@@ -24,3 +24,7 @@ export interface EgresadosPorExtension {
   ciudad: string; // El ID de la extensión
   cantidad_egresados: string; // El número de egresados por esa extensión
 }
+export interface EgresadosPorAnio {
+  anio: number; // El año
+  cantidad_egresados: number; // El número de egresados por ese año
+}

@@ -23,6 +23,11 @@ const EgresadosPorCiudad = () => {
   return (
     <div className="border border-gray-300 rounded-lg p-4 shadow-md bg-gray-50">
       <h2 className="text-xl font-semibold mb-4">Egresados por Ciudad</h2>
+      <span>
+        Cantidad de Egresados (Profesionales, Técnicos Laborales, Cursos de
+        Extension) por Ciudad registrados en la base de datos
+      </span>
+
       {data && data.length > 0 ? (
         <table className="min-w-full bg-white">
           <thead>

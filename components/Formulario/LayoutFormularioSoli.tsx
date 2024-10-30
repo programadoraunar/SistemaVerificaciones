@@ -21,6 +21,7 @@ import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
 import { useEgresado } from "@/context/EgresadoContext";
 import Loading from "../ui/Loading";
+import { useSolicitante } from "@/context/SolicitanteContext";
 
 const LayoutFormularioSoli: React.FC = () => {
   const router = useRouter();
@@ -34,6 +35,8 @@ const LayoutFormularioSoli: React.FC = () => {
     formacionAcademicaContext,
     setFormacionAcademicaContext,
   } = useEgresado();
+
+  const { setSolicitanteCorreo, setSolicitanteNombre } = useSolicitante();
   const [isLoading, setIsLoading] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -123,6 +126,9 @@ const LayoutFormularioSoli: React.FC = () => {
           setFormacionAcademicaContext(
             datosVerificacion.formacionAcademicaEgresado
           );
+          //enviamos al contexto del solicitante
+          setSolicitanteCorreo(datosCompletos.correoElectronico);
+          setSolicitanteNombre(datosCompletos.nombres);
           setEgresado(datos);
           await registrarConsultaConEgresado({
             nombresSolicitante: datosCompletos.nombres,

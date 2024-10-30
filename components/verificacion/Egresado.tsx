@@ -6,9 +6,14 @@ import { obtenerInformacionEgresado } from "@/lib/SupabasePublicFunctions";
 import { EgresadoVerificado } from "@/interfaces/Verificacion";
 import { formatearFecha } from "@/utils/fechas";
 import Loading from "../ui/Loading";
+import { useSolicitante } from "@/context/SolicitanteContext";
+import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
+
 const Egresado = () => {
   const router = useRouter();
   const { egresado, identificacion, formacionAcademicaContext } = useEgresado();
+  const { solicitanteCorreo, solicitanteNombre } = useSolicitante();
   const [datosGraduado, setDatosGraduado] = useState<EgresadoVerificado[]>([]); // Aplica la interfaz en el estado
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +29,10 @@ const Egresado = () => {
           numero_documento: identificacion,
           formacionAcademica: formacionAcademicaContext,
         });
-        console.log(data);
+        console.log(data[0].nombre + identificacion);
+        console.log(solicitanteCorreo);
+        console.log(solicitanteNombre);
+
         setDatosGraduado(data); // Establece los datos del egresado como un array
         setLoading(false);
       } catch (error) {
@@ -34,6 +42,29 @@ const Egresado = () => {
 
     fetchEgresado();
   }, [egresado, identificacion, router]);
+
+  const sendEmail = () => {
+    const templateParams = {
+      solicitante_nombre: solicitanteNombre,
+      solicitante_correo: solicitanteCorreo,
+      egresado_nombre: datosGraduado[0]?.nombre || "", // Maneja el caso donde no hay datos
+      egresado_documento: identificacion,
+    };
+
+    emailjs
+      .send("service_bk1vz0a", "template_zcttbui", templateParams, {
+        publicKey: "dvTPfnCvNqCnywfFE",
+      })
+      .then(
+        () => {
+          console.log("SUCCESS!");
+          toast.success("Email Enviado");
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
+  };
   if (loading) {
     return <Loading />;
   }
@@ -148,7 +179,10 @@ const Egresado = () => {
             </div>
 
             <div className="flex justify-center">
-              <button className="p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center">
+              <button
+                className="p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center"
+                onClick={sendEmail}
+              >
                 Solicitar Verificación
               </button>
             </div>

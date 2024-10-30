@@ -151,14 +151,16 @@ const UploadExcel: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="file-upload">
-      <h2>Cargar archivo Excel</h2>
-      <input
-        type="file"
-        accept=".xlsx, .xls"
-        onChange={handleFileUpload}
-        className="file-input"
-      />
+    <div className="file-upload bg-white my-5 p-5">
+      <div className="flex flex-col gap-3">
+        <h2>Cargar archivo Excel</h2>
+        <input
+          type="file"
+          accept=".xlsx, .xls"
+          onChange={handleFileUpload}
+          className="file-input"
+        />
+      </div>
 
       {error && <p className="error">{error}</p>}
       {multipleCount > 0 && (

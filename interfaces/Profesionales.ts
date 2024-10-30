@@ -1,3 +1,5 @@
+import { Titulos } from "./Titulos";
+
 /**
  * Interfaz que representa un profesional con título.
  * @interface ProfesionalConTitulo
@@ -184,54 +186,12 @@ export interface ProfesionalRegistro {
    * @type {string}
    */
   apellido: string;
-
-  /**
-   * ID del título del profesional. Puede ser null si no hay título.
-   * @type {number|null}
-   */
-  id_titulo?: number | null;
-
-  /**
-   * Descripción del título del profesional.
-   * @type {string}
-   */
-  descripcion_titulo?: string;
-
-  /**
-   * Fecha de grado del profesional. Puede ser null si no hay fecha.
-   * @type {Date|null}
-   */
-  fecha_grado?: Date | null;
-
-  /**
-   * Número de diploma del profesional.
-   * @type {string}
-   */
-  numero_diploma: string;
-
-  /**
-   * Acta de grado del profesional.
-   * @type {string}
-   */
-  acta_grado: string;
-
-  /**
-   * Folio del registro del profesional.
-   * @type {string}
-   */
-  folio: string;
-
-  /**
-   * Libro de registro de grado del profesional.
-   * @type {string}
-   */
-  libro_registro_grado: string;
-
   /**
    * ID de la extensión del título.
    * @type {number}
    */
   id_extension: number;
+  titulos: Titulos[];
 }
 
 /**

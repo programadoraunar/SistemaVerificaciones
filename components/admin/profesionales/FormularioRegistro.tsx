@@ -1,58 +1,39 @@
 "use client";
 import { ProfesionalRegistro } from "@/interfaces/Profesionales";
 import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Button } from "../../ui/button";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import { identificationOptionsFormulario } from "@/constants/options";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { formularioRegistroSchema } from "@/validations/validationAdminSchemas";
-import Loading from "../../ui/Loading";
 import { registrarProfesionalConTitulo } from "@/lib/supabaseAdminPostFunctions";
 import { toast, Toaster } from "react-hot-toast";
+import { Titulos } from "@/interfaces/Titulos";
 
 interface FormularioRegistroProps {
   onSuccess: () => void; // Nueva prop para cerrar el modal
 }
-/**
- * Componente de formulario para registrar profesionales con título, técnicos o cursos de extensión.
- * Este formulario permite ingresar la información de identificación, datos personales, y detalles académicos
- * para registrar un profesional, técnico o curso de extension en el sistema.
- *
- * @component
- * @param {Object} props - Props del componente.
- * @param {function} props.onSuccess - Función que se ejecuta después de registrar exitosamente un profesional.
- *
- * @typedef {Object} ProfesionalRegistro
- * @property {string} tipo_identificacion - Tipo de identificación seleccionado.
- * @property {string} numero_identificacion - Número de identificación del profesional.
- * @property {string} nombre - Nombre del profesional.
- * @property {string} apellido - Apellido del profesional.
- * @property {string} numero_diploma - Número del diploma obtenido.
- * @property {string} id_titulo - ID del título seleccionado del profesional.
- * @property {string} acta_grado - Número del acta de grado.
- * @property {string} folio - Número del folio.
- * @property {string} fecha_grado - Fecha de grado en formato 'YYYY-MM-DD'.
- * @property {string} libro_registro_grado - Número del libro de registro de grado.
- * @property {string} id_extension - ID de la extensión seleccionada.
- *
- * @typedef {Object} FormularioRegistroProps
- * @property {function} onSuccess - Función que se llama al registrar exitosamente el profesional.
- *
- * @returns {JSX.Element} Formulario de registro de profesionales y técnicos.
- *
- * @example
- * <FormularioRegistro onSuccess={() => console.log("Registro exitoso")} />
- */
+
 function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProfesionalRegistro>({
-    resolver: zodResolver(formularioRegistroSchema),
+  const { register, handleSubmit, control, reset } = useForm<{
+    tipoIdentificacion: string;
+    numeroIdentificacion: string;
+    nombre: string;
+    apellido: string;
+    idExtension: number | string;
+    titulos: Titulos[];
+  }>({
+    defaultValues: {
+      titulos: [
+        {
+          id_titulo: 0,
+          acta_grado: "",
+          folio: "",
+          fecha_grado: new Date(), // Inicializa con la fecha actual
+          libro_registro_grado: "",
+          numero_diploma: "",
+        },
+      ],
+    },
   });
 
   const fetcher = async (url: string) => {
@@ -64,289 +45,236 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
   const { data: titulos } = useSWR("titulos", fetcher);
   const { data: extensiones } = useSWR("extension", fetcher);
 
-  const onSubmit: SubmitHandler<ProfesionalRegistro> = async (data) => {
-    console.log(data);
-    setIsLoading(true);
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "titulos", // Nombre del campo del arreglo
+  });
+
+  const onSubmit = async (data: any) => {
+    const titulosJson = data.titulos.map((titulo: Titulos) => ({
+      ...titulo,
+      // Formatear la fecha al formato yyyy-mm-dd
+      fecha_grado: new Date(titulo.fecha_grado).toISOString().split("T")[0], // Obtener solo la parte de la fecha
+    }));
+    // Preparar el objeto de datos para enviar a la función registrarProfesionalConTitulo
+    const profesionalData = {
+      tipo_identificacion: data.tipoIdentificacion,
+      numero_identificacion: data.numeroIdentificacion,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      id_extension: Number(data.idExtension),
+      titulos: titulosJson,
+    };
+
     try {
-      await registrarProfesionalConTitulo(data);
+      // Llamada a la función de registro de profesional con los datos preparados
+      await registrarProfesionalConTitulo(profesionalData);
 
-      onSuccess(); // Cerrar el modal al registrar con éxito
-    } catch (error) {
-      console.log(error);
-      // Verifica si el error tiene la estructura esperada
-      if (typeof error === "object" && error !== null && "message" in error) {
-        const customError = error as { message: string; code?: string }; // Cast para acceder a 'message' y 'code'
-
-        toast.error(`${customError.message}`); // Muestra el mensaje de error
+      toast.success("¡Profesional registrado exitosamente!");
+      onSuccess();
+      reset();
+    } catch (err) {
+      // Verifica si el error es una instancia de Error para obtener el mensaje
+      if (err instanceof Error) {
+        alert(`Error: ${err.message}`);
       } else {
-        // Si no tiene la estructura esperada, muestra un mensaje genérico
-        toast.error("Ocurrió un error inesperado.");
+        alert("Error desconocido al registrar el profesional.");
       }
-      // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
-    } finally {
-      setIsLoading(false);
     }
   };
+
   return (
     <>
-      {isLoading && <Loading />}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-2xl mx-auto  bg-white p-5 lg:p-4 rounded-lg shadow-lg"
+        className="p-4 bg-white rounded-lg"
       >
-        <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-          {/* Tipo de Identificación */}
-          <div className="mb-4 w-[100%] lg:w-[50%] ">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Tipo de Identificación
-            </label>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Tipo de Identificación
+          </label>
 
-            <select
-              {...register("tipo_identificacion")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.numero_identificacion
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
-            >
-              <option disabled selected>
-                Seleccione una identificación
+          <select
+            {...register("tipoIdentificacion")}
+            className="w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
+          >
+            <option disabled selected>
+              Seleccione una identificación
+            </option>
+            {identificationOptionsFormulario.map((option, index) => (
+              <option key={index} value={option.id}>
+                {option.nombre}
               </option>
-              {identificationOptionsFormulario.map((option, index) => (
-                <option key={index} value={option.id}>
-                  {option.nombre}
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Número de Identificación
+          </label>
+          <input
+            type="text"
+            {...register("numeroIdentificacion", { required: true })}
+            placeholder="Número de Identificación"
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Nombre
+          </label>
+          <input
+            type="text"
+            {...register("nombre", { required: true })}
+            placeholder="Nombre"
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Apellido
+          </label>
+          <input
+            type="text"
+            {...register("apellido", { required: true })}
+            placeholder="Apellido"
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Seleccionar Extension
+          </label>
+
+          <select
+            {...register("idExtension")}
+            className="w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
+                "
+          >
+            <option value="">Seleccionar la Extension</option>
+            {extensiones &&
+              extensiones.map((extension: any) => (
+                <option key={extension.id} value={extension.id}>
+                  {extension.nombre}
                 </option>
               ))}
-            </select>
-            {errors.tipo_identificacion && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.tipo_identificacion.message}
-              </p>
-            )}
-          </div>
+          </select>
+        </div>
 
-          {/* Número de Documento */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Número de Documento
-            </label>
-            <input
-              type="text"
-              {...register("numero_identificacion")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.numero_identificacion
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
-              placeholder="Número de documento"
-            />
-            {errors.numero_identificacion && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.numero_identificacion.message}
-              </p>
+        <h3 className="text-xl font-semibold mb-2">Títulos</h3>
+        {fields.map((item, index) => (
+          <div key={item.id} className="mb-4 p-4 border rounded-md bg-gray-50">
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Título
+              </label>
+              <select
+                {...register(`titulos.${index}.id_titulo`, { required: true })}
+                className="w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
+              >
+                <option value="">Seleccionar Título</option>
+                {titulos &&
+                  titulos.map((titulo: any) => (
+                    <option key={titulo.id} value={titulo.id}>
+                      {titulo.nombre}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Acta de Grado
+              </label>
+              <input
+                type="text"
+                {...register(`titulos.${index}.acta_grado`)}
+                placeholder="Acta de Grado"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Folio
+              </label>
+              <input
+                type="text"
+                {...register(`titulos.${index}.folio`)}
+                placeholder="Folio"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Fecha de Grado
+              </label>
+              <input
+                type="date"
+                {...register(`titulos.${index}.fecha_grado`)}
+                placeholder="Fecha de Grado"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Libro de Registro de Grado
+              </label>
+              <input
+                type="text"
+                {...register(`titulos.${index}.libro_registro_grado`)}
+                placeholder="Libro de Registro de Grado"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Número de Diploma
+              </label>
+              <input
+                type="text"
+                {...register(`titulos.${index}.numero_diploma`)}
+                placeholder="Número de Diploma"
+                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
+            {fields.length > 1 && ( // Verifica si hay más de un título para mostrar el botón "Eliminar"
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200"
+              >
+                Eliminar Título
+              </button>
             )}
           </div>
-        </div>
-        <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-          {/* Nombre */}
-          <div className="mb-4  w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Nombres
-            </label>
-            <input
-              type="text"
-              {...register("nombre")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.nombre ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Nombre"
-            />
-            {errors.nombre && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.nombre.message}
-              </p>
-            )}
-          </div>
+        ))}
 
-          {/* Apellido */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Apellidos
-            </label>
-            <input
-              type="text"
-              {...register("apellido")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.apellido ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Apellido"
-            />
-            {errors.apellido && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.apellido.message}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row w-full  lg:gap-8">
-          {/* Programa */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Numero de Diploma
-            </label>
-            <input
-              type="text"
-              {...register("numero_diploma")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.numero_diploma ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Número de Diploma"
-            />
-            {errors.numero_diploma && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.numero_diploma.message}
-              </p>
-            )}
-          </div>
-          {/* Título */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Título
-            </label>
-            <select
-              {...register("id_titulo")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.id_titulo ? "border-red-500" : "border-gray-300"
-              }`}
-            >
-              <option>Seleccionar Título</option>
-              {titulos &&
-                titulos.map((titulo: any) => (
-                  <option key={titulo.id} value={titulo.id}>
-                    {titulo.nombre}
-                  </option>
-                ))}
-            </select>
-            {errors.id_titulo && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.id_titulo.message}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-          {/* Acta de Grado */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Acta de Grado
-            </label>
-            <input
-              type="text"
-              {...register("acta_grado")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.acta_grado ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Acta de grado"
-            />
-            {errors.acta_grado && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.acta_grado.message}
-              </p>
-            )}
-          </div>
+        <button
+          type="button"
+          onClick={() =>
+            append({
+              id_titulo: 0,
+              acta_grado: "",
+              folio: "",
+              fecha_grado: new Date(), // Inicializa con la fecha actual
+              libro_registro_grado: "",
+              numero_diploma: "",
+            })
+          }
+          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
+        >
+          Agregar Título
+        </button>
 
-          {/* Folio */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Folio
-            </label>
-            <input
-              type="text"
-              {...register("folio")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.folio ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Folio"
-            />
-            {errors.folio && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.folio.message}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-          {/* Fecha de Grado */}
-          <div className="mb-4w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Fecha de Grado
-            </label>
-            <input
-              type="date"
-              {...register("fecha_grado")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.fecha_grado ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.fecha_grado && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.acta_grado?.message}
-              </p>
-            )}
-          </div>
-
-          {/* Libro Registro de Grado */}
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Libro de Registro de Grado
-            </label>
-            <input
-              type="text"
-              {...register("libro_registro_grado")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.libro_registro_grado
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
-              placeholder="Libro de registro de grado"
-            />
-            {errors.libro_registro_grado && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.libro_registro_grado.message}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-          <div className="mb-4 w-[100%] lg:w-[50%]">
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Extension
-            </label>
-            <select
-              {...register("id_extension")}
-              className={`w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-                errors.id_titulo ? "border-red-500" : "border-gray-300"
-              }`}
-            >
-              <option value="">Seleccionar la Extension</option>
-              {extensiones &&
-                extensiones.map((extension: any) => (
-                  <option key={extension.id} value={extension.id}>
-                    {extension.nombre}
-                  </option>
-                ))}
-            </select>
-            {errors.id_titulo && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.id_titulo.message}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <Button type="submit">Registrar</Button>
-        </div>
-        <Toaster />
+        <button
+          type="submit"
+          className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
+        >
+          Registrar Profesional
+        </button>
       </form>
     </>
   );

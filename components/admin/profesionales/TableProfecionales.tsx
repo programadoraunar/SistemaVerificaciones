@@ -41,10 +41,6 @@ function TableProfecionales({
   const columnHelper = createColumnHelper<InformacionProfesional>();
 
   const columns = [
-    columnHelper.accessor("id_profesional", {
-      header: "ID",
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.accessor("tipo_identificacion", {
       header: "Tipo Identificación",
       cell: (info) => info.getValue(),
@@ -68,13 +64,13 @@ function TableProfecionales({
     }),
     columnHelper.display({
       id: "details",
-      header: "Actualizar",
+      header: "Detalles",
       cell: (info) => (
         <button
           onClick={() => openModal(info.row.original.numero_identificacion)}
           className="bg-blue-zodiac-950 text-white p-2 rounded"
         >
-          Actualizar
+          Detalles
         </button>
       ),
     }),

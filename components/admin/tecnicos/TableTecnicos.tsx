@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/ui/Loading";
-import { TecnicoConTitulo } from "@/interfaces/Tecnicos";
+import { Tecnico } from "@/interfaces/Tecnicos";
 import { obtenerInformacionTecnicos } from "@/lib/supabaseAdminGetFunctionTec";
 import {
   createColumnHelper,
@@ -22,11 +22,7 @@ const fetcher = async () => {
   const result = await obtenerInformacionTecnicos();
   return result;
 };
-const TableTecnicos = ({
-  searchResults,
-}: {
-  searchResults: TecnicoConTitulo[];
-}) => {
+const TableTecnicos = ({ searchResults }: { searchResults: Tecnico[] }) => {
   const { data, error, isLoading, mutate } = useSWR("tecnicos", fetcher, {
     revalidateOnFocus: false,
   });
@@ -34,13 +30,9 @@ const TableTecnicos = ({
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const [identificacion, setIdentificacion] = useState<string | null>(null);
   const [titulo, setTitulo] = useState<number | null>(null);
-  const columnHelper = createColumnHelper<TecnicoConTitulo>();
+  const columnHelper = createColumnHelper<Tecnico>();
 
   const columns = [
-    columnHelper.accessor("id_tecnico", {
-      header: "ID",
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.accessor("tipo_identificacion", {
       header: "Tipo Identificación",
       cell: (info) => info.getValue(),
@@ -57,50 +49,10 @@ const TableTecnicos = ({
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("titulo_nombre", {
-      header: "Titulo",
-      cell: (info) => info.getValue(),
-    }),
+
     columnHelper.accessor("nombre_extension", {
       header: "Extension",
       cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("numero_diploma", {
-      header: "N° de Diploma",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("acta_grado", {
-      header: "Acta de Grado",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("folio", {
-      header: "Folio",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("fecha_grado", {
-      header: "Fecha de Grado",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("libro_registro_grado", {
-      header: "Libro Registro",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.display({
-      id: "details",
-      header: "Actualizar",
-      cell: (info) => (
-        <button
-          onClick={() =>
-            openModal(
-              info.row.original.numero_identificacion,
-              info.row.original.id_titulo
-            )
-          }
-          className="bg-blue-zodiac-950 text-white p-2 rounded"
-        >
-          Actualizar
-        </button>
-      ),
     }),
   ];
 
@@ -135,7 +87,7 @@ const TableTecnicos = ({
     <div className="bg-white w-full overflow-x-auto rounded-lg">
       {!isLoading ? (
         <>
-          <table className="border">
+          <table className="border w-full">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr

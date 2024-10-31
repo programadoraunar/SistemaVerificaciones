@@ -77,3 +77,13 @@ export interface ExtensionConTitulo {
   libro_registro_grado: string;
   titulo_id: number;
 }
+
+/*interfaces que representan los egresados de extension */
+export interface Extension {
+  id_cursos_extension: number;
+  tipo_identificacion: string;
+  numero_identificacion: string;
+  nombre_tecnico: string;
+  apellido_tecnico: string;
+  nombre_extension: number | null;
+}

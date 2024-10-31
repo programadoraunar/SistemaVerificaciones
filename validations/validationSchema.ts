@@ -111,3 +111,10 @@ export const formularioEgresadoSchema = z.object({
 });
 
 export type FormularioEgresado = z.infer<typeof formularioEgresadoSchema>;
+
+export const loginSchema = z.object({
+  email: z.string().email("Correo electrónico inválido"),
+  password: z.string().min(1, "La contraseña es requerida"),
+});
+
+export type LoginFormData = z.infer<typeof loginSchema>;

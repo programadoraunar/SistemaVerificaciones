@@ -224,7 +224,7 @@ const LayoutFormularioSoli: React.FC = () => {
           </label>
           <select
             name="tipoIdentificacionEgresado"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm cursor-pointer"
             required
             onChange={handleDatosAdicionalesChange}
             value={datosAdicionales.tipoIdentificacionEgresado}
@@ -270,7 +270,7 @@ const LayoutFormularioSoli: React.FC = () => {
         </label>
         <select
           name="formacionAcademicaEgresado"
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm cursor-pointer"
           required
           onChange={handleDatosAdicionalesChange}
           value={datosAdicionales.formacionAcademicaEgresado}

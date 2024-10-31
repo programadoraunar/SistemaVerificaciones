@@ -5,11 +5,21 @@ import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
+import { LoginFormData, loginSchema } from "@/validations/validationSchema";
 
 // Acción de inicio de sesión
-export const signInAction = async (formData: FormData) => {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+export const signInAction = async (data: LoginFormData) => {
+  // Validación de los datos con Zod
+  const parsedData = loginSchema.safeParse(data);
+  if (!parsedData.success) {
+    return encodedRedirect(
+      "error",
+      "/sign-in",
+      "Datos de inicio de sesión inválidos"
+    );
+  }
+
+  const { email, password } = parsedData.data;
   const supabase = createClient();
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -21,7 +31,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  // Redirige al dashboard después del inicio de sesión exitoso
   return redirect("/dashboard");
 };
 

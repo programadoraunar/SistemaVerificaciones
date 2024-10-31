@@ -41,7 +41,9 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
 
   useEffect(() => {
     // Obtener los países únicos del JSON de ciudades
-    const countries = Array.from(new Set(cities.map((city) => city.country)));
+    const countries = Array.from(
+      new Set(cities.map((city) => city.country))
+    ).sort((a, b) => a.localeCompare(b));
     setPaises(countries);
     setIsLoading(false);
   }, []);
@@ -53,7 +55,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         .filter((city) => city.country === watch("pais")) // Uso directo de `watch`
         .map((city) => city.subcountry)
     )
-  ).sort();
+  ).sort((a, b) => a.localeCompare(b));
 
   // Filtrar ciudades según la región seleccionada
   const filteredCities = cities
@@ -62,7 +64,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         city.country === watch("pais") &&
         city.subcountry === watch("subcountry")
     )
-    .sort();
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -102,7 +104,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
               Tipo Identificación del Solicitante
             </label>
             <select
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 text-sm cursor-pointer"
               {...register("tipoIdentificacion")}
             >
               <option value="">Seleccione una identificación</option>
@@ -166,7 +168,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
               País:
             </label>
             <select
-              className="w-full text-sm"
+              className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-1.5 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
               id="pais"
               {...register("pais")}
               onChange={(e) => {
@@ -195,7 +197,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
               Región/Estado/Departamento:
             </label>
             <select
-              className="text-sm"
+              className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-1.5 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
               id="subcountry"
               {...register("subcountry")}
               onChange={(e) => {
@@ -219,7 +221,11 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             <label className="text-sm" htmlFor="city">
               Ciudad:
             </label>
-            <select className="text-sm" id="ciudad" {...register("ciudad")}>
+            <select
+              className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-1.5 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
+              id="ciudad"
+              {...register("ciudad")}
+            >
               <option value="">Selecciona una ciudad</option>
               {filteredCities.map((city) => (
                 <option key={city.geonameid} value={city.name}>
@@ -233,7 +239,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         <div className="mt-6">
           <button
             type="submit"
-            className="w-full p-2 bg-blue-950 text-white rounded-md text-center"
+            className="w-full p-2 bg-blue-zodiac-950 text-white rounded-md text-center"
             disabled={isLoading}
           >
             {isLoading ? "Cargando..." : "Verificar"}

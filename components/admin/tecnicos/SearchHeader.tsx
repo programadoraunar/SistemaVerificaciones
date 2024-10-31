@@ -4,11 +4,11 @@ import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { CiSearch } from "react-icons/ci";
-import { TecnicoConTitulo } from "@/interfaces/Tecnicos";
+import { Tecnico } from "@/interfaces/Tecnicos";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
 
 interface SearchHeaderProps {
-  onSearch: (data: TecnicoConTitulo[]) => void;
+  onSearch: (data: Tecnico[]) => void;
 }
 const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   const [numeroIdentificacion, setNumeroIdentificacion] = useState("");

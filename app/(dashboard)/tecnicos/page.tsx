@@ -4,7 +4,7 @@ import FormularioRegistro from "@/components/admin/profesionales/FormularioRegis
 import SearchHeader from "@/components/admin/tecnicos/SearchHeader";
 import TableTecnicos from "@/components/admin/tecnicos/TableTecnicos";
 import Modal from "@/components/ui/Modal";
-import { TecnicoConTitulo } from "@/interfaces/Tecnicos";
+import { Tecnico } from "@/interfaces/Tecnicos";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 function tecnicosPage() {
@@ -19,7 +19,7 @@ function tecnicosPage() {
     toast.success("¡Registro exitoso!");
     closeModal(); // Cierra el modal
   };
-  const [searchResults, setSearchResults] = useState<TecnicoConTitulo[]>([]);
+  const [searchResults, setSearchResults] = useState<Tecnico[]>([]);
   console.log(searchResults);
   return (
     <div className="flex flex-col p-5 bg-gray-100">

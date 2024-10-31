@@ -5,6 +5,7 @@ interface Detalles {
   onSuccess: () => void;
 }
 const Detalles: React.FC<Detalles> = ({ id, onSuccess }) => {
+  console.log(id);
   return <div>Detalles</div>;
 };
 

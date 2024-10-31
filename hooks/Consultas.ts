@@ -7,7 +7,8 @@ const fetcher = async () => {
     .from("consultas")
     .select(
       "id, tipo_solicitante, nombres_solicitante, apellidos_solicitante, telefono_solicitante, correo_electronico_solicitante, fecha_consulta"
-    );
+    )
+    .order("fecha_consulta", { ascending: false });
 
   if (error) {
     throw new Error(error.message);

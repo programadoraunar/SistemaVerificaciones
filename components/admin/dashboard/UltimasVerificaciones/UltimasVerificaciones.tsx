@@ -48,7 +48,7 @@ function UltimasVerificaciones() {
 
   return (
     <div className="bg-white p-5 rounded-lg">
-      <div className="flex justify-between items-center py-3">
+      <div className="flex flex-col sm:flex-row justify-between items-center py-3">
         <h2 className="text-lg font-bold mb-4">
           Resumen de Consulta de Verificación de Título
         </h2>

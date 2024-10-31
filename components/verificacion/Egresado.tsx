@@ -9,6 +9,10 @@ import Loading from "../ui/Loading";
 import { useSolicitante } from "@/context/SolicitanteContext";
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
+import { Button } from "../ui/button";
+import { IoMdArrowBack } from "react-icons/io";
+import Link from "next/link";
+import Modal from "../ui/Modal";
 
 const Egresado = () => {
   const router = useRouter();
@@ -29,9 +33,6 @@ const Egresado = () => {
           numero_documento: identificacion,
           formacionAcademica: formacionAcademicaContext,
         });
-        console.log(data[0].nombre + identificacion);
-        console.log(solicitanteCorreo);
-        console.log(solicitanteNombre);
 
         setDatosGraduado(data); // Establece los datos del egresado como un array
         setLoading(false);
@@ -47,6 +48,7 @@ const Egresado = () => {
     const templateParams = {
       solicitante_nombre: solicitanteNombre,
       solicitante_correo: solicitanteCorreo,
+      egresado_titulo: datosGraduado[0]?.titulo || "",
       egresado_nombre: datosGraduado[0]?.nombre || "", // Maneja el caso donde no hay datos
       egresado_documento: identificacion,
     };
@@ -57,13 +59,16 @@ const Egresado = () => {
       })
       .then(
         () => {
-          console.log("SUCCESS!");
-          toast.success("Email Enviado");
+          setIsModalOpen(true);
         },
         (error) => {
           console.log("FAILED...", error.text);
         }
       );
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
   if (loading) {
     return <Loading />;
@@ -173,22 +178,40 @@ const Egresado = () => {
             "
             >
               <span className="text-red-400 font-bold">
-                * Si usted(es) requiere de una de una certificación firmada dar
-                click aquí
+                * Si usted(es) requiere de una certificación firmada dar click
+                aquí
               </span>
             </div>
 
             <div className="flex justify-center">
               <button
-                className="p-2 bg-blueBase text-white rounded-md hover:bg-blue-800 text-center"
+                className="p-2 bg-blue-zodiac-950 text-white rounded-md hover:bg-blue-800 text-center"
                 onClick={sendEmail}
               >
                 Solicitar Verificación
               </button>
             </div>
+            <div className="flex justify-end">
+              <Link
+                className="p-2 bg-blue-zodiac-950 text-white rounded-md hover:bg-blue-800 text-center"
+                href="/"
+              >
+                <IoMdArrowBack />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="Solicitud Enviada"
+      >
+        <span className="text-justify">
+          Su solicitud de verificación de título ha sido recibida. La respuesta
+          será enviada al correo electrónico registrado en su solicitud
+        </span>
+      </Modal>
     </div>
   );
 };

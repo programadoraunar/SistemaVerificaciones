@@ -24,6 +24,7 @@ export const EgresadoContext = createContext<EgresadoContextType | null>(null);
 export const EgresadoProvider = ({ children }: { children: ReactNode }) => {
   const [egresado, setEgresado] = useState<any>(null); // Usa el tipo adecuado aquí
   const [identificacion, setIdentificacion] = useState<any>(null);
+
   const [formacionAcademicaContext, setFormacionAcademicaContext] =
     useState<any>(null);
 

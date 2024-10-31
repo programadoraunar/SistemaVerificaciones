@@ -19,7 +19,6 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
       try {
         const consultaId: ConsultaBusquedaId = { id: idConsulta };
         const response = await obtenerDetallesConsultaId(consultaId);
-        console.log(response[0]);
         setConsulta(response[0]);
         setIsLoading(false);
       } catch (error) {
@@ -67,7 +66,7 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
         </p>
         <p>
           <span className="font-bold">Fecha Consulta:</span>{" "}
-          {new Date(consulta.fecha_consulta).toLocaleString()}
+          {convertirAHoraColombiana(consulta.fecha_consulta)}
         </p>
 
         {/* Información del Profesional */}

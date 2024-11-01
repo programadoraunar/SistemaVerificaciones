@@ -47,8 +47,9 @@ function TableProfecionales({
     }),
     columnHelper.accessor("numero_identificacion", {
       header: "Número Identificación",
-      cell: (info) => info.getValue(),
+      cell: (info) => <div className="text-right">{info.getValue()}</div>,
     }),
+
     columnHelper.accessor("nombre_profesional", {
       header: "Nombre",
       cell: (info) => info.getValue(),

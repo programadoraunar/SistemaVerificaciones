@@ -8,7 +8,7 @@ export interface Titulos {
 }
 
 export interface Titulo {
-  id: number;
+  titulo_id: number;
   nombre: string;
-  descripcion: string;
+  codigos: string[];
 }

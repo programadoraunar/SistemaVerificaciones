@@ -22,7 +22,7 @@ const EgresadosPorCiudad = () => {
   if (error) return <div>Error al cargar los datos: {error.message}</div>;
   return (
     <div className="border border-gray-300 rounded-lg p-4 shadow-md bg-gray-50">
-      <h2 className="text-xl font-semibold mb-4">Egresados por Ciudad</h2>
+      <h2 className="text-2xl font-semibold mb-4">Egresados por Ciudad</h2>
       <span>
         Cantidad de Egresados (Profesionales, Técnicos Laborales, Cursos de
         Extension) por Ciudad registrados en la base de datos

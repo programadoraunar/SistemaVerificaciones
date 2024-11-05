@@ -10,14 +10,19 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { ProfesionalConTitulo } from "@/interfaces/Persona";
-import { ProfesionalConTituloImport } from "@/interfaces/Profesionales";
+import {
+  DatosProcesados,
+  ProfesionalConTituloImport,
+} from "@/interfaces/Profesionales";
 import DownloadExcelFile from "./excel/Profesionales/DownloadExcelFile";
+import { supabase } from "@/utils/supabase/client";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
   multipleCount: number;
   multipleTitle: any[];
 }
+
 const UploadExcel: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [multipleCount, setMultipleCount] = useState<number>(0);
@@ -122,7 +127,7 @@ const UploadExcel: React.FC = () => {
       // Imprimir multipleTitle en la consola
       console.log(data.multipleTitle);
       console.log(data.multipleCount);
-      console.log(previewData);
+
       // Transformar los datos de preview a ProfesionalConTitulo[]
       const transformedData: ProfesionalConTituloImport[] = data.preview.map(
         (row) => ({
@@ -130,7 +135,7 @@ const UploadExcel: React.FC = () => {
           numero_identificacion: row[1] as string,
           nombre_profesional: row[2] as string,
           apellido_profesional: row[3] as string,
-          snies: row[4] as string,
+          snies: row[4] as Number,
           titulo_nombre: row[5] as string,
           nombre_extension: row[6] as string,
           acta_grado: row[7] as string,
@@ -146,6 +151,93 @@ const UploadExcel: React.FC = () => {
       console.error("Error al cargar el archivo:", err);
       setError("Error al cargar el archivo");
     }
+  };
+
+  const processTransformedData = (data: DatosProcesados[]) => {
+    const extension_to_id: { [key: string]: number } = {
+      pasto: 1,
+      ipiales: 2,
+      "puerto asis": 3,
+      cali: 4,
+      villavicencio: 5,
+      cartagena: 6,
+    };
+
+    const snies_to_id_titulo: { [key: number]: number } = {
+      52928: 1,
+      102519: 1,
+      53445: 2,
+      102322: 2,
+      52536: 3,
+      52639: 4,
+      15864: 5,
+      14351: 5,
+      15865: 5,
+      15861: 6,
+      15862: 6,
+      5363: 6,
+      2742: 6,
+      14355: 6,
+      3092: 7,
+      101274: 7,
+      2458: 8,
+      2700: 9,
+      15616: 9,
+      3485: 10,
+      14365: 10,
+      101511: 11,
+      19432: 12,
+    };
+
+    const processedData = data.map((row: DatosProcesados) => {
+      // Asegurarse de que nombre_extension sea un string antes de llamar a toLowerCase()
+      const normalizedExtension =
+        typeof row.nombre_extension === "string"
+          ? row.nombre_extension.toLowerCase().trim()
+          : null;
+
+      return {
+        tipo_identificacion: row.tipo_identificacion,
+        numero_identificacion: row.numero_identificacion,
+        nombre_profesional: row.nombre_profesional,
+        apellido_profesional: row.apellido_profesional,
+        snies: row.snies,
+        titulo_nombre: snies_to_id_titulo[row.snies as number] || null,
+        nombre_extension:
+          extension_to_id[normalizedExtension as string] || null,
+        acta_grado: row.acta_grado,
+        numero_diploma: row.numero_diploma,
+        folio: row.folio,
+        fecha_grado: row.fecha_grado ? new Date(row.fecha_grado) : null,
+        libro_registro_grado: row.libro_registro_grado,
+      };
+    });
+
+    return processedData;
+  };
+  const subirDatos = async (datos: DatosProcesados[]) => {
+    const datosParaInsertar = datos.map((item) => ({
+      tipo_identificacion: item.tipo_identificacion,
+      nombre: item.nombre_profesional,
+      apellido: item.apellido_profesional,
+      numero_identificacion: item.numero_identificacion.toString(),
+      id_extension: item.nombre_extension,
+    }));
+    console.log(datosParaInsertar);
+
+    const { data, error } = await supabase
+      .from("ProfesionalesPrueba")
+      .insert(datosParaInsertar);
+
+    if (error) {
+      console.error("Error al insertar datos:", error);
+    } else {
+      console.log("Datos insertados:", data);
+    }
+  };
+  const manejarClick = () => {
+    const datosTransformados = processTransformedData(previewData);
+    subirDatos(datosTransformados);
   };
 
   const [error, setError] = useState<string | null>(null);
@@ -309,6 +401,7 @@ const UploadExcel: React.FC = () => {
               </div>
             </div>
           </div>
+          <button onClick={manejarClick}>Subir Datos</button>
         </>
       )}
     </div>

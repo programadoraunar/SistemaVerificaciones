@@ -98,6 +98,7 @@ const MetricasPromociones = () => {
           <h2 className="text-lg font-semibold">
             Total de Promociones Acumuladas:
           </h2>
+          <span>Total de promociones acumuladas hasta la actualidad</span>
           <p>{totalPromocionesAcumuladas}</p>
         </div>
       )}

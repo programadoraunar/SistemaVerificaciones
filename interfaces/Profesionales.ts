@@ -85,77 +85,18 @@ export interface ProfesionalConTitulo {
  * @interface ProfesionalConTituloImport
  */
 export interface ProfesionalConTituloImport {
-  /**
-   * Tipo de identificación del profesional.
-   * @type {string}
-   */
   tipo_identificacion: string;
-
-  /**
-   * Número de identificación del profesional.
-   * Asegurarse de usar "numero_identificacion".
-   * @type {string}
-   */
-  numero_identificacion: string;
-
-  /**
-   * Nombre del profesional.
-   * @type {string}
-   */
+  numero_identificacion: string; // Mantener como string
   nombre_profesional: string;
-
-  /**
-   * Apellido del profesional.
-   * @type {string}
-   */
   apellido_profesional: string;
-  /**
-   * snies del título del profesional.
-   * @type {string}
-   */
-  snies: string;
-
-  /**
-   * Nombre del título del profesional.
-   * @type {string}
-   */
+  snies: Number; // Convertido a number
   titulo_nombre: string;
-
-  /**
-   * Número de diploma del profesional.
-   * @type {string}
-   */
-  numero_diploma: string;
-
-  /**
-   * Acta de grado del profesional.
-   * @type {string}
-   */
-  acta_grado: string;
-
-  /**
-   * Folio del registro del profesional.
-   * @type {string}
-   */
-  folio: string;
-
-  /**
-   * Fecha de grado del profesional. Puede ser null si no hay fecha.
-   * @type {Date|null}
-   */
-  fecha_grado: Date | null;
-
-  /**
-   * Libro de registro de grado del profesional.
-   * @type {string}
-   */
-  libro_registro_grado: string;
-
-  /**
-   * Nombre de la extensión del título.
-   * @type {string}
-   */
   nombre_extension: string;
+  acta_grado: string;
+  numero_diploma: string | null;
+  folio: string;
+  fecha_grado: Date | null;
+  libro_registro_grado: string;
 }
 
 /**
@@ -222,24 +163,6 @@ export interface ProfecionalBusquedaNombres {
    * @type {string|null}
    */
   apellidos: string | null;
-}
-
-/**
- * Interfaz para buscar profesionales por fechas.
- * @interface ProfecionalBusquedaFechas
- */
-export interface ProfecionalBusquedaFechas {
-  /**
-   * Fecha de inicio para la búsqueda. Puede ser null.
-   * @type {string|null}
-   */
-  fechaInicio: string | null;
-
-  /**
-   * Fecha de fin para la búsqueda. Puede ser null.
-   * @type {string|null}
-   */
-  fechaFin: string | null;
 }
 
 /**
@@ -366,4 +289,19 @@ export interface InformacionProfesional {
   nombre_profesional: string;
   apellido_profesional: string;
   nombre_extension: number | null;
+}
+//interfaz que se utuliza
+export interface DatosProcesados {
+  tipo_identificacion: string;
+  numero_identificacion: string; // Cambiado a string
+  nombre_profesional: string;
+  apellido_profesional: string;
+  snies: Number;
+  titulo_nombre: string | number | null;
+  nombre_extension: string | number | null;
+  acta_grado: string;
+  numero_diploma: string | null;
+  folio: string;
+  fecha_grado: Date | null;
+  libro_registro_grado: string;
 }

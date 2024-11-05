@@ -1,10 +1,5 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import "./globals.css";
 import localFont from "next/font/local";
-import HeaderImage from "@/components/HeaderImage";
-import Escudo from "@/components/Escudo";
 import { EgresadoProvider } from "@/context/EgresadoContext";
 import { SolicitanteProvider } from "@/context/SolicitanteContext";
 

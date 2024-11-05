@@ -17,6 +17,8 @@ import {
 import DownloadExcelFile from "./excel/Profesionales/DownloadExcelFile";
 import { supabase } from "@/utils/supabase/client";
 import { EXTENSION_TO_ID, SNIES_TO_ID_TITULO } from "@/constants/options";
+import toast from "react-hot-toast";
+import { Button } from "../ui/button";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -28,6 +30,7 @@ const UploadExcel: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [multipleCount, setMultipleCount] = useState<number>(0);
   const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const columnHelper = createColumnHelper<ProfesionalConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -103,6 +106,7 @@ const UploadExcel: React.FC = () => {
   });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -118,17 +122,12 @@ const UploadExcel: React.FC = () => {
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.error || "Failed to upload file");
+        toast.dismiss(loadingToastId); // Cierra el mensaje de carga
         setPreviewData([]);
         return;
       }
 
       const data: PreviewData = await response.json();
-      setMultipleCount(data.multipleCount);
-      setMultipleTitles(data.multipleTitle);
-      // Imprimir multipleTitle en la consola
-      console.log(data.multipleTitle);
-      console.log(data.multipleCount);
-
       // Transformar los datos de preview a ProfesionalConTitulo[]
       const transformedData: ProfesionalConTituloImport[] = data.preview.map(
         (row) => ({
@@ -148,6 +147,7 @@ const UploadExcel: React.FC = () => {
         })
       );
       setPreviewData(transformedData);
+      toast.dismiss(loadingToastId);
     } catch (err) {
       console.error("Error al cargar el archivo:", err);
       setError("Error al cargar el archivo");
@@ -182,6 +182,7 @@ const UploadExcel: React.FC = () => {
     return processedData;
   };
   const subirDatos = async (datos: DatosProcesados[]) => {
+    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const datosParaInsertar = datos.map((item) => ({
       tipo_identificacion: item.tipo_identificacion,
       nombre: item.nombre_profesional,
@@ -201,6 +202,8 @@ const UploadExcel: React.FC = () => {
     // Verificar si hay un error al insertar los profesionales
     if (profesionalesError) {
       console.error("Error al insertar datos:", profesionalesError);
+      toast.error("Error al registrar el profesional.");
+      toast.dismiss(loadingToastId);
       return; // Salir de la función si hay un error
     }
 
@@ -209,6 +212,8 @@ const UploadExcel: React.FC = () => {
       console.error(
         "No se recibió datos de profesionales después de la inserción."
       );
+      toast.error("No se pudo registrar el profesional.");
+      toast.dismiss(loadingToastId);
       return; // Salir de la función si no hay datos
     }
 
@@ -237,8 +242,11 @@ const UploadExcel: React.FC = () => {
 
     if (titulosError) {
       console.error("Error al insertar títulos:", titulosError);
+      toast.error("Error al registrar los títulos del profesional.");
     } else {
       console.log("Títulos insertados:", titulosData);
+      toast.dismiss(loadingToastId);
+      toast.success("¡Profesional y títulos registrados con éxito!");
     }
   };
 
@@ -408,7 +416,7 @@ const UploadExcel: React.FC = () => {
               </div>
             </div>
           </div>
-          <button onClick={manejarClick}>Subir Datos</button>
+          <Button onClick={manejarClick}>Cargar Datos</Button>
         </>
       )}
     </div>

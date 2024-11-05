@@ -189,18 +189,59 @@ const UploadExcel: React.FC = () => {
       numero_identificacion: item.numero_identificacion.toString(),
       id_extension: item.nombre_extension,
     }));
+
     console.log(datosParaInsertar);
 
-    const { data, error } = await supabase
-      .from("ProfesionalesPrueba")
-      .insert(datosParaInsertar);
+    const { data: profesionalesData, error: profesionalesError } =
+      await supabase
+        .from("ProfesionalesPrueba")
+        .insert(datosParaInsertar)
+        .select("id");
 
-    if (error) {
-      console.error("Error al insertar datos:", error);
+    // Verificar si hay un error al insertar los profesionales
+    if (profesionalesError) {
+      console.error("Error al insertar datos:", profesionalesError);
+      return; // Salir de la función si hay un error
+    }
+
+    // Verificar que profesionalesData no sea null
+    if (!profesionalesData) {
+      console.error(
+        "No se recibió datos de profesionales después de la inserción."
+      );
+      return; // Salir de la función si no hay datos
+    }
+
+    console.log("Datos insertados:", profesionalesData);
+
+    // Paso 3: Preparar los títulos para insertar
+    const titulosParaInsertar = datos.map((item, index) => ({
+      id_profesional: profesionalesData[index]?.id || null, // Usar el ID del profesional correspondiente
+      id_titulo: item.titulo_nombre || null, // Obtener el ID del título
+      acta_grado: item.acta_grado,
+      folio: item.folio,
+      fecha_grado: item.fecha_grado
+        ? new Date(item.fecha_grado).toISOString().split("T")[0]
+        : null,
+      libro_registro_grado: item.libro_registro_grado,
+      numero_diploma: item.numero_diploma,
+    }));
+
+    console.log(
+      "Datos para insertar en profesionalestitulos:",
+      titulosParaInsertar
+    );
+    const { data: titulosData, error: titulosError } = await supabase
+      .from("profesionalestitulosprueba")
+      .insert(titulosParaInsertar);
+
+    if (titulosError) {
+      console.error("Error al insertar títulos:", titulosError);
     } else {
-      console.log("Datos insertados:", data);
+      console.log("Títulos insertados:", titulosData);
     }
   };
+
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
     subirDatos(datosTransformados);

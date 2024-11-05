@@ -21,7 +21,6 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   const [titulos, setTitulos] = useState<any[]>([]);
   useEffect(() => {
     const fetchProfessional = async () => {
-      console.log(numeroIdentificacion);
       try {
         setLoading(true);
         const result = await obtenerDetallesActualizacionProfesional({
@@ -85,11 +84,16 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
           <div className="py-4">
             <ExpandingButton
               buttonText="Titulo(s)"
-              expandedContent={<FormularioTitulos titulos={titulos} tipoIdentificacion={professionalData.tipo_identificacion}
-              numeroIdentificacion={professionalData.numero_identificacion}
-              nombre={professionalData.nombre_profesional}
-              apellido={professionalData.apellido_profesional}
-              extension={professionalData.id_extension}/>}
+              expandedContent={
+                <FormularioTitulos
+                  titulos={titulos}
+                  tipoIdentificacion={professionalData.tipo_identificacion}
+                  numeroIdentificacion={professionalData.numero_identificacion}
+                  nombre={professionalData.nombre_profesional}
+                  apellido={professionalData.apellido_profesional}
+                  extension={professionalData.id_extension}
+                />
+              }
             />
           </div>
         </>

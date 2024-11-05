@@ -29,7 +29,6 @@ const TableTecnicos = ({ searchResults }: { searchResults: Tecnico[] }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const [identificacion, setIdentificacion] = useState<string | null>(null);
-  const [titulo, setTitulo] = useState<number | null>(null);
   const columnHelper = createColumnHelper<Tecnico>();
 
   const columns = [
@@ -54,18 +53,27 @@ const TableTecnicos = ({ searchResults }: { searchResults: Tecnico[] }) => {
       header: "Extension",
       cell: (info) => info.getValue(),
     }),
+    columnHelper.display({
+      id: "details",
+      header: "Detalles",
+      cell: (info) => (
+        <button
+          onClick={() => openModal(info.row.original.numero_identificacion)}
+          className="bg-blue-zodiac-950 text-white p-2 rounded"
+        >
+          Detalles
+        </button>
+      ),
+    }),
   ];
 
-  const openModal = (numeroIdentificacion: string, id_titulo: number) => {
-    console.log(id_titulo);
+  const openModal = (numeroIdentificacion: string) => {
     setIdentificacion(numeroIdentificacion); // Establece el profesional seleccionado
-    setTitulo(id_titulo); // Establece el título seleccionado
     setModalOpen(true); // Abre el modal
   };
   const closeModal = () => {
     setModalOpen(false); // Cierra el modal
     setIdentificacion(null); // Reinicia el profesional seleccionado
-    setTitulo(null);
     mutate(); // Revalida los datos de SWR para que se actualice la tabla
   };
 
@@ -225,15 +233,10 @@ const TableTecnicos = ({ searchResults }: { searchResults: Tecnico[] }) => {
       )}
       <Toaster />
 
-      <Modal
-        isOpen={modalOpen}
-        onClose={closeModal}
-        title="Actualizar Profesional"
-      >
-        {identificacion && titulo !== null && (
+      <Modal isOpen={modalOpen} onClose={closeModal} title="Actualizar Tecnico">
+        {identificacion !== null && (
           <FormularioActualizacion
             numeroIdentificacion={identificacion}
-            tituloId={titulo}
             onSuccess={closeModal}
           />
         )}

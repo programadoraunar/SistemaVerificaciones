@@ -1,34 +1,33 @@
 "use client";
 import { supabase } from "@/utils/supabase/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import useSWR from "swr";
-import GenerarDocumentoWord from "../../GenerarDocumentoWord";
-interface ProfesionalTitulo {
+interface TecnicoTitulo {
   id: number;
-  id_profesional: number; // Esta propiedad se mantiene pero no se utiliza en la función
+  id_tecnico: number; // Esta propiedad se mantiene pero no se utiliza en la función
   id_titulo: number;
   acta_grado: string;
   folio: string;
   fecha_grado: string;
   libro_registro_grado: string;
   numero_diploma: string;
+  siet: string;
+  numero_certificado: string;
 }
-
 interface FormularioTitulosProps {
-  titulos: ProfesionalTitulo[];
+  titulos: TecnicoTitulo[];
   tipoIdentificacion: string; // Agregar esta línea
   numeroIdentificacion: string; // Agregar esta línea
   nombre: string; // Agregar esta línea
   apellido: string; // Agregar esta línea
   extension: number; // Agregar esta línea
 }
-
 // Define el tipo para los valores del formulario
 interface FormValues {
-  [key: string]: string | number; // Permite claves dinámicas
+  [key: string]: string | number;
 }
+
 // Función para obtener los nombres de los títulos
 const fetcher = async (url: string) => {
   const { data, error } = await supabase.from(url).select();
@@ -46,7 +45,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   const { register, handleSubmit, reset } = useForm<FormValues>();
   // Obtiene los nombres de los títulos
   const { data: titulosNombres } = useSWR("titulos", fetcher);
-
   // Crea un objeto de referencia para los nombres de los títulos
   const titulosMap = titulosNombres?.reduce(
     (
@@ -58,45 +56,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
     },
     {}
   );
-  const onSubmit = async (data: FormValues, index: number) => {
-    try {
-      const id = Number(data[`id_${index}`]);
-      const idTitulo = Number(data[`id_titulo_${index}`]);
-
-      // Log de depuración
-      console.log("Enviando datos para actualizar:", {
-        id,
-        idTitulo,
-        actaGrado: data[`acta_grado_${index}`],
-        folio: data[`folio_${index}`],
-        fechaGrado: data[`fecha_grado_${index}`],
-        libroRegistroGrado: data[`libro_registro_grado_${index}`],
-        numeroDiploma: data[`numero_diploma_${index}`],
-      });
-
-      if (isNaN(id) || isNaN(idTitulo)) {
-        throw new Error(
-          `Los IDs deben ser números válidos para el título ${index + 1}`
-        );
-      }
-
-      const { error } = await supabase.rpc("actualizar_titulo_profesional", {
-        p_id: id,
-        p_id_titulo: idTitulo,
-        p_acta_grado: data[`acta_grado_${index}`] || null,
-        p_folio: data[`folio_${index}`] || null,
-        p_fecha_grado: data[`fecha_grado_${index}`] || null,
-        p_libro_registro_grado: data[`libro_registro_grado_${index}`] || null,
-        p_numero_diploma: data[`numero_diploma_${index}`] || null,
-      });
-
-      if (error) throw new Error(error.message);
-      toast.success("Datos actualizados correctamente");
-    } catch (error) {
-      console.error(`Error al actualizar el título ${index + 1}:`, error);
-      // Mostrar un mensaje al usuario aquí
-    }
-  };
 
   useEffect(() => {
     reset({
@@ -108,11 +67,13 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
         acc[`fecha_grado_${index}`] = titulo.fecha_grado;
         acc[`libro_registro_grado_${index}`] = titulo.libro_registro_grado;
         acc[`numero_diploma_${index}`] = titulo.numero_diploma;
+        acc[`siet_${index}`] = titulo.siet;
+        acc[`numero_certificado_${index}`] = titulo.numero_certificado;
         return acc;
       }, {} as FormValues),
     });
   }, [titulos, reset]);
-
+  console.log(titulos);
   return (
     <form className="py-4">
       {titulos.map((titulo, index) => (
@@ -178,31 +139,31 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               />
             </div>
           </div>
-          <div className="flex justify-end">
-            <button
-              type="button" // Cambiado a "button" para manejar el envío por separado
-              onClick={handleSubmit((data) => onSubmit(data, index))}
-              className="bg-blue-zodiac-950 text-white p-2 rounded"
-            >
-              Guardar Cambios
-            </button>
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Número de Certificado:
+              </label>
+              <input
+                type="text"
+                {...register(`numero_certificado_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
           </div>
-          <GenerarDocumentoWord
-            persona={{
-              tipoIdentificacion,
-              numeroIdentificacion,
-              nombre,
-              apellido,
-              extension,
-              // Datos específicos del título
-              titulo_nombre: titulosMap?.[titulo.id_titulo] || "",
-              fecha_grado: titulo.fecha_grado,
-              acta_grado: titulo.acta_grado,
-              folio: titulo.folio,
-              libro_registro_grado: titulo.libro_registro_grado,
-              numero_diploma: titulo.numero_diploma,
-            }}
-          />
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-sm font-medium text-gray-700">
+                Número de Diploma
+              </label>
+              <input
+                type="text"
+                {...register(`numero_diploma_${index}`)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end"></div>
         </div>
       ))}
     </form>

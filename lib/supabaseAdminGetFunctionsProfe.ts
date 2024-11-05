@@ -55,3 +55,16 @@ export const obtenerDetallesActualizacionProfesional = async (
   if (error) throw error;
   return result;
 };
+
+export const obtenerDetallesActualizacionTecnico = async (
+  data: ProfecionalBusquedaActualizacion
+) => {
+  const { data: result, error } = await supabase.rpc(
+    "obtener_detalles_actualizacion_tecnico_laboral",
+    {
+      p_numero_identificacion: data.numero_identificacion,
+    }
+  );
+  if (error) throw error;
+  return result;
+};

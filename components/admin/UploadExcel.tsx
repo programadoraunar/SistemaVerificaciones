@@ -16,6 +16,7 @@ import {
 } from "@/interfaces/Profesionales";
 import DownloadExcelFile from "./excel/Profesionales/DownloadExcelFile";
 import { supabase } from "@/utils/supabase/client";
+import { EXTENSION_TO_ID, SNIES_TO_ID_TITULO } from "@/constants/options";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -154,41 +155,6 @@ const UploadExcel: React.FC = () => {
   };
 
   const processTransformedData = (data: DatosProcesados[]) => {
-    const extension_to_id: { [key: string]: number } = {
-      pasto: 1,
-      ipiales: 2,
-      "puerto asis": 3,
-      cali: 4,
-      villavicencio: 5,
-      cartagena: 6,
-    };
-
-    const snies_to_id_titulo: { [key: number]: number } = {
-      52928: 1,
-      102519: 1,
-      53445: 2,
-      102322: 2,
-      52536: 3,
-      52639: 4,
-      15864: 5,
-      14351: 5,
-      15865: 5,
-      15861: 6,
-      15862: 6,
-      5363: 6,
-      2742: 6,
-      14355: 6,
-      3092: 7,
-      101274: 7,
-      2458: 8,
-      2700: 9,
-      15616: 9,
-      3485: 10,
-      14365: 10,
-      101511: 11,
-      19432: 12,
-    };
-
     const processedData = data.map((row: DatosProcesados) => {
       // Asegurarse de que nombre_extension sea un string antes de llamar a toLowerCase()
       const normalizedExtension =
@@ -202,9 +168,9 @@ const UploadExcel: React.FC = () => {
         nombre_profesional: row.nombre_profesional,
         apellido_profesional: row.apellido_profesional,
         snies: row.snies,
-        titulo_nombre: snies_to_id_titulo[row.snies as number] || null,
+        titulo_nombre: SNIES_TO_ID_TITULO[row.snies as number] || null,
         nombre_extension:
-          extension_to_id[normalizedExtension as string] || null,
+          EXTENSION_TO_ID[normalizedExtension as string] || null,
         acta_grado: row.acta_grado,
         numero_diploma: row.numero_diploma,
         folio: row.folio,

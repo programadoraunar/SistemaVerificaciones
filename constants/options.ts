@@ -25,3 +25,39 @@ export const extension = [
   { id: "5", nombre: "Villavicencio" },
   { id: "6", nombre: "Cartagena" },
 ];
+
+//constantes de los profesionales
+export const EXTENSION_TO_ID: { [key: string]: number } = {
+  pasto: 1,
+  ipiales: 2,
+  "puerto asis": 3,
+  cali: 4,
+  villavicencio: 5,
+  cartagena: 6,
+};
+
+export const SNIES_TO_ID_TITULO: { [key: number]: number } = {
+  52928: 1,
+  102519: 1,
+  53445: 2,
+  102322: 2,
+  52536: 3,
+  52639: 4,
+  15864: 5,
+  14351: 5,
+  15865: 5,
+  15861: 6,
+  15862: 6,
+  5363: 6,
+  2742: 6,
+  14355: 6,
+  3092: 7,
+  101274: 7,
+  2458: 8,
+  2700: 9,
+  15616: 9,
+  3485: 10,
+  14365: 10,
+  101511: 11,
+  19432: 12,
+};

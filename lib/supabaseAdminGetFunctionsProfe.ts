@@ -2,7 +2,6 @@ import {
   ProfecionalBusquedaDocumento,
   ProfesionalRegistro,
   ProfecionalBusquedaNombres,
-  ProfecionalBusquedaFechas,
   ProfesionalActualizar,
   ProfecionalBusquedaActualizacion,
 } from "@/interfaces/Profesionales";
@@ -38,20 +37,6 @@ export const obtnerProfesionalPorNombreApellido = async (
     {
       p_apellido: data.apellidos || null,
       p_nombre: data.nombres || null,
-    }
-  );
-  if (error) throw error;
-  return result;
-};
-
-export const obtnerProfesionalPorRangoFechas = async (
-  data: ProfecionalBusquedaFechas
-) => {
-  const { data: result, error } = await supabase.rpc(
-    "obtener_profesional_por_rango_fecha",
-    {
-      p_fecha_fin: data.fechaFin || null,
-      p_fecha_inicio: data.fechaInicio || null,
     }
   );
   if (error) throw error;

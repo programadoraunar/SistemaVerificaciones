@@ -144,21 +144,51 @@ const UploadExcelTecnico = () => {
   // función donde se procesa la información se coloca el id de su titulo correspondiente al igual
   // que el id de la extension correspondiente
   const processTransformedData = (data: DatosProcesados[]) => {
+    // Función para normalizar tipo de identificación
+    const normalizeTipoIdentificacion = (tipo: string) => {
+      if (!tipo) return tipo;
+
+      // Mapear las variantes comunes a sus formas estandarizadas
+      const tipoMap: { [key: string]: string } = {
+        "C.C": "CC",
+        "C.C.": "CC",
+        CC: "CC",
+        "T.I": "TI",
+        "T.I.": "TI",
+        TI: "TI",
+        "C.E": "CE",
+        "C.E.": "CE",
+        CE: "CE",
+        "P.P.T": "PPT",
+        "P.P.T.": "PPT",
+        PPT: "PPT",
+        PASAPORTE: "PA",
+        PA: "PA",
+      };
+
+      // Normalizar el tipo eliminando puntos, espacios y convirtiendo a mayúsculas
+      const normalized = tipo.replace(/\./g, "").toUpperCase().trim();
+      return tipoMap[normalized] || tipo; // Devuelve la forma estandarizada o el valor original
+    };
+
     const processedData = data.map((row: DatosProcesados) => {
-      // Asegurarse de que nombre_extension sea un string antes de llamar a toLowerCase()
       const normalizedExtension =
         typeof row.nombre_extension === "string"
           ? row.nombre_extension.toLowerCase().trim()
           : null;
 
-      // Verificar que la fecha sea válida antes de formatearla
+      // Normalizar tipo de identificación usando la función interna
+      const tipoIdentificacion = normalizeTipoIdentificacion(
+        row.tipo_identificacion
+      );
+
       const fechaGradoFormatted =
         row.fecha_grado && !isNaN(new Date(row.fecha_grado).getTime())
           ? new Date(row.fecha_grado).toISOString().split("T")[0]
           : null;
 
       return {
-        tipo_identificacion: row.tipo_identificacion,
+        tipo_identificacion: tipoIdentificacion,
         numero_identificacion: row.numero_identificacion,
         nombre_tecnico: row.nombre_tecnico,
         apellido_tecnico: row.apellido_tecnico,
@@ -245,7 +275,8 @@ const UploadExcelTecnico = () => {
   };
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
-    subirDatos(datosTransformados);
+    //subirDatos(datosTransformados);
+    console.log(datosTransformados);
   };
   const [error, setError] = useState<string | null>(null);
 

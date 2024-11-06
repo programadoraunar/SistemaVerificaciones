@@ -3,6 +3,7 @@ export const identificationOptionsFormulario = [
   { id: "CC", nombre: "Cédula de Ciudadanía" },
   { id: "CE", nombre: "Cédula de Extranjería" },
   { id: "PA", nombre: "Pasaporte" },
+  { id: "PPT", nombre: "Permiso de Protección Temporal" },
 ];
 
 export const identificationSolicitanteOptionsFormulario = [
@@ -80,4 +81,22 @@ export const CODE_TECNICO_TO_ID_TITULO: { [key: number]: number } = {
   3: 27,
   39253: 28,
   4548: 29,
+};
+
+// Mapear las variantes comunes a sus formas estandarizadas
+export const tipoMap: { [key: string]: string } = {
+  "C.C": "CC",
+  "C.C.": "CC",
+  CC: "CC",
+  "T.I": "TI",
+  "T.I.": "TI",
+  TI: "TI",
+  "C.E": "CE",
+  "C.E.": "CE",
+  CE: "CE",
+  "P.P.T": "PPT",
+  "P.P.T.": "PPT",
+  PPT: "PPT",
+  PASAPORTE: "PA",
+  PA: "PA",
 };

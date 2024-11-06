@@ -16,14 +16,12 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   numeroIdentificacion,
   onSuccess,
 }) => {
-  console.log(numeroIdentificacion);
   const [loading, setLoading] = useState<boolean>(true);
   const [tecnicosData, setTecnicosData] =
     useState<TecnicoLaboralActualizar | null>(null);
   const [titulos, setTitulos] = useState<any[]>([]);
   useEffect(() => {
     const fetchTecnico = async () => {
-      console.log(numeroIdentificacion);
       try {
         setLoading(true);
         const result = await obtenerDetallesActualizacionTecnico({
@@ -46,8 +44,6 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   }
 
   const onSubmit = async (data: TecnicoLaboralActualizar) => {
-    console.log("datos ");
-    console.log(data.nombre_tecnico);
     if (data.nombre_tecnico) {
       try {
         const { error } = await supabase.rpc("actualizar_tecnicodatos", {

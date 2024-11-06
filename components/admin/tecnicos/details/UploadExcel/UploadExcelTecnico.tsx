@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { TecnicoConTituloImport } from "@/interfaces/Tecnicos";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -131,13 +132,18 @@ const UploadExcelTecnico = () => {
           libro_registro_grado: row[11] as string,
         })
       );
-      console.log(transformedData);
+
       setPreviewData(transformedData);
+      console.log(previewData);
       toast.dismiss(loadingToastId);
     } catch (err) {
       console.error("Error al cargar el archivo:", err);
       setError("Error al cargar el archivo");
     }
+  };
+
+  const manejarClick = () => {
+    console.log(previewData);
   };
   const [error, setError] = useState<string | null>(null);
 
@@ -299,6 +305,7 @@ const UploadExcelTecnico = () => {
               </div>
             </div>
           </div>
+          <Button onClick={manejarClick}>Cargar Datos</Button>
         </>
       )}
     </div>

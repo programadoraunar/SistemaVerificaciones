@@ -36,7 +36,7 @@ export const EXTENSION_TO_ID: { [key: string]: number } = {
   cartagena: 6,
 };
 
-export const SNIES_TO_ID_TITULO: { [key: number]: number } = {
+export const CODE_TO_ID_TITULO: { [key: number]: number } = {
   52928: 1,
   102519: 1,
   53445: 2,

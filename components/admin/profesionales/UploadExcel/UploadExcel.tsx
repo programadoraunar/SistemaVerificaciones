@@ -9,14 +9,14 @@ import {
   SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { ProfesionalConTitulo } from "@/interfaces/Persona";
+
 import {
   DatosProcesados,
   ProfesionalConTituloImport,
 } from "@/interfaces/Profesionales";
 import DownloadExcelFile from "../../excel/Profesionales/DownloadExcelFile";
 import { supabase } from "@/utils/supabase/client";
-import { EXTENSION_TO_ID, SNIES_TO_ID_TITULO } from "@/constants/options";
+import { EXTENSION_TO_ID, CODE_TO_ID_TITULO } from "@/constants/options";
 import toast from "react-hot-toast";
 import { Button } from "../../../ui/button";
 interface PreviewData {
@@ -168,7 +168,7 @@ const UploadExcel: React.FC = () => {
         nombre_profesional: row.nombre_profesional,
         apellido_profesional: row.apellido_profesional,
         snies: row.snies,
-        titulo_nombre: SNIES_TO_ID_TITULO[row.snies as number] || null,
+        titulo_nombre: CODE_TO_ID_TITULO[row.snies as number] || null,
         nombre_extension:
           EXTENSION_TO_ID[normalizedExtension as string] || null,
         acta_grado: row.acta_grado,

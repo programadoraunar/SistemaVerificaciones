@@ -9,9 +9,14 @@ import {
   SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { TecnicoConTituloImport } from "@/interfaces/Tecnicos";
+import { DatosProcesados, TecnicoConTituloImport } from "@/interfaces/Tecnicos";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import {
+  CODE_TECNICO_TO_ID_TITULO,
+  EXTENSION_TO_ID,
+} from "@/constants/options";
+import { supabase } from "@/utils/supabase/client";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -33,11 +38,11 @@ const UploadExcelTecnico = () => {
       header: "Número Identificación",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("nombre_profesional", {
+    columnHelper.accessor("nombre_tecnico", {
       header: "Nombre",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("apellido_profesional", {
+    columnHelper.accessor("apellido_tecnico", {
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
@@ -63,12 +68,7 @@ const UploadExcelTecnico = () => {
     }),
     columnHelper.accessor("fecha_grado", {
       header: "Fecha de Grado",
-      cell: (info) => {
-        const dateValue = info.getValue();
-        return dateValue
-          ? dateValue.toISOString().split("T")[0]
-          : "No disponible";
-      },
+      cell: (info) => info.getValue(),
     }),
 
     columnHelper.accessor("libro_registro_grado", {
@@ -120,15 +120,15 @@ const UploadExcelTecnico = () => {
         (row) => ({
           tipo_identificacion: row[0] as string,
           numero_identificacion: row[1] as string,
-          nombre_profesional: row[2] as string,
-          apellido_profesional: row[3] as string,
+          nombre_tecnico: row[2] as string,
+          apellido_tecnico: row[3] as string,
           siet: row[4] as Number,
           titulo_nombre: row[5] as string,
           nombre_extension: row[6] as string,
           acta_grado: row[7] as string,
           numero_certificado: row[8] as string,
           folio: row[9] as string,
-          fecha_grado: row[10] ? new Date(row[10] as string) : null, // Asegúrate de que el formato sea correcto
+          fecha_grado: row[10] as string, // Asegúrate de que el formato sea correcto
           libro_registro_grado: row[11] as string,
         })
       );
@@ -141,9 +141,111 @@ const UploadExcelTecnico = () => {
       setError("Error al cargar el archivo");
     }
   };
+  // función donde se procesa la información se coloca el id de su titulo correspondiente al igual
+  // que el id de la extension correspondiente
+  const processTransformedData = (data: DatosProcesados[]) => {
+    const processedData = data.map((row: DatosProcesados) => {
+      // Asegurarse de que nombre_extension sea un string antes de llamar a toLowerCase()
+      const normalizedExtension =
+        typeof row.nombre_extension === "string"
+          ? row.nombre_extension.toLowerCase().trim()
+          : null;
 
+      // Verificar que la fecha sea válida antes de formatearla
+      const fechaGradoFormatted =
+        row.fecha_grado && !isNaN(new Date(row.fecha_grado).getTime())
+          ? new Date(row.fecha_grado).toISOString().split("T")[0]
+          : null;
+
+      return {
+        tipo_identificacion: row.tipo_identificacion,
+        numero_identificacion: row.numero_identificacion,
+        nombre_tecnico: row.nombre_tecnico,
+        apellido_tecnico: row.apellido_tecnico,
+        siet: row.siet,
+        titulo_nombre: CODE_TECNICO_TO_ID_TITULO[row.siet as number] || null,
+        nombre_extension:
+          EXTENSION_TO_ID[normalizedExtension as string] || null,
+        acta_grado: row.acta_grado,
+        numero_certificado: row.numero_certificado,
+        folio: row.folio,
+        fecha_grado: fechaGradoFormatted,
+        libro_registro_grado: row.libro_registro_grado,
+      };
+    });
+
+    return processedData;
+  };
+
+  //subimos los datos en sus respectivas tablas profesionales y títulos
+  const subirDatos = async (datos: DatosProcesados[]) => {
+    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
+    const datosParaInsertar = datos.map((item) => ({
+      tipo_identificacion: item.tipo_identificacion,
+      nombre: item.nombre_tecnico,
+      apellido: item.apellido_tecnico,
+      numero_identificacion: item.numero_identificacion.toString(),
+      id_extension: item.nombre_extension,
+    }));
+
+    console.log(datosParaInsertar);
+
+    const { data: tecnicoData, error: tecnicoError } = await supabase
+      .from("tecnicoslaborales")
+      .insert(datosParaInsertar)
+      .select("id");
+
+    // Verificar si hay un error al insertar los profesionales
+    if (tecnicoError) {
+      console.error("Error al insertar datos:", tecnicoError);
+      toast.error("Error al registrar el tecnico.");
+      toast.dismiss(loadingToastId);
+      return; // Salir de la función si hay un error
+    }
+
+    // Verificar que profesionalesData no sea null
+    if (!tecnicoData) {
+      console.error(
+        "No se recibió datos de profesionales después de la inserción."
+      );
+      toast.error("No se pudo registrar el tecnico.");
+      toast.dismiss(loadingToastId);
+      return; // Salir de la función si no hay datos
+    }
+
+    console.log("Datos insertados:", tecnicoData);
+
+    // Paso 3: Preparar los títulos para insertar
+    const titulosParaInsertar = datos.map((item, index) => ({
+      id_tecnico_laboral: tecnicoData[index]?.id || null, // Usar el ID del profesional correspondiente
+      id_titulo: item.titulo_nombre || null, // Obtener el ID del título
+      acta_grado: item.acta_grado,
+      folio: item.folio,
+      fecha_grado: item.fecha_grado,
+      libro_registro_grado: item.libro_registro_grado,
+      numero_certificado: item.numero_certificado,
+    }));
+
+    console.log(
+      "Datos para insertar en tecnicoslaboraletitulos:",
+      titulosParaInsertar
+    );
+    const { data: titulosData, error: titulosError } = await supabase
+      .from("tecnicoslaboralestitulos")
+      .insert(titulosParaInsertar);
+
+    if (titulosError) {
+      console.error("Error al insertar títulos:", titulosError);
+      toast.error("Error al registrar los títulos del profesional.");
+    } else {
+      console.log("Títulos insertados:", titulosData);
+      toast.dismiss(loadingToastId);
+      toast.success("¡Profesional y títulos registrados con éxito!");
+    }
+  };
   const manejarClick = () => {
-    console.log(previewData);
+    const datosTransformados = processTransformedData(previewData);
+    subirDatos(datosTransformados);
   };
   const [error, setError] = useState<string | null>(null);
 
@@ -305,7 +407,9 @@ const UploadExcelTecnico = () => {
               </div>
             </div>
           </div>
-          <Button onClick={manejarClick}>Cargar Datos</Button>
+          <Button className="py-5" onClick={manejarClick}>
+            Cargar Datos
+          </Button>
         </>
       )}
     </div>

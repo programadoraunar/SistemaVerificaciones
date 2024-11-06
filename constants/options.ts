@@ -61,3 +61,23 @@ export const CODE_TO_ID_TITULO: { [key: number]: number } = {
   101511: 11,
   19432: 12,
 };
+
+export const CODE_TECNICO_TO_ID_TITULO: { [key: number]: number } = {
+  11: 13,
+  5: 14,
+  15: 15,
+  7: 16,
+  14: 17,
+  12: 18,
+  13: 19,
+  6: 20,
+  4: 21,
+  8: 22,
+  1: 23,
+  2: 24,
+  9: 25,
+  10: 26,
+  3: 27,
+  39253: 28,
+  4548: 29,
+};

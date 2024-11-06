@@ -155,18 +155,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               />
             </div>
           </div>
-          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-            <div className="mb-4 w-full lg:w-1/2">
-              <label className="block text-sm font-medium text-gray-700">
-                Número de Diploma:
-              </label>
-              <input
-                type="text"
-                {...register(`numero_diploma_${index}`)}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-          </div>
+
           <div className="flex flex-col lg:flex-row w-full lg:gap-8">
             <div className="mb-4 w-full lg:w-1/2">
               <label className="block text-sm font-medium text-gray-700">

@@ -181,6 +181,7 @@ const UploadExcel: React.FC = () => {
 
     return processedData;
   };
+  //subimos los datos en sus respectivas tablas profesionales y títulos
   const subirDatos = async (datos: DatosProcesados[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const datosParaInsertar = datos.map((item) => ({

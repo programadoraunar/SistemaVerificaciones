@@ -6,7 +6,9 @@ export interface Titulos {
   libro_registro_grado: string;
   numero_diploma: string;
 }
-
+export interface TitulosTecnico extends Titulos {
+  numero_certificado: string;
+}
 export interface Titulo {
   titulo_id: number;
   nombre: string;

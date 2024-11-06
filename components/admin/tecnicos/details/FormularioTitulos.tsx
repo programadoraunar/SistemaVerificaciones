@@ -2,6 +2,7 @@
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import useSWR from "swr";
 interface TecnicoTitulo {
   id: number;
@@ -67,13 +68,40 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
         acc[`fecha_grado_${index}`] = titulo.fecha_grado;
         acc[`libro_registro_grado_${index}`] = titulo.libro_registro_grado;
         acc[`numero_diploma_${index}`] = titulo.numero_diploma;
-        acc[`siet_${index}`] = titulo.siet;
         acc[`numero_certificado_${index}`] = titulo.numero_certificado;
         return acc;
       }, {} as FormValues),
     });
   }, [titulos, reset]);
-  console.log(titulos);
+  const onSubmit = async (data: FormValues, index: number) => {
+    try {
+      const id = Number(data[`id_${index}`]);
+      const idTitulo = Number(data[`id_titulo_${index}`]);
+
+      if (isNaN(id) || isNaN(idTitulo)) {
+        throw new Error(
+          `Los IDs deben ser números válidos para el título ${index + 1}`
+        );
+      }
+
+      const { error } = await supabase.rpc("actualizar_titulo_tecnico", {
+        p_id: id,
+        p_id_titulo: idTitulo,
+        p_acta_grado: data[`acta_grado_${index}`] || null,
+        p_folio: data[`folio_${index}`] || null,
+        p_fecha_grado: data[`fecha_grado_${index}`] || null,
+        p_libro_registro_grado: data[`libro_registro_grado_${index}`] || null,
+        p_numero_diploma: data[`numero_diploma_${index}`] || null,
+        p_numero_certificado: data[`numero_certificado_${index}`],
+      });
+
+      if (error) throw new Error(error.message);
+      toast.success("Datos actualizados correctamente");
+    } catch (error) {
+      console.error(`Error al actualizar el título ${index + 1}:`, error);
+      // Mostrar un mensaje al usuario aquí
+    }
+  };
   return (
     <form className="py-4">
       {titulos.map((titulo, index) => (
@@ -163,7 +191,15 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               />
             </div>
           </div>
-          <div className="flex justify-end"></div>
+          <div className="flex justify-end">
+            <button
+              type="button" // Cambiado a "button" para manejar el envío por separado
+              onClick={handleSubmit((data) => onSubmit(data, index))}
+              className="bg-blue-zodiac-950 text-white p-2 rounded"
+            >
+              Guardar Cambios
+            </button>
+          </div>
         </div>
       ))}
     </form>

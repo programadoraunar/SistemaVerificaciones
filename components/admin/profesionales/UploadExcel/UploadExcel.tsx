@@ -14,11 +14,11 @@ import {
   DatosProcesados,
   ProfesionalConTituloImport,
 } from "@/interfaces/Profesionales";
-import DownloadExcelFile from "./excel/Profesionales/DownloadExcelFile";
+import DownloadExcelFile from "../../excel/Profesionales/DownloadExcelFile";
 import { supabase } from "@/utils/supabase/client";
 import { EXTENSION_TO_ID, SNIES_TO_ID_TITULO } from "@/constants/options";
 import toast from "react-hot-toast";
-import { Button } from "../ui/button";
+import { Button } from "../../../ui/button";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras

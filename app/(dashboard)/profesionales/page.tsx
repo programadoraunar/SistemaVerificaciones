@@ -2,7 +2,7 @@
 import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
 import SearchHeader from "@/components/admin/profesionales/SearchHeader";
 import TableProfecionales from "@/components/admin/profesionales/TableProfecionales";
-import UploadExcel from "@/components/admin/UploadExcel";
+import UploadExcel from "@/components/admin/profesionales/UploadExcel/UploadExcel";
 import Modal from "@/components/ui/Modal";
 import { InformacionProfesional } from "@/interfaces/Profesionales";
 import { useState } from "react";

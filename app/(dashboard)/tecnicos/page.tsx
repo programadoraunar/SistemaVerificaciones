@@ -1,6 +1,5 @@
 "use client";
-
-import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
+import FormularioRegistroTecnicos from "@/components/admin/tecnicos/FormularioRegistroTecnicos";
 import SearchHeader from "@/components/admin/tecnicos/SearchHeader";
 import TableTecnicos from "@/components/admin/tecnicos/TableTecnicos";
 import Modal from "@/components/ui/Modal";
@@ -15,8 +14,6 @@ function tecnicosPage() {
   };
   // Función para manejar el éxito del registro
   const handleRegistroExitoso = () => {
-    // Puedes realizar acciones adicionales aquí si es necesario
-    toast.success("¡Registro exitoso!");
     closeModal(); // Cierra el modal
   };
   const [searchResults, setSearchResults] = useState<Tecnico[]>([]);
@@ -41,7 +38,7 @@ function tecnicosPage() {
         onClose={closeModal}
         title="Registro de Técnico"
       >
-        <FormularioRegistro onSuccess={handleRegistroExitoso} />
+        <FormularioRegistroTecnicos onSuccess={handleRegistroExitoso} />
       </Modal>
       <Toaster />
     </div>

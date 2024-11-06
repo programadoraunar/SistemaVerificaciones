@@ -62,18 +62,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
     try {
       const id = Number(data[`id_${index}`]);
       const idTitulo = Number(data[`id_titulo_${index}`]);
-
-      // Log de depuración
-      console.log("Enviando datos para actualizar:", {
-        id,
-        idTitulo,
-        actaGrado: data[`acta_grado_${index}`],
-        folio: data[`folio_${index}`],
-        fechaGrado: data[`fecha_grado_${index}`],
-        libroRegistroGrado: data[`libro_registro_grado_${index}`],
-        numeroDiploma: data[`numero_diploma_${index}`],
-      });
-
       if (isNaN(id) || isNaN(idTitulo)) {
         throw new Error(
           `Los IDs deben ser números válidos para el título ${index + 1}`

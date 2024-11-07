@@ -19,7 +19,7 @@ function cursoExtensionPage() {
     closeModal(); // Cierra el modal
   };
   const [searchResults, setSearchResults] = useState<ExtensionConTitulo[]>([]);
-  console.log(searchResults);
+
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">

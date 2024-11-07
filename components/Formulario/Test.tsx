@@ -31,7 +31,6 @@ function Test() {
 
   const onSubmit = (data: FormValues) => {
     const datos = data;
-    console.log(datos);
   };
   return (
     <form

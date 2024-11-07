@@ -104,7 +104,7 @@ const LayoutFormularioSoli: React.FC = () => {
   const handlePersonaSubmit = async (data: FormularioPersonaType) => {
     if (validate()) {
       const datosCompletos = { ...data, ...datosAdicionales };
-      console.log("Datos completos Persona:", datosCompletos);
+
       // Prepara los datos  para verificar si existe el egresado
       const datosVerificacion = {
         tipoIdentificacionEgresado: datosAdicionales.tipoIdentificacionEgresado,
@@ -117,7 +117,7 @@ const LayoutFormularioSoli: React.FC = () => {
       try {
         setIsLoading(true);
         const datos = await verificarEgresado(datosVerificacion);
-        console.log(datos);
+
         setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
         if (datos) {
           // Si existe el egresado, se procede a guardar la información de la persona
@@ -160,7 +160,7 @@ const LayoutFormularioSoli: React.FC = () => {
   const handleEmpresaSubmit = async (data: FormularioEmpresaType) => {
     if (validate()) {
       const datosCompletos = { ...data, ...datosAdicionales };
-      console.log("Datos completos Empresa:", datosCompletos);
+
       // Maneja los datos completos aquí
       // Prepara los datos  para verificar si existe el egresado
       const datosVerificacion = {

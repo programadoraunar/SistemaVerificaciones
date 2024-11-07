@@ -223,8 +223,6 @@ const UploadExcel: React.FC = () => {
       id_extension: item.nombre_extension,
     }));
 
-    console.log(datosParaInsertar);
-
     const { data: profesionalesData, error: profesionalesError } =
       await supabase
         .from("profesionales")
@@ -249,8 +247,6 @@ const UploadExcel: React.FC = () => {
       return; // Salir de la función si no hay datos
     }
 
-    console.log("Datos insertados:", profesionalesData);
-
     // Paso 3: Preparar los títulos para insertar
     const titulosParaInsertar = datos.map((item, index) => ({
       id_profesional: profesionalesData[index]?.id || null, // Usar el ID del profesional correspondiente
@@ -264,10 +260,6 @@ const UploadExcel: React.FC = () => {
       numero_diploma: item.numero_diploma,
     }));
 
-    console.log(
-      "Datos para insertar en profesionalestitulos:",
-      titulosParaInsertar
-    );
     const { data: titulosData, error: titulosError } = await supabase
       .from("profesionalestitulos")
       .insert(titulosParaInsertar);
@@ -276,7 +268,6 @@ const UploadExcel: React.FC = () => {
       console.error("Error al insertar títulos:", titulosError);
       toast.error("Error al registrar los títulos del profesional.");
     } else {
-      console.log("Títulos insertados:", titulosData);
       toast.dismiss(loadingToastId);
       toast.success("¡Profesional y títulos registrados con éxito!");
     }

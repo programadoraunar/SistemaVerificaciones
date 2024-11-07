@@ -6,8 +6,6 @@ import { da } from "date-fns/locale";
 export const registrarProfesionalConTitulo = async (
   data: ProfesionalRegistro
 ) => {
-  console.log("Formato de titulos:", JSON.stringify(data.titulos));
-
   const { data: result, error } = await supabase.rpc(
     "registrar_profesional_con_titulos",
     {
@@ -27,8 +25,6 @@ export const registrarProfesionalConTitulo = async (
 };
 
 export const registrarTecnicoConTitulos = async (data: ProfesionalRegistro) => {
-  console.log("Formato de titulos:", JSON.stringify(data.titulos));
-
   const { data: result, error } = await supabase.rpc(
     "registrar_tecnico_con_titulos",
     {

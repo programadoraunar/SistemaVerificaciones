@@ -58,7 +58,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     }
 
     setErrorIdentificacion(""); // Limpiar el error si la búsqueda es exitosa
-    console.log(numeroIdentificacion);
     try {
       const result = await obtenerTecnicoPorDocumento({
         numero_identificacion: numeroIdentificacion,
@@ -79,7 +78,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     }
 
     const searchTerm = nombreApellido.trim();
-    console.log(searchTerm);
     try {
       // Primero intentamos buscar como apellido
       let result = await obtnerTecnicoPorNombreApellido({
@@ -88,7 +86,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       });
       // Si no hay resultados, intentamos buscar como nombre
       if (!result || result.length === 0) {
-        console.log("nombre");
         result = await obtnerTecnicoPorNombreApellido({
           nombres: searchTerm,
           apellidos: null,

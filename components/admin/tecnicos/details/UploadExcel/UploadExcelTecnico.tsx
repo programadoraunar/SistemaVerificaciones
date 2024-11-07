@@ -135,7 +135,7 @@ const UploadExcelTecnico = () => {
       );
 
       setPreviewData(transformedData);
-      console.log(previewData);
+
       toast.dismiss(loadingToastId);
     } catch (err) {
       console.error("Error al cargar el archivo:", err);
@@ -219,8 +219,6 @@ const UploadExcelTecnico = () => {
       id_extension: item.nombre_extension,
     }));
 
-    console.log(datosParaInsertar);
-
     const { data: tecnicoData, error: tecnicoError } = await supabase
       .from("tecnicoslaborales")
       .insert(datosParaInsertar)
@@ -244,8 +242,6 @@ const UploadExcelTecnico = () => {
       return; // Salir de la función si no hay datos
     }
 
-    console.log("Datos insertados:", tecnicoData);
-
     // Paso 3: Preparar los títulos para insertar
     const titulosParaInsertar = datos.map((item, index) => ({
       id_tecnico_laboral: tecnicoData[index]?.id || null, // Usar el ID del profesional correspondiente
@@ -257,10 +253,6 @@ const UploadExcelTecnico = () => {
       numero_certificado: item.numero_certificado,
     }));
 
-    console.log(
-      "Datos para insertar en tecnicoslaboraletitulos:",
-      titulosParaInsertar
-    );
     const { data: titulosData, error: titulosError } = await supabase
       .from("tecnicoslaboralestitulos")
       .insert(titulosParaInsertar);

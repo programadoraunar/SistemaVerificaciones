@@ -63,7 +63,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       const result = await obtenerProfesionalPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
-      console.log(result);
       onSearch(result);
     } catch (err) {
       console.error(err);
@@ -80,7 +79,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     }
 
     const searchTerm = nombreApellido.trim();
-    console.log(searchTerm);
 
     try {
       // Primero intentamos buscar como apellido
@@ -91,7 +89,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
 
       // Si no hay resultados, intentamos buscar como nombre
       if (!result || result.length === 0) {
-        console.log("nombre");
         result = await obtnerProfesionalPorNombreApellido({
           nombres: searchTerm,
           apellidos: null,
@@ -110,7 +107,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         });
       }
 
-      console.log("Resultados de la búsqueda:", result);
       onSearch(result);
     } catch (err) {
       console.error("Error en la búsqueda:", err);

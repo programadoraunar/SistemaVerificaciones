@@ -275,8 +275,8 @@ const UploadExcelTecnico = () => {
   };
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
-    //subirDatos(datosTransformados);
-    console.log(datosTransformados);
+    subirDatos(datosTransformados);
+
   };
   const [error, setError] = useState<string | null>(null);
 

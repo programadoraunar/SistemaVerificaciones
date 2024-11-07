@@ -142,7 +142,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         </div>
 
         {/* Campo de búsqueda por nombre o apellido */}
-        <div className="p-4 flex flex-col gap-3 w-full">
+        <div className="p-4 flex flex-col lg:col-span-2 gap-3 w-full">
           <Label className="text-lg">Ingrese Nombres o Apellido</Label>
           <div className="flex items-center w-full">
             <Input

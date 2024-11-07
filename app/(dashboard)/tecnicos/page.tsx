@@ -22,7 +22,7 @@ function tecnicosPage() {
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">
-        <p className="text-2xl lg:text-3xl font-bold">Técnicos</p>
+        <p className="text-2xl lg:text-3xl font-bold">Técnicos Laborales</p>
         <div>
           <button
             onClick={openModal}

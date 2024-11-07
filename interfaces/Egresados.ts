@@ -21,8 +21,9 @@ export interface EgresadoConTitulos {
   titulos: EgresadoTitulo[]; // Un array de títulos
 }
 export interface EgresadosPorExtension {
-  ciudad: string; // El ID de la extensión
-  cantidad_egresados: string; // El número de egresados por esa extensión
+  tipo: string;
+  ciudad: string;
+  cantidad_egresados: number;
 }
 export interface EgresadosPorAnio {
   anio: number; // El año

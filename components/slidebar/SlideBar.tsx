@@ -63,9 +63,10 @@ function SlideBar() {
                     className="flex items-center text-lg lg:text-md xl:text-lg gap-3 py-2 px-4 rounded-lg text-yellowBase hover:text-blue-zodiac-950 hover:bg-yellowBase transition-colors"
                   >
                     {React.cloneElement(icon, {
-                      className: "text-lg lg:text-xl",
-                    })}{" "}
-                    {label}
+                      className: "text-lg lg:text-xl xl:text-2xl",
+                    })}
+                    <span className="lg:text-sm xl:text-base">{label}</span>
+                    {/* El texto solo es visible en pantallas grandes */}
                   </Link>
                 </li>
               ))}
@@ -74,7 +75,7 @@ function SlideBar() {
         </div>
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="xl:hidden fixed bottom-4 right-4 bg-yellowBase text-black p-5 rounded-full z-50"
+          className="xl:hidden fixed bottom-4 right-4 bg-yellowBase text-white p-5 rounded-full z-50"
         >
           {showMenu ? <CiMenuFries size={25} /> : <CiMenuBurger size={25} />}
         </button>

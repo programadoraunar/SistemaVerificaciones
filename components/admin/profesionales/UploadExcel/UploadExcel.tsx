@@ -19,6 +19,7 @@ import { supabase } from "@/utils/supabase/client";
 import { EXTENSION_TO_ID, CODE_TO_ID_TITULO } from "@/constants/options";
 import toast from "react-hot-toast";
 import { Button } from "../../../ui/button";
+import DownloadTemplate from "../../../ui/DownloadTemplate";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -290,13 +291,19 @@ const UploadExcel: React.FC = () => {
 
   return (
     <div className="file-upload bg-white my-5 p-5">
-      <div className="flex flex-col gap-3">
-        <h2>Cargar archivo Excel</h2>
-        <input
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={handleFileUpload}
-          className="file-input"
+      <div className="flex justify-between">
+        <div className="flex flex-col gap-3">
+          <h2>Cargar archivo Excel</h2>
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileUpload}
+            className="file-input"
+          />
+        </div>
+        <DownloadTemplate
+          fileUrl="plantillas/PlantillaProfesionales.xlsx"
+          fileName="PlantillaProfesionales.xlsx"
         />
       </div>
 

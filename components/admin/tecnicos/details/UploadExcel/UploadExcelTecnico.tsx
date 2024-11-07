@@ -17,6 +17,7 @@ import {
   EXTENSION_TO_ID,
 } from "@/constants/options";
 import { supabase } from "@/utils/supabase/client";
+import DownloadTemplate from "@/components/ui/DownloadTemplate";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -276,19 +277,24 @@ const UploadExcelTecnico = () => {
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
     subirDatos(datosTransformados);
-
   };
   const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="file-upload bg-white my-5 p-5">
-      <div className="flex flex-col gap-3">
-        <h2>Cargar archivo Excel</h2>
-        <input
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={handleFileUpload}
-          className="file-input"
+      <div className="flex justify-between">
+        <div className="flex flex-col gap-3">
+          <h2>Cargar archivo Excel</h2>
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileUpload}
+            className="file-input"
+          />
+        </div>
+        <DownloadTemplate
+          fileUrl="plantillas/PlantillaTecnicos.xlsx"
+          fileName="PlantillaTecnicos.xlsx"
         />
       </div>
 

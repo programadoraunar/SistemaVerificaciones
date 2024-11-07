@@ -155,31 +155,35 @@ const AgregarTitulo = () => {
             className="p-2 border border-gray-400 rounded mb-2"
             required
           />
-          <div className="flex flex-col mb-2">
-            <input
-              type="text"
-              value={codigoNuevo}
-              onChange={(e) => setCodigoNuevo(e.target.value)}
-              placeholder="Nuevo código"
-              className="p-2 border border-gray-400 rounded mb-2"
-            />
-            <button
-              type="button"
-              onClick={agregarCodigo}
-              className="bg-blue-950 text-white rounded p-2"
-            >
-              Agregar Código
-            </button>
-          </div>
+          {idEditar && (
+            <div className="flex flex-col mb-2">
+              <input
+                type="text"
+                value={codigoNuevo}
+                onChange={(e) => setCodigoNuevo(e.target.value)}
+                placeholder="Nuevo código"
+                className="p-2 border border-gray-400 rounded mb-2"
+              />
+              <button
+                type="button"
+                onClick={agregarCodigo}
+                className="bg-blue-950 text-white rounded p-2"
+              >
+                Agregar Código
+              </button>
+            </div>
+          )}
           <div className="mb-2">
             {codigos.map((codigo) => (
-              <div key={codigo} className="flex items-center justify-between">
+              <div key={codigo} className="flex items-center justify-center">
                 {codigoEditando === codigo ? (
                   <form
                     onSubmit={manejarActualizarCodigo}
-                    className="flex flex-col w-full"
+                    className="flex flex-col bg-gray-200 my-4 border rounded-sm py-4 px-4 w-[70%]"
                   >
-                    <span className="text-center">Edición de Codigo</span>
+                    <span className="text-center text-lg font-bold">
+                      Edición de Codigo: {codigoEditado}
+                    </span>
                     <input
                       type="text"
                       value={codigoEditado}
@@ -200,7 +204,7 @@ const AgregarTitulo = () => {
                     </div>
                   </form>
                 ) : (
-                  <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center justify-between w-full bg-gray-50">
                     <span>{codigo}</span>
                     <div className="flex justify-end">
                       <button

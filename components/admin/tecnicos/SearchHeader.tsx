@@ -6,6 +6,10 @@ import { Label } from "../../ui/label";
 import { CiSearch } from "react-icons/ci";
 import { Tecnico } from "@/interfaces/Tecnicos";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
+import {
+  obtenerTecnicoPorDocumento,
+  obtnerTecnicoPorNombreApellido,
+} from "@/lib/supabaseAdminGetFunctionTec";
 
 interface SearchHeaderProps {
   onSearch: (data: Tecnico[]) => void;
@@ -56,11 +60,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     setErrorIdentificacion(""); // Limpiar el error si la búsqueda es exitosa
     console.log(numeroIdentificacion);
     try {
-      /* const result = await obtenerProfesionalPorDocumento({
+      const result = await obtenerTecnicoPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
-      console.log(result);
-      onSearch(result); */
+      onSearch(result);
     } catch (err) {
       console.error(err);
     }
@@ -69,7 +72,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   const handleSearchByNombreApellido = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    /* const validationError = validateNombreApellido(nombreApellido);
+    const validationError = validateNombreApellido(nombreApellido);
     if (validationError) {
       setErrorNombre(validationError);
       return;
@@ -77,34 +80,32 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
 
     const searchTerm = nombreApellido.trim();
     console.log(searchTerm);
- */
     try {
       // Primero intentamos buscar como apellido
-      /*  let result = await obtnerProfesionalPorNombreApellido({
+      let result = await obtnerTecnicoPorNombreApellido({
         nombres: null,
         apellidos: searchTerm,
-      }); */
+      });
       // Si no hay resultados, intentamos buscar como nombre
-      /* if (!result || result.length === 0) {
+      if (!result || result.length === 0) {
         console.log("nombre");
-        result = await obtnerProfesionalPorNombreApellido({
+        result = await obtnerTecnicoPorNombreApellido({
           nombres: searchTerm,
           apellidos: null,
         });
-      } */
+      }
       // Si aún no hay resultados y hay un espacio en el término de búsqueda,
       // dividimos en nombre y apellido
-      /* if ((!result || result.length === 0) && searchTerm.includes(" ")) {
+      if ((!result || result.length === 0) && searchTerm.includes(" ")) {
         const [firstWord, ...restWords] = searchTerm.split(" ");
         const lastWords = restWords.join(" ");
 
-        result = await obtnerProfesionalPorNombreApellido({
+        result = await obtnerTecnicoPorNombreApellido({
           nombres: firstWord,
           apellidos: lastWords,
         });
-      } */
-      /* console.log("Resultados de la búsqueda:", result);
-      onSearch(result); */
+      }
+      onSearch(result);
     } catch (err) {
       console.error("Error en la búsqueda:", err);
     }

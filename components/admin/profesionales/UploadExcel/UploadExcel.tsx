@@ -226,7 +226,7 @@ const UploadExcel: React.FC = () => {
 
     const { data: profesionalesData, error: profesionalesError } =
       await supabase
-        .from("ProfesionalesPrueba")
+        .from("profesionales")
         .insert(datosParaInsertar)
         .select("id");
 
@@ -268,7 +268,7 @@ const UploadExcel: React.FC = () => {
       titulosParaInsertar
     );
     const { data: titulosData, error: titulosError } = await supabase
-      .from("profesionalestitulosprueba")
+      .from("profesionalestitulos")
       .insert(titulosParaInsertar);
 
     if (titulosError) {

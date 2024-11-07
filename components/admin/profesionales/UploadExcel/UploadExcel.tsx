@@ -156,14 +156,44 @@ const UploadExcel: React.FC = () => {
 
   const processTransformedData = (data: DatosProcesados[]) => {
     const processedData = data.map((row: DatosProcesados) => {
+      // Función para normalizar tipo de identificación
+      const normalizeTipoIdentificacion = (tipo: string) => {
+        if (!tipo) return tipo;
+
+        // Mapear las variantes comunes a sus formas estandarizadas
+        const tipoMap: { [key: string]: string } = {
+          "C.C": "CC",
+          "C.C.": "CC",
+          CC: "CC",
+          "T.I": "TI",
+          "T.I.": "TI",
+          TI: "TI",
+          "C.E": "CE",
+          "C.E.": "CE",
+          CE: "CE",
+          "P.P.T": "PPT",
+          "P.P.T.": "PPT",
+          PPT: "PPT",
+          PASAPORTE: "PA",
+          PA: "PA",
+        };
+
+        // Normalizar el tipo eliminando puntos, espacios y convirtiendo a mayúsculas
+        const normalized = tipo.replace(/\./g, "").toUpperCase().trim();
+        return tipoMap[normalized] || tipo; // Devuelve la forma estandarizada o el valor original
+      };
       // Asegurarse de que nombre_extension sea un string antes de llamar a toLowerCase()
       const normalizedExtension =
         typeof row.nombre_extension === "string"
           ? row.nombre_extension.toLowerCase().trim()
           : null;
+      // Normalizar tipo de identificación usando la función interna
+      const tipoIdentificacion = normalizeTipoIdentificacion(
+        row.tipo_identificacion
+      );
 
       return {
-        tipo_identificacion: row.tipo_identificacion,
+        tipo_identificacion: tipoIdentificacion,
         numero_identificacion: row.numero_identificacion,
         nombre_profesional: row.nombre_profesional,
         apellido_profesional: row.apellido_profesional,

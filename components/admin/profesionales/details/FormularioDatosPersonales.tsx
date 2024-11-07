@@ -44,7 +44,7 @@ const FormularioDatosPersonales: React.FC<FormularioDatosPersonalesProps> = ({
     return data;
   };
   // Usamos SWR para obtener las extensiones desde la tabla "Extension"
-  const { data: extensiones } = useSWR("extension", fetcher);
+  const { data: extensiones, isLoading } = useSWR("extension", fetcher);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -105,19 +105,21 @@ const FormularioDatosPersonales: React.FC<FormularioDatosPersonalesProps> = ({
           <label className="block text-gray-700 text-md font-bold mb-2">
             Extension
           </label>
-          <select
-            {...register("id_extension")}
-            defaultValue={extension}
-            className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
-          >
-            <option value="">Seleccionar la Extension</option>
-            {extensiones &&
-              extensiones.map((extension: any) => (
+          {!isLoading && extensiones ? (
+            <select
+              {...register("id_extension")}
+              defaultValue={extension}
+              className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
+            >
+              {extensiones.map((extension: any) => (
                 <option key={extension.id} value={extension.id}>
                   {extension.nombre}
                 </option>
               ))}
-          </select>
+            </select>
+          ) : (
+            <p>Cargando extensiones...</p>
+          )}
         </div>
       </div>
       <div className="flex justify-end">

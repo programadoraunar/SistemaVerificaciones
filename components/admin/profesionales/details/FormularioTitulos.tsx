@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
-import GenerarDocumentoWord from "../../GenerarDocumentoWord";
+import GenerarDocumentoWord from "../VerificacionWord/GenerarDocumentoWord";
 interface ProfesionalTitulo {
   id: number;
   id_profesional: number; // Esta propiedad se mantiene pero no se utiliza en la función

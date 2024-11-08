@@ -66,7 +66,6 @@ function SlideBar() {
                       className: "text-lg lg:text-xl xl:text-2xl",
                     })}
                     <span className="lg:text-sm xl:text-base">{label}</span>
-                    {/* El texto solo es visible en pantallas grandes */}
                   </Link>
                 </li>
               ))}
@@ -75,7 +74,7 @@ function SlideBar() {
         </div>
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="xl:hidden fixed bottom-4 right-4 bg-yellowBase text-white p-5 rounded-full z-50"
+          className="xl:hidden fixed bottom-4 right-4 bg-yellowBase text-blue-zodiac-950 p-5 rounded-full z-50"
         >
           {showMenu ? <CiMenuFries size={25} /> : <CiMenuBurger size={25} />}
         </button>

@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
+import GenerarDocumentoWord from "../UploadExcel/GenerarDocumentoWord";
 interface TecnicoTitulo {
   id: number;
   id_tecnico: number; // Esta propiedad se mantiene pero no se utiliza en la función
@@ -178,6 +179,21 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               Guardar Cambios
             </button>
           </div>
+          <GenerarDocumentoWord
+            persona={{
+              tipoIdentificacion,
+              numeroIdentificacion,
+              nombre,
+              apellido,
+              extension,
+              titulo_nombre: titulosMap?.[titulo.id_titulo] || "",
+              fecha_grado: titulo.fecha_grado,
+              acta_grado: titulo.acta_grado,
+              folio: titulo.folio,
+              libro_registro_grado: titulo.libro_registro_grado,
+              numero_certificado: titulo.numero_certificado,
+            }}
+          />
         </div>
       ))}
     </form>

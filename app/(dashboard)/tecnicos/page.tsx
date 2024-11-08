@@ -1,8 +1,8 @@
 "use client";
-import UploadExcelTecnico from "@/components/admin/tecnicos/details/UploadExcel/UploadExcelTecnico";
 import FormularioRegistroTecnicos from "@/components/admin/tecnicos/FormularioRegistroTecnicos";
 import SearchHeader from "@/components/admin/tecnicos/SearchHeader";
 import TableTecnicos from "@/components/admin/tecnicos/TableTecnicos";
+import UploadExcelTecnico from "@/components/admin/tecnicos/UploadExcel/UploadExcelTecnico";
 import Modal from "@/components/ui/Modal";
 import { Tecnico } from "@/interfaces/Tecnicos";
 import React, { useState } from "react";

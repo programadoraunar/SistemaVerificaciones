@@ -18,7 +18,7 @@ import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctions
 import { toast, Toaster } from "react-hot-toast";
 import Modal from "../../ui/Modal";
 import FormularioActualizacion from "./details/FormularioActualizacion";
-import GenerarDocumentoWord from "../GenerarDocumentoWord";
+import GenerarDocumentoWord from "./VerificacionWord/GenerarDocumentoWord";
 import useSWR from "swr";
 // Función de fetch para SWR
 const fetcher = async () => {

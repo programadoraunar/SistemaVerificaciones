@@ -16,7 +16,7 @@ import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
 import FormularioActualizacion from "./details/FormularioActualizacion";
 import Modal from "@/components/ui/Modal";
-import GenerarDocumentoWord from "../GenerarDocumentoWord";
+import GenerarDocumentoWord from "../profesionales/VerificacionWord/GenerarDocumentoWord";
 // Función de fetch para SWR
 const fetcher = async () => {
   const result = await obtenerInformacionTecnicos();

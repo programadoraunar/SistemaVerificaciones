@@ -21,6 +21,7 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
         const response = await obtenerDetallesConsultaId(consultaId);
         setConsulta(response[0]);
         setIsLoading(false);
+        console.log(response[0]);
       } catch (error) {
         console.error("Error fetching consulta:", error);
         setIsError(true);
@@ -52,6 +53,7 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
           <span className="font-bold">Tipo Solicitante:</span>{" "}
           {consulta.tipo_solicitante}
         </p>
+
         <p>
           <span className="font-bold">Nombres:</span>{" "}
           {consulta.nombres_solicitante} {consulta.apellidos_solicitante}
@@ -60,6 +62,44 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
           <span className="font-bold">Teléfono:</span>{" "}
           {consulta.telefono_solicitante}
         </p>
+        {consulta.tipo_solicitante === "persona_natural" ? (
+          <>
+            <div className="flex flex-col space-y-2">
+              <div className="flex">
+                <span className="font-bold">Numero de Identificación:</span>
+                &nbsp;
+                {consulta.numero_identificacion_solicitante}
+              </div>
+              <div className="flex">
+                <span className="font-bold">País:</span>&nbsp;
+                {consulta.pais_solicitante}
+              </div>
+
+              <div className="flex">
+                <span className="font-bold">Region:</span>&nbsp;
+                {consulta.region_solicitante}
+              </div>
+              <div className="flex">
+                <span className="font-bold">Ciudad:</span>&nbsp;
+                {consulta.ciudad_solicitante}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col space-y-2">
+              <div className="flex">
+                <span className="font-bold">Razón Social</span>&nbsp;
+                {consulta.razon_social_empresa}
+              </div>
+              <div className="flex">
+                <span className="font-bold">Cargo</span>&nbsp;
+                {consulta.cargo_solicitante}
+              </div>
+            </div>
+          </>
+        )}
+
         <p>
           <span className="font-bold">Correo Electrónico:</span>{" "}
           {consulta.correo_electronico_solicitante}

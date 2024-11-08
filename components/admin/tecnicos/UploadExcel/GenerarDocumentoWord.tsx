@@ -21,7 +21,6 @@ interface GenerarDocumentoWordProps {
 const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
   persona,
 }) => {
-  console.log(persona);
   const generarDocumento = () => {
     const nombreCompleto = `${persona.nombre} ${persona.apellido}`;
 
@@ -42,7 +41,7 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
               spacing: { before: 300, after: 600 },
             }),
             new Paragraph({
-              alignment: AlignmentType.CENTER,
+              alignment: AlignmentType.JUSTIFIED,
               children: [
                 new TextRun({
                   text: `El (la) señor (a) ${nombreCompleto}, identificado (a) con ${persona.tipoIdentificacion} No. ${persona.numeroIdentificacion}, obtuvo el título de ${persona.titulo_nombre} con fecha de grado ${formatearFecha(persona.fecha_grado)}, inscrito en el Acta No. ${persona.acta_grado}, folio No. ${persona.folio} del libro de Registro No. ${persona.libro_registro_grado} de los Registros Institucionales. El número de certificado es ${persona.numero_certificado}.`,

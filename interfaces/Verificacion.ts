@@ -67,10 +67,11 @@ export interface ConsultaDetalles {
   razon_social_empresa: string;
   cargo_solicitante: string;
   fecha_consulta: string; // O Date dependiendo de cómo manejes las fechas
-  profesional_nombre: string;
-  profesional_apellido: string;
-  profesional_tipo_identificacion: string;
-  profesional_numero_identificacion: string;
+  nombre: string;
+  apellido: string;
+  tipo_identificacion: string;
+  numero_identificacion: string;
+  tipo: string;
 }
 
 export interface ConsultaBusquedaId {

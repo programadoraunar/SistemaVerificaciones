@@ -1,10 +1,12 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   ConsultaBusquedaId,
   ConsultaDetalles,
 } from "@/interfaces/Verificacion";
 import { obtenerDetallesConsultaId } from "@/lib/SupabaseAdminGetConsultas";
 import { convertirAHoraColombiana } from "@/utils/fechas";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 interface Detalles {
   idConsulta: number;
@@ -21,7 +23,6 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
         const response = await obtenerDetallesConsultaId(consultaId);
         setConsulta(response[0]);
         setIsLoading(false);
-        console.log(response[0]);
       } catch (error) {
         console.error("Error fetching consulta:", error);
         setIsError(true);
@@ -114,17 +115,28 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
           Egresado Consultado
         </h3>
         <p>
-          <span className="font-bold">Nombre:</span>{" "}
-          {consulta.profesional_nombre} {consulta.profesional_apellido}
+          <span className="font-bold">Nombre:</span> {consulta.nombre}{" "}
+          {consulta.apellido}
         </p>
         <p>
           <span className="font-bold">Tipo Identificación:</span>{" "}
-          {consulta.profesional_tipo_identificacion}
+          {consulta.tipo_identificacion}
         </p>
         <p>
           <span className="font-bold">Número Identificación:</span>{" "}
-          {consulta.profesional_numero_identificacion}
+          {consulta.numero_identificacion}
         </p>
+        {consulta.tipo === "Tecnico Laboral" ? (
+          <Button>
+            <Link href="/tecnicos">Mas Información</Link>
+          </Button>
+        ) : (
+          <div className="my-10">
+            <Button>
+              <Link href="/profesionales">Mas Información</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

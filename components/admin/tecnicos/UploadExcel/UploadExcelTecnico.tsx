@@ -27,8 +27,8 @@ interface PreviewData {
 }
 const UploadExcelTecnico = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [multipleCount] = useState<number>(0);
-  const [multipleTitles] = useState<any[]>([]);
+  const [multipleCount, setMultipleCount] = useState<number>(0);
+  const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const columnHelper = createColumnHelper<TecnicoConTituloImport>();
@@ -118,6 +118,8 @@ const UploadExcelTecnico = () => {
       }
 
       const data: PreviewData = await response.json();
+      setMultipleCount(data.multipleCount);
+      setMultipleTitles(data.multipleTitle);
       // Transformar los datos de preview a TecnicoConTituloImport[]
       const transformedData: TecnicoConTituloImport[] = data.preview.map(
         (row) => ({
@@ -252,6 +254,7 @@ const UploadExcelTecnico = () => {
       libro_registro_grado: item.libro_registro_grado,
       numero_certificado: item.numero_certificado,
     }));
+    console.log(tecnicoData);
 
     const { data: titulosData, error: titulosError } = await supabase
       .from("tecnicoslaboralestitulos")
@@ -278,7 +281,7 @@ const UploadExcelTecnico = () => {
     setPreviewData([]);
   };
   const [error, setError] = useState<string | null>(null);
-
+  console.log(multipleCount);
   return (
     <div className="file-upload bg-white my-5 p-5">
       <div className="flex flex-col lg:flex-row lg:justify-between items-start lg:items-center gap-3 lg:gap-6">

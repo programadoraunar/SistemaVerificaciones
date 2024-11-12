@@ -30,7 +30,6 @@ const FormularioRegistroTecnicos = ({
           folio: "",
           fecha_grado: new Date(), // Inicializa con la fecha actual
           libro_registro_grado: "",
-          numero_diploma: "",
           numero_certificado: "",
         },
       ],
@@ -227,17 +226,7 @@ const FormularioRegistroTecnicos = ({
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
             </div>
-            <div className="mb-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Número de Diploma
-              </label>
-              <input
-                type="text"
-                {...register(`titulos.${index}.numero_diploma`)}
-                placeholder="Número de Diploma"
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              />
-            </div>
+
             <div className="mb-2">
               <label className="block text-sm font-medium text-gray-700">
                 Número de Certificado

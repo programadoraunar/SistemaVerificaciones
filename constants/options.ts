@@ -36,7 +36,19 @@ export const EXTENSION_TO_ID: { [key: string]: number } = {
   villavicencio: 5,
   cartagena: 6,
 };
-
+/**
+ * Mapa de códigos SNIES a ID de títulos profesionales en la base de datos.
+ *
+ * Este objeto mapea cada código SNIES de un título profesional a su ID correspondiente en la base de datos.
+ *
+ * Es importante mantener esta constante actualizada cada vez que se agregue un nuevo título a través de la plataforma,
+ * ya que se utiliza para sincronizar la funcionalidad de subida de datos desde archivos Excel.
+ *
+ * @constant
+ * @type {Object<number, number>}
+ * @property {number} codigoSnies - El código SNIES del título profesional.
+ * @property {number} idTitulo - El ID del título profesional en la base de datos.
+ */
 export const CODE_TO_ID_TITULO: { [key: number]: number } = {
   52928: 1,
   102519: 1,
@@ -61,8 +73,24 @@ export const CODE_TO_ID_TITULO: { [key: number]: number } = {
   14365: 10,
   101511: 11,
   19432: 12,
+  102314: 31,
+  102186: 32,
+  90611: 33,
+  101340: 34,
+  102018: 35,
 };
-
+/**
+ * Mapa de códigos técnicos a ID de títulos técnicos en la base de datos.
+ *
+ * Similar a `CODE_TO_ID_TITULO`, esta constante mapea cada código técnico de un título a su ID correspondiente en la base de datos.
+ * También debe mantenerse actualizada al agregar nuevos títulos desde la plataforma,
+ * ya que se usa en la funcionalidad de carga de archivos Excel.
+ *
+ * @constant
+ * @type {Object<number, number>}
+ * @property {number} codigoTecnico - El código técnico del título.
+ * @property {number} idTituloTecnico - El ID del título técnico en la base de datos.
+ */
 export const CODE_TECNICO_TO_ID_TITULO: { [key: number]: number } = {
   11: 13,
   5: 14,

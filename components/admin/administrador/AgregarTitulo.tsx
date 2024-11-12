@@ -79,7 +79,13 @@ const AgregarTitulo = () => {
       .insert([{ codigo: codigoNuevo, titulo_id: idEditar }]); // Asocia el código al título actual
 
     if (error) {
-      toast.error("Error al agregar el código");
+      if (error.code === "23505") {
+        toast.error(
+          "El código ingresado ya está en uso. Por favor, verifica el código y asegúrate de que no esté duplicado antes de intentarlo de nuevo."
+        );
+      } else {
+        toast.error("Error al agregar el código");
+      }
     } else {
       setCodigos((prevCodigos) => [...prevCodigos, codigoNuevo]);
       setCodigoNuevo(""); // Limpiar el campo de entrada

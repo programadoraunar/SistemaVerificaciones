@@ -29,8 +29,8 @@ interface PreviewData {
 
 const UploadExcel: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [multipleCount] = useState<number>(0);
-  const [multipleTitles] = useState<any[]>([]);
+  const [multipleCount, setMultipleCount] = useState<number>(0);
+  const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const columnHelper = createColumnHelper<ProfesionalConTituloImport>();
@@ -130,6 +130,8 @@ const UploadExcel: React.FC = () => {
       }
 
       const data: PreviewData = await response.json();
+      setMultipleCount(data.multipleCount);
+      setMultipleTitles(data.multipleTitle);
       // Transformar los datos de preview a ProfesionalConTitulo[]
       const transformedData: ProfesionalConTituloImport[] = data.preview.map(
         (row) => ({

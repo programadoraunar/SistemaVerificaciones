@@ -25,6 +25,7 @@ export async function POST(req: Request) {
     const preview: (string | number | null | Date)[][] = [];
     const titleCounts: Record<string, number> = {};
     const multipleTitleRecords: any[][] = [];
+    const uniqueRecords: Record<string, any[]> = {};
 
     // Función auxiliar para formatear fechas
     const formatDate = (value: any): string | number | null | Date => {
@@ -56,27 +57,19 @@ export async function POST(req: Request) {
         const idNumber = rowData[1] as string;
 
         if (titleCounts[idNumber]) {
+          // Si ya existe en titleCounts, lo agregamos como duplicado
           titleCounts[idNumber]++;
+          // Agregar el primer registro a los duplicados si es la primera vez que encontramos un duplicado
+          if (titleCounts[idNumber] === 2 && uniqueRecords[idNumber]) {
+            multipleTitleRecords.push(uniqueRecords[idNumber]);
+          }
+          // Agregar el registro duplicado actual
           multipleTitleRecords.push(rowData);
         } else {
+          // Si no existe, se guarda como registro único
           titleCounts[idNumber] = 1;
+          uniqueRecords[idNumber] = rowData;
           preview.push(rowData);
-        }
-      }
-    });
-
-    worksheet.eachRow((row, rowNumber) => {
-      if (rowNumber > 1) {
-        const rowData = Array.isArray(row.values)
-          ? row.values.slice(1).map((value) => {
-              return formatDate(value);
-            })
-          : [];
-
-        const idNumber = rowData[1] as string;
-
-        if (titleCounts[idNumber] > 1) {
-          multipleTitleRecords.push(rowData);
         }
       }
     });

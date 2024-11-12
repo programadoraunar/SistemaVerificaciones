@@ -18,6 +18,7 @@ import {
 } from "@/constants/options";
 import { supabase } from "@/utils/supabase/client";
 import DownloadTemplate from "@/components/ui/DownloadTemplate";
+import DownloadExcelFile from "../../excel/Tecnicos/DownloadExcelFile";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -26,8 +27,8 @@ interface PreviewData {
 }
 const UploadExcelTecnico = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [multipleCount, setMultipleCount] = useState<number>(0);
-  const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
+  const [multipleCount] = useState<number>(0);
+  const [multipleTitles] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const columnHelper = createColumnHelper<TecnicoConTituloImport>();
   const columns = [
@@ -116,7 +117,7 @@ const UploadExcelTecnico = () => {
       }
 
       const data: PreviewData = await response.json();
-      // Transformar los datos de preview a ProfesionalConTitulo[]
+      // Transformar los datos de preview a TecnicoConTituloImport[]
       const transformedData: TecnicoConTituloImport[] = data.preview.map(
         (row) => ({
           tipo_identificacion: row[0] as string,
@@ -208,7 +209,7 @@ const UploadExcelTecnico = () => {
     return processedData;
   };
 
-  //subimos los datos en sus respectivas tablas profesionales y títulos
+  //subimos los datos en sus respectivas tablas técnicos y títulos
   const subirDatos = async (datos: DatosProcesados[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const datosParaInsertar = datos.map((item) => ({
@@ -224,7 +225,7 @@ const UploadExcelTecnico = () => {
       .insert(datosParaInsertar)
       .select("id");
 
-    // Verificar si hay un error al insertar los profesionales
+    // Verificar si hay un error al insertar los técnicos
     if (tecnicoError) {
       console.error("Error al insertar datos:", tecnicoError);
       toast.error("Error al registrar el tecnico.");
@@ -232,11 +233,9 @@ const UploadExcelTecnico = () => {
       return; // Salir de la función si hay un error
     }
 
-    // Verificar que profesionalesData no sea null
+    // Verificar que tecnicosData no sea null
     if (!tecnicoData) {
-      console.error(
-        "No se recibió datos de profesionales después de la inserción."
-      );
+      console.error("No se recibió datos de Tecnicos después de la inserción.");
       toast.error("No se pudo registrar el tecnico.");
       toast.dismiss(loadingToastId);
       return; // Salir de la función si no hay datos
@@ -244,7 +243,7 @@ const UploadExcelTecnico = () => {
 
     // Paso 3: Preparar los títulos para insertar
     const titulosParaInsertar = datos.map((item, index) => ({
-      id_tecnico_laboral: tecnicoData[index]?.id || null, // Usar el ID del profesional correspondiente
+      id_tecnico_laboral: tecnicoData[index]?.id || null, // Usar el ID del Tecnico correspondiente
       id_titulo: item.titulo_nombre || null, // Obtener el ID del título
       acta_grado: item.acta_grado,
       folio: item.folio,
@@ -259,16 +258,22 @@ const UploadExcelTecnico = () => {
 
     if (titulosError) {
       console.error("Error al insertar títulos:", titulosError);
-      toast.error("Error al registrar los títulos del profesional.");
+      toast.error("Error al registrar los títulos del Tecnicos.");
     } else {
       console.log("Títulos insertados:", titulosData);
       toast.dismiss(loadingToastId);
-      toast.success("¡Profesional y títulos registrados con éxito!");
+      toast.success("Técnicos y títulos registrados con éxito!");
+      // Limpiar la tabla
+      setPreviewData([]);
     }
   };
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
     subirDatos(datosTransformados);
+  };
+  //boton para limpiar la tabla
+  const limpiarTabla = () => {
+    setPreviewData([]);
   };
   const [error, setError] = useState<string | null>(null);
 
@@ -288,6 +293,9 @@ const UploadExcelTecnico = () => {
           fileUrl="plantillas/PlantillaTecnicos.xlsx"
           fileName="PlantillaTecnicos.xlsx"
         />
+        {previewData.length > 0 && (
+          <Button onClick={limpiarTabla}>Eliminar Datos</Button>
+        )}
       </div>
 
       {error && <p className="error">{error}</p>}
@@ -297,6 +305,7 @@ const UploadExcelTecnico = () => {
             Hay {multipleCount} personas con múltiples títulos que no se
             mostrarán en la tabla.
           </p>
+          <DownloadExcelFile multipleTitleData={multipleTitles} />
         </div>
       )}
 

@@ -277,6 +277,10 @@ const UploadExcel: React.FC = () => {
     const datosTransformados = processTransformedData(previewData);
     subirDatos(datosTransformados);
   };
+  // función para limpiar tabla
+  const limpiarTabla = () => {
+    setPreviewData([]);
+  };
 
   const [error, setError] = useState<string | null>(null);
 
@@ -296,6 +300,9 @@ const UploadExcel: React.FC = () => {
           fileUrl="plantillas/PlantillaProfesionales.xlsx"
           fileName="PlantillaProfesionales.xlsx"
         />
+        {previewData.length > 0 && (
+          <Button onClick={limpiarTabla}>Eliminar Datos</Button>
+        )}
       </div>
 
       {error && <p className="error">{error}</p>}

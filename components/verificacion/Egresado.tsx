@@ -8,8 +8,6 @@ import { formatearFecha } from "@/utils/fechas";
 import Loading from "../ui/Loading";
 import { useSolicitante } from "@/context/SolicitanteContext";
 import emailjs from "@emailjs/browser";
-import toast from "react-hot-toast";
-import { Button } from "../ui/button";
 import { IoMdArrowBack } from "react-icons/io";
 import Link from "next/link";
 import Modal from "../ui/Modal";
@@ -30,8 +28,8 @@ const Egresado = () => {
 
       try {
         const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
-          numero_documento: identificacion,
-          formacionAcademica: formacionAcademicaContext,
+          numero_documento: "1088649737",
+          formacionAcademica: "Profesional",
         });
 
         setDatosGraduado(data); // Establece los datos del egresado como un array
@@ -74,7 +72,7 @@ const Egresado = () => {
     return <Loading />;
   }
 
-  if (!datosGraduado) {
+  if (!datosGraduado && !datosGraduado) {
     return (
       <div className="flex justify-center items-center lg:py-36 bg-gray-100 min-h-screen">
         <div className="bg-white shadow-md rounded-lg p-8 max-w-2xl w-full">

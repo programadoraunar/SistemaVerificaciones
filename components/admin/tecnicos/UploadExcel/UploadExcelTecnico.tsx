@@ -30,6 +30,7 @@ const UploadExcelTecnico = () => {
   const [multipleCount] = useState<number>(0);
   const [multipleTitles] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
   const columnHelper = createColumnHelper<TecnicoConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -264,7 +265,7 @@ const UploadExcelTecnico = () => {
       toast.dismiss(loadingToastId);
       toast.success("Técnicos y títulos registrados con éxito!");
       // Limpiar la tabla
-      setPreviewData([]);
+      limpiarTabla();
     }
   };
   const manejarClick = () => {
@@ -273,29 +274,29 @@ const UploadExcelTecnico = () => {
   };
   //boton para limpiar la tabla
   const limpiarTabla = () => {
+    setFileInputKey(Date.now());
     setPreviewData([]);
   };
   const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="file-upload bg-white my-5 p-5">
-      <div className="flex justify-between">
+      <div className="flex flex-col lg:flex-row lg:justify-between items-start lg:items-center gap-3 lg:gap-6">
         <div className="flex flex-col gap-3">
           <h2>Cargar archivo Excel</h2>
           <input
+            key={fileInputKey}
             type="file"
             accept=".xlsx, .xls"
             onChange={handleFileUpload}
-            className="file-input"
+            className="text-sm"
           />
         </div>
-        <DownloadTemplate
-          fileUrl="plantillas/PlantillaTecnicos.xlsx"
-          fileName="PlantillaTecnicos.xlsx"
-        />
-        {previewData.length > 0 && (
-          <Button onClick={limpiarTabla}>Eliminar Datos</Button>
-        )}
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 mt-3 lg:mt-0">
+          {previewData.length > 0 && (
+            <Button onClick={limpiarTabla}>Limpiar Tabla</Button>
+          )}
+        </div>
       </div>
 
       {error && <p className="error">{error}</p>}

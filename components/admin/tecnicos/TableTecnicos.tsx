@@ -17,6 +17,7 @@ import useSWR from "swr";
 import FormularioActualizacion from "./details/FormularioActualizacion";
 import Modal from "@/components/ui/Modal";
 import GenerarDocumentoWord from "../profesionales/VerificacionWord/GenerarDocumentoWord";
+import DownloadTemplate from "@/components/ui/DownloadTemplate";
 // Función de fetch para SWR
 const fetcher = async () => {
   const result = await obtenerInformacionTecnicos();
@@ -226,6 +227,12 @@ const TableTecnicos = ({ searchResults }: { searchResults: Tecnico[] }) => {
                 <span className="w-5 h-5">{">>"}</span>
               </button>
             </div>
+          </div>
+          <div className="flex w-full justify-end py-5">
+            <DownloadTemplate
+              fileUrl="plantillas/PlantillaTecnicos.xlsx"
+              fileName="PlantillaTecnicos.xlsx"
+            />
           </div>
         </>
       ) : (

@@ -29,9 +29,10 @@ interface PreviewData {
 
 const UploadExcel: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [multipleCount, setMultipleCount] = useState<number>(0);
-  const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
+  const [multipleCount] = useState<number>(0);
+  const [multipleTitles] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
   const columnHelper = createColumnHelper<ProfesionalConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -270,6 +271,7 @@ const UploadExcel: React.FC = () => {
     } else {
       toast.dismiss(loadingToastId);
       toast.success("¡Profesional y títulos registrados con éxito!");
+      limpiarTabla();
     }
   };
 
@@ -279,6 +281,7 @@ const UploadExcel: React.FC = () => {
   };
   // función para limpiar tabla
   const limpiarTabla = () => {
+    setFileInputKey(Date.now());
     setPreviewData([]);
   };
 
@@ -290,16 +293,14 @@ const UploadExcel: React.FC = () => {
         <div className="flex flex-col gap-3">
           <h2>Cargar archivo Excel</h2>
           <input
+            key={fileInputKey}
             type="file"
             accept=".xlsx, .xls"
             onChange={handleFileUpload}
             className="file-input"
           />
         </div>
-        <DownloadTemplate
-          fileUrl="plantillas/PlantillaProfesionales.xlsx"
-          fileName="PlantillaProfesionales.xlsx"
-        />
+
         {previewData.length > 0 && (
           <Button onClick={limpiarTabla}>Eliminar Datos</Button>
         )}

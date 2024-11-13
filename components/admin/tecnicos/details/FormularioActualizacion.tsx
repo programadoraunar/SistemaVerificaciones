@@ -7,6 +7,9 @@ import ExpandingButton from "@/components/ui/ExpandingButton";
 import FormularioTitulos from "./FormularioTitulos";
 import { supabase } from "@/utils/supabase/client";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import Modal from "@/components/ui/Modal";
+import NuevoTituloTecnico from "./NuevoTituloTecnico";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -20,6 +23,15 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   const [tecnicosData, setTecnicosData] =
     useState<TecnicoLaboralActualizar | null>(null);
   const [titulos, setTitulos] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  // Función para manejar el éxito del registro
+  const handleRegistroExitoso = () => {
+    closeModal(); // Cierra el modal
+  };
   useEffect(() => {
     const fetchTecnico = async () => {
       try {
@@ -91,6 +103,26 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
                 />
               }
             />
+          </div>
+          <div>
+            <div>
+              <button
+                onClick={openModal}
+                className="px-4 py-2 bg-blue-zodiac-950 text-white rounded"
+              >
+                Registrar Nuevo +
+              </button>
+            </div>
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              title={`Agregar Nuevo Titulo a ${tecnicosData.nombre_tecnico}`}
+            >
+              <NuevoTituloTecnico
+                onSuccess={handleRegistroExitoso}
+                numeroIdentificacion={tecnicosData.numero_identificacion}
+              />
+            </Modal>
           </div>
         </>
       )}

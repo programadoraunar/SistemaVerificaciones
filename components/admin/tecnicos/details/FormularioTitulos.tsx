@@ -106,7 +106,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   return (
     <form className="py-4">
       {titulos.map((titulo, index) => (
-        <div key={index} className="mb-6 border-b-2 pb-4">
+        <div key={index} className="mb-6 pb-4">
           {/* Muestra el nombre del título en lugar del índice */}
           <h3 className="font-semibold mb-2">
             {titulosMap?.[titulo.id_titulo] || "Título desconocido"}

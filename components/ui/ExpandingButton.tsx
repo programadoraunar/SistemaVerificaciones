@@ -32,7 +32,7 @@ const ExpandingButton: React.FC<ExpandingButtonProps> = ({
         transition={{ duration: 0.3 }}
         className="overflow-hidden"
       >
-        <div className="border">{expandedContent}</div>
+        <div>{expandedContent}</div>
       </motion.div>
     </div>
   );

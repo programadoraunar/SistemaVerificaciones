@@ -213,7 +213,7 @@ const UploadExcelTecnico = () => {
   };
 
   //subimos los datos en sus respectivas tablas técnicos y títulos
-  const subirDatos = async (datos: DatosProcesados[]) => {
+  /* const subirDatos = async (datos: DatosProcesados[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const datosParaInsertar = datos.map((item) => ({
       tipo_identificacion: item.tipo_identificacion,
@@ -231,7 +231,25 @@ const UploadExcelTecnico = () => {
     // Verificar si hay un error al insertar los técnicos
     if (tecnicoError) {
       console.error("Error al insertar datos:", tecnicoError);
-      toast.error("Error al registrar el tecnico.");
+
+      // Verificar si el error es debido a un duplicado de número de identificación
+      if (tecnicoError.code === "23505") {
+        const duplicateIdentifications = datos.filter(
+          (item) =>
+            item.numero_identificacion.toString() ===
+            tecnicoError.details?.match(/Key \(([^)]+)\)=\(([^)]+)\)/)?.[2]
+        );
+        console.error(
+          "Número(s) de identificación duplicado(s):",
+          duplicateIdentifications
+        );
+        toast.error(
+          `Número(s) de identificación duplicado(s): ${duplicateIdentifications.map((item) => item.numero_identificacion).join(", ")}`
+        );
+      } else {
+        toast.error("Error al registrar el técnico.");
+      }
+
       toast.dismiss(loadingToastId);
       return; // Salir de la función si hay un error
     }
@@ -270,7 +288,56 @@ const UploadExcelTecnico = () => {
       // Limpiar la tabla
       limpiarTabla();
     }
+  }; */
+
+  const subirDatos = async (datos: DatosProcesados[]) => {
+    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
+
+    // Mapeo de los datos a un formato que espera la función en el backend
+    const datosParaInsertar = datos.map((item) => ({
+      tipo_identificacion: item.tipo_identificacion,
+      nombre: item.nombre_tecnico,
+      apellido: item.apellido_tecnico,
+      numero_identificacion: item.numero_identificacion.toString(),
+      id_extension: item.nombre_extension,
+      titulo_nombre: item.titulo_nombre,
+      acta_grado: item.acta_grado,
+      folio: item.folio,
+      fecha_grado: item.fecha_grado,
+      libro_registro_grado: item.libro_registro_grado,
+      numero_certificado: item.numero_certificado,
+    }));
+
+    console.log(datosParaInsertar); // Verifica que esto sea un array
+
+    try {
+      // Llamar a la función RPC en Supabase
+      const { data, error } = await supabase.rpc(
+        "insertar_tecnicos_y_titulos_excel",
+        { datos: datosParaInsertar }
+      );
+
+      // Manejo de la respuesta del servidor
+      if (error) {
+        toast.error(`Error: ${error.message}`);
+        console.error(error);
+      } else if (data && data.mensaje && data.duplicados) {
+        // Caso de duplicados
+        toast.error(`${data.mensaje}: ${data.duplicados.join(", ")}`);
+      } else {
+        toast.success("Datos insertados correctamente.");
+        console.log(data); // Aquí puedes ver la respuesta de la función
+      }
+    } catch (error) {
+      toast.error("Error al conectar con el servidor.");
+      console.error("Error:", error);
+    } finally {
+      // Descartar el toast de carga
+      toast.dismiss(loadingToastId);
+      limpiarTabla();
+    }
   };
+
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
     subirDatos(datosTransformados);

@@ -110,7 +110,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
                 onClick={openModal}
                 className="px-4 py-2 bg-blue-zodiac-950 text-white rounded"
               >
-                Registrar Nuevo +
+                Nuevo Titulo
               </button>
             </div>
             <Modal

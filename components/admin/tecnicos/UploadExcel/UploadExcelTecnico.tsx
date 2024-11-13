@@ -323,7 +323,9 @@ const UploadExcelTecnico = () => {
         console.error(error);
       } else if (data && data.mensaje && data.duplicados) {
         // Caso de duplicados
-        toast.error(`${data.mensaje}: ${data.duplicados.join(", ")}`);
+        toast.error(`${data.mensaje}: ${data.duplicados.join(", ")}`, {
+          duration: 10000,
+        });
       } else {
         toast.success("Datos insertados correctamente.");
         console.log(data); // Aquí puedes ver la respuesta de la función

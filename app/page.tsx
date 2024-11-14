@@ -3,6 +3,7 @@ import Hero from "@/components/Home/hero";
 import Footer from "@/components/Home/Footer";
 import NavBar from "@/components/Home/NavBar";
 import LoadingScreen from "@/components/ui/LoadingScreen";
+import Tets from "@/components/Home/Tets";
 export default async function Index() {
   return (
     <div className="relative">

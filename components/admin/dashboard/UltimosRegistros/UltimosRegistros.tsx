@@ -7,6 +7,7 @@ import { Egresado } from "@/interfaces/Egresados";
 import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import { Registros } from "@/interfaces/Registro";
+import { Link } from "lucide-react";
 const fetcher = async () => {
   const { data: result, error } = await supabase.rpc(
     "obtener_ultimos_10_egresados_registrados"
@@ -37,6 +38,7 @@ function UltimosRegistros() {
     setModalOpen(false); // Cierra el modal
     setId(null); // Reinicia el profesional seleccionado
   };
+
   return (
     <div className="bg-white p-5 rounded-lg">
       <h2 className="text-lg font-bold mb-4">Últimos Registros Agregados</h2>
@@ -60,8 +62,8 @@ function UltimosRegistros() {
                     {egresado.nombre} {egresado.apellido}
                   </td>
                   <td className="border border-gray-300 p-2 text-center">
-                    <Button onClick={() => openModal(egresado.id)}>
-                      Ver Detalles
+                    <Button>
+                      <Link>Ver Detalles</Link>
                     </Button>
                   </td>
                 </tr>

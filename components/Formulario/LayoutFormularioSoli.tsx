@@ -1,3 +1,4 @@
+// @ts-ignore
 "use client";
 import { useState } from "react";
 import FormularioPersona from "./FormularioPersona";
@@ -101,6 +102,58 @@ const LayoutFormularioSoli: React.FC = () => {
     return Object.values(newErrors).every((error) => error === "");
   };
 
+  const handleEmpresaSubmit = async (data: FormularioEmpresaType) => {
+    if (validate()) {
+      const datosCompletos = { ...data, ...datosAdicionales };
+
+      // Maneja los datos completos aquí
+      // Prepara los datos  para verificar si existe el egresado
+      const datosVerificacion = {
+        tipoIdentificacionEgresado: datosAdicionales.tipoIdentificacionEgresado,
+        numeroIdentificacionEgresado:
+          datosAdicionales.numeroIdentificacionEgresado,
+        formacionAcademicaEgresado: Number(
+          datosAdicionales.formacionAcademicaEgresado
+        ), // Convertir a número
+      };
+      try {
+        setIsLoading(true);
+        const datos = await verificarEgresado(datosVerificacion);
+        //guardamos el numero de identificación para informar a la modal si no se encontró
+        setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
+
+        if (datos) {
+          // Si existe el egresado, se procede a guardar la información de la persona
+          setEgresado(datos);
+          setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
+          // enviamos al contexto el tipo de egresado para realizar búsquedas sobre eso
+          setFormacionAcademicaContext(
+            datosVerificacion.formacionAcademicaEgresado
+          );
+          await registrarConsultaConEgresadoEmpresas({
+            apellidosSolicitante: datosCompletos.apellidosSolicitante,
+            cargo: datosCompletos.cargoSolicitante,
+            correoElectronicoSolicitante: datosCompletos.correoElectronico,
+            formacionAcademicaEgresado:
+              datosVerificacion.formacionAcademicaEgresado,
+            nit: datosCompletos.nit,
+            nombresSolicitante: datosCompletos.nombresSolicitante,
+            numeroIdentificacionEgresado:
+              datosCompletos.numeroIdentificacionEgresado,
+            razon: datosCompletos.nit,
+            telefonoSolicitante: datosCompletos.telefono,
+          });
+          setIsLoading(false);
+          router.push("/verificacion");
+        } else {
+          setIsLoading(false);
+          openModal();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   const handlePersonaSubmit = async (data: FormularioPersonaType) => {
     if (validate()) {
       const datosCompletos = { ...data, ...datosAdicionales };
@@ -144,59 +197,6 @@ const LayoutFormularioSoli: React.FC = () => {
               datosVerificacion.formacionAcademicaEgresado,
             numeroIdentificacionEgresado:
               datosVerificacion.numeroIdentificacionEgresado,
-          });
-          setIsLoading(false);
-          router.push("/verificacion");
-        } else {
-          setIsLoading(false);
-          openModal();
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  const handleEmpresaSubmit = async (data: FormularioEmpresaType) => {
-    if (validate()) {
-      const datosCompletos = { ...data, ...datosAdicionales };
-
-      // Maneja los datos completos aquí
-      // Prepara los datos  para verificar si existe el egresado
-      const datosVerificacion = {
-        tipoIdentificacionEgresado: datosAdicionales.tipoIdentificacionEgresado,
-        numeroIdentificacionEgresado:
-          datosAdicionales.numeroIdentificacionEgresado,
-        formacionAcademicaEgresado: Number(
-          datosAdicionales.formacionAcademicaEgresado
-        ), // Convertir a número
-      };
-      try {
-        setIsLoading(true);
-        const datos = await verificarEgresado(datosVerificacion);
-        //guardamos el numero de identificación para informar a la modal si no se encontró
-        setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
-
-        if (datos) {
-          // Si existe el egresado, se procede a guardar la información de la persona
-          setEgresado(datos);
-          setIdentificacion(datosVerificacion.numeroIdentificacionEgresado);
-          // enviamos al contexto el tipo de egresado para realizar búsquedas sobre eso
-          setFormacionAcademicaContext(
-            datosVerificacion.formacionAcademicaEgresado
-          );
-          await registrarConsultaConEgresadoEmpresas({
-            apellidosSolicitante: datosCompletos.apellidosSolicitante,
-            cargo: datosCompletos.cargoSolicitante,
-            correoElectronicoSolicitante: datosCompletos.correoElectronico,
-            formacionAcademicaEgresado:
-              datosVerificacion.formacionAcademicaEgresado,
-            nit: datosCompletos.nit,
-            nombresSolicitante: datosCompletos.nombresSolicitante,
-            numeroIdentificacionEgresado:
-              datosCompletos.numeroIdentificacionEgresado,
-            razon: datosCompletos.nit,
-            telefonoSolicitante: datosCompletos.telefono,
           });
           setIsLoading(false);
           router.push("/verificacion");
@@ -331,6 +331,7 @@ const LayoutFormularioSoli: React.FC = () => {
       {tipoSolicitante === "empresa" && (
         <FormularioEmpresa onSubmit={handleEmpresaSubmit} />
       )}
+
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

@@ -1,5 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  CODE_TECNICO_TO_ID_TITULO,
+  CODE_TO_ID_TITULO,
+} from "@/constants/options";
 import { Titulo } from "@/interfaces/Titulos";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useRef, useState } from "react";
@@ -137,7 +141,17 @@ const AgregarTitulo = () => {
   const cancelarEdicion = () => {
     limpiarFormulario();
   };
+  const titulosProfesionales = titulos2
+    ? titulos2.filter((titulo) =>
+        Object.values(CODE_TO_ID_TITULO).includes(titulo.titulo_id)
+      )
+    : [];
 
+  const titulosFiltradosTecnicos = titulos2
+    ? titulos2.filter((titulo) =>
+        Object.values(CODE_TECNICO_TO_ID_TITULO).includes(titulo.titulo_id)
+      )
+    : [];
   // Manejo de errores y carga de datos
   if (error) return <div>Error al cargar los títulos</div>;
   if (!titulos2) return <div>Cargando...</div>;
@@ -242,7 +256,54 @@ const AgregarTitulo = () => {
             )}
           </div>
         </form>
-        <div className="overflow-x-auto">
+        {/* Sección para títulos profesionales */}
+        <div className="my-6">
+          <h3 className="text-xl font-semibold text-gray-700 mb-4">
+            Títulos Profesionales
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-400">
+              <thead className="bg-gray-200">
+                <tr>
+                  <th className="p-4 text-left text-gray-700 font-semibold">
+                    Nombre
+                  </th>
+                  <th className="p-4 text-left text-gray-700 font-semibold">
+                    Códigos
+                  </th>
+                  <th className="p-4 text-left text-gray-700 font-semibold">
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {titulosProfesionales.map((titulo) => (
+                  <tr
+                    key={titulo.titulo_id}
+                    className={`border-b ${idEditar === titulo.titulo_id ? "bg-gray-100" : ""}`}
+                  >
+                    <td className="border-gray-400 p-2">{titulo.nombre}</td>
+                    <td className="border-gray-400 p-2">
+                      {titulo.codigos.length > 0
+                        ? titulo.codigos.join(", ")
+                        : "N/A"}
+                    </td>
+                    <td className="border-gray-400 p-2">
+                      <button
+                        className="text-blue-500"
+                        onClick={() => editarTitulo(titulo)}
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg py-2">Títulos Técnicos</h3>
           <table className="w-full border-collapse border border-gray-400">
             <thead className="bg-gray-200">
               <tr>
@@ -258,11 +319,8 @@ const AgregarTitulo = () => {
               </tr>
             </thead>
             <tbody>
-              {titulos2.map((titulo) => (
-                <tr
-                  key={titulo.titulo_id}
-                  className={`border-b ${idEditar === titulo.titulo_id ? "bg-gray-100" : ""}`}
-                >
+              {titulosFiltradosTecnicos.map((titulo) => (
+                <tr key={titulo.titulo_id}>
                   <td className="border-gray-400 p-2">{titulo.nombre}</td>
                   <td className="border-gray-400 p-2">
                     {titulo.codigos.length > 0

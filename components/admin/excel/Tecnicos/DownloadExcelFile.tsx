@@ -25,7 +25,7 @@ const DownloadExcelFile: React.FC<DownloadExcelProps> = ({
       { header: "Nombre Tecnico", key: "nombre_tecnico", width: 20 },
       {
         header: "Apellido Tecnico",
-        key: "apellido_tecncico",
+        key: "apellido_tecnico",
         width: 20,
       },
       { header: "SIET", key: "siet", width: 10 },
@@ -47,8 +47,8 @@ const DownloadExcelFile: React.FC<DownloadExcelProps> = ({
       worksheet.addRow({
         tipo_identificacion: row[0],
         numero_identificacion: row[1],
-        nombre_profesional: row[2],
-        apellido_profesional: row[3],
+        nombre_tecnico: row[2],
+        apellido_tecnico: row[3],
         siet: row[4],
         programa: row[5],
         nombre_extension: row[6],

@@ -375,8 +375,9 @@ const UploadExcelTecnico = () => {
       {multipleCount > 0 && (
         <div>
           <p className="warning">
-            Hay {multipleCount} personas con múltiples títulos que no se
-            mostrarán en la tabla.
+            Hay {multipleCount} personas con múltiples títulos o con números de
+            identificación repetidos. Por favor, verificalos descargándolos
+            mediante el siguiente botón
           </p>
           <DownloadExcelFile multipleTitleData={multipleTitles} />
         </div>

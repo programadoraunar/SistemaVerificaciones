@@ -99,7 +99,12 @@ const UploadExcelTecnico = () => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const file = e.target.files?.[0];
     if (!file) return;
-
+    const expectedFileName = "PlantillaTecnicos.xlsx"; // El nombre de archivo esperado
+    if (file.name !== expectedFileName) {
+      toast.dismiss(loadingToastId); // Cierra el mensaje de carga
+      toast.error("El archivo no corresponde a la plantilla correcta.");
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
 
@@ -211,85 +216,6 @@ const UploadExcelTecnico = () => {
 
     return processedData;
   };
-
-  //subimos los datos en sus respectivas tablas técnicos y títulos
-  /* const subirDatos = async (datos: DatosProcesados[]) => {
-    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
-    const datosParaInsertar = datos.map((item) => ({
-      tipo_identificacion: item.tipo_identificacion,
-      nombre: item.nombre_tecnico,
-      apellido: item.apellido_tecnico,
-      numero_identificacion: item.numero_identificacion.toString(),
-      id_extension: item.nombre_extension,
-    }));
-
-    const { data: tecnicoData, error: tecnicoError } = await supabase
-      .from("tecnicoslaborales")
-      .insert(datosParaInsertar)
-      .select("id");
-
-    // Verificar si hay un error al insertar los técnicos
-    if (tecnicoError) {
-      console.error("Error al insertar datos:", tecnicoError);
-
-      // Verificar si el error es debido a un duplicado de número de identificación
-      if (tecnicoError.code === "23505") {
-        const duplicateIdentifications = datos.filter(
-          (item) =>
-            item.numero_identificacion.toString() ===
-            tecnicoError.details?.match(/Key \(([^)]+)\)=\(([^)]+)\)/)?.[2]
-        );
-        console.error(
-          "Número(s) de identificación duplicado(s):",
-          duplicateIdentifications
-        );
-        toast.error(
-          `Número(s) de identificación duplicado(s): ${duplicateIdentifications.map((item) => item.numero_identificacion).join(", ")}`
-        );
-      } else {
-        toast.error("Error al registrar el técnico.");
-      }
-
-      toast.dismiss(loadingToastId);
-      return; // Salir de la función si hay un error
-    }
-
-    // Verificar que tecnicosData no sea null
-    if (!tecnicoData) {
-      console.error("No se recibió datos de Tecnicos después de la inserción.");
-      toast.error("No se pudo registrar el tecnico.");
-      toast.dismiss(loadingToastId);
-      return; // Salir de la función si no hay datos
-    }
-
-    // Paso 3: Preparar los títulos para insertar
-    const titulosParaInsertar = datos.map((item, index) => ({
-      id_tecnico_laboral: tecnicoData[index]?.id || null, // Usar el ID del Tecnico correspondiente
-      id_titulo: item.titulo_nombre || null, // Obtener el ID del título
-      acta_grado: item.acta_grado,
-      folio: item.folio,
-      fecha_grado: item.fecha_grado,
-      libro_registro_grado: item.libro_registro_grado,
-      numero_certificado: item.numero_certificado,
-    }));
-    console.log(tecnicoData);
-
-    const { data: titulosData, error: titulosError } = await supabase
-      .from("tecnicoslaboralestitulos")
-      .insert(titulosParaInsertar);
-
-    if (titulosError) {
-      console.error("Error al insertar títulos:", titulosError);
-      toast.error("Error al registrar los títulos del Tecnicos.");
-    } else {
-      console.log("Títulos insertados:", titulosData);
-      toast.dismiss(loadingToastId);
-      toast.success("Técnicos y títulos registrados con éxito!");
-      // Limpiar la tabla
-      limpiarTabla();
-    }
-  }; */
-
   const subirDatos = async (datos: DatosProcesados[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
 
@@ -307,9 +233,6 @@ const UploadExcelTecnico = () => {
       libro_registro_grado: item.libro_registro_grado,
       numero_certificado: item.numero_certificado,
     }));
-
-    console.log(datosParaInsertar); // Verifica que esto sea un array
-
     try {
       // Llamar a la función RPC en Supabase
       const { data, error } = await supabase.rpc(
@@ -350,7 +273,6 @@ const UploadExcelTecnico = () => {
     setPreviewData([]);
   };
   const [error, setError] = useState<string | null>(null);
-  console.log(multipleCount);
   return (
     <div className="file-upload bg-white my-5 p-5">
       <div className="flex flex-col lg:flex-row lg:justify-between items-start lg:items-center gap-3 lg:gap-6">

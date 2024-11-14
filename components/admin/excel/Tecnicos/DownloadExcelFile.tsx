@@ -1,6 +1,7 @@
 import React from "react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { Button } from "@/components/ui/button";
 
 interface DownloadExcelProps {
   multipleTitleData: any[]; // Puedes tipar mejor esta propiedad según la estructura de los datos
@@ -72,9 +73,9 @@ const DownloadExcelFile: React.FC<DownloadExcelProps> = ({
   };
 
   return (
-    <button onClick={downloadExcelFile} className="download-button">
+    <Button onClick={downloadExcelFile} className="download-button">
       Descargar Excel
-    </button>
+    </Button>
   );
 };
 

@@ -216,7 +216,7 @@ const UploadExcel: React.FC = () => {
     return processedData;
   };
   //subimos los datos en sus respectivas tablas profesionales y títulos
-  const subirDatos = async (datos: DatosProcesados[]) => {
+  /* const subirDatos = async (datos: DatosProcesados[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const datosParaInsertar = datos.map((item) => ({
       tipo_identificacion: item.tipo_identificacion,
@@ -273,6 +273,54 @@ const UploadExcel: React.FC = () => {
     } else {
       toast.dismiss(loadingToastId);
       toast.success("¡Profesional y títulos registrados con éxito!");
+      limpiarTabla();
+    }
+  };
+ */
+  const subirDatos = async (datos: DatosProcesados[]) => {
+    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
+
+    // Mapeo de los datos para que coincidan con el formato esperado por la función en el backend
+    const datosParaInsertar = datos.map((item) => ({
+      tipo_identificacion: item.tipo_identificacion,
+      numero_identificacion: item.numero_identificacion.toString(),
+      nombre: item.nombre_profesional,
+      apellido: item.apellido_profesional,
+      id_extension: item.nombre_extension,
+      titulo_nombre: item.titulo_nombre, // ID del título
+      acta_grado: item.acta_grado,
+      folio: item.folio,
+      fecha_grado: item.fecha_grado,
+      libro_registro_grado: item.libro_registro_grado,
+      numero_diploma: item.numero_diploma,
+    }));
+
+    try {
+      // Llamar a la función RPC en Supabase
+      const { data, error } = await supabase.rpc(
+        "insertar_profesionales_y_titulos_excel",
+        { datos: datosParaInsertar }
+      );
+
+      // Manejo de la respuesta del servidor
+      if (error) {
+        toast.error(`Error: ${error.message}`);
+        console.error(error);
+      } else if (data && data.mensaje && data.duplicados) {
+        // Caso de duplicados
+        toast.error(`${data.mensaje}: ${data.duplicados.join(", ")}`, {
+          duration: 10000,
+        });
+      } else {
+        toast.success("Profesionales y títulos insertados correctamente.");
+        console.log(data); // Aquí puedes ver la respuesta de la función
+      }
+    } catch (error) {
+      toast.error("Error al conectar con el servidor.");
+      console.error("Error:", error);
+    } finally {
+      // Descartar el toast de carga
+      toast.dismiss(loadingToastId);
       limpiarTabla();
     }
   };

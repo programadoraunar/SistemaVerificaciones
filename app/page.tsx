@@ -4,6 +4,7 @@ import Footer from "@/components/Home/Footer";
 import NavBar from "@/components/Home/NavBar";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import Tets from "@/components/Home/Tets";
+import { Toaster } from "react-hot-toast";
 export default async function Index() {
   return (
     <div className="relative">
@@ -21,6 +22,7 @@ export default async function Index() {
         </div>
       </div>
       <Footer />
+      <Toaster />
     </div>
   );
 }

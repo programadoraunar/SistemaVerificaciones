@@ -25,11 +25,12 @@ const Egresado = () => {
         router.push("/");
         return;
       }
+      console.log("egresado a buscar " + identificacion);
 
       try {
         const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
-          numero_documento: "1088649737",
-          formacionAcademica: "Profesional",
+          numero_documento: identificacion,
+          formacionAcademica: formacionAcademicaContext,
         });
 
         setDatosGraduado(data); // Establece los datos del egresado como un array

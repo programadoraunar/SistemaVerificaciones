@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,8 @@ import {
   formularioEmpresaSchema,
   FormularioEmpresaType,
 } from "../../validations/validationSchema";
+import Captcha from "../ui/Captcha";
+import toast from "react-hot-toast";
 interface FormularioEmpresaProps {
   onSubmit: (data: FormularioEmpresaType) => void;
 }
@@ -18,9 +20,20 @@ const FormularioEmpresa: FC<FormularioEmpresaProps> = ({ onSubmit }) => {
   } = useForm<FormularioEmpresaType>({
     resolver: zodResolver(formularioEmpresaSchema),
   });
+  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
+
+  // Función que se ejecuta cuando el formulario se envía
+  const handleFormSubmit = (data: FormularioEmpresaType) => {
+    console.log("activo el evento");
+    if (isCaptchaValid) {
+      onSubmit(data); // Envía el formulario solo si el CAPTCHA es válido
+    } else {
+      toast.error("CAPTCHA INVALIDO");
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="pl-2">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="pl-2">
       <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-5">
         <div>
           <label
@@ -174,14 +187,23 @@ const FormularioEmpresa: FC<FormularioEmpresaProps> = ({ onSubmit }) => {
           </p>
         )}
       </div>
+      <div className="flex justify-center pt-5">
+        <Captcha
+          validate={(res) => {
+            setIsCaptchaValid(res);
+          }}
+        />{" "}
+        {/* Componente CAPTCHA */}
+      </div>
 
+      {/* Solo mostrar el botón de enviar si el CAPTCHA es válido */}
       <div className="mt-6">
         <button
           type="submit"
           disabled={isSubmitting}
           className="w-full p-2 bg-blue-zodiac-950 text-white rounded-md hover:bg-blue-800 text-center disabled:bg-gray-400"
         >
-          {isSubmitting ? "Validando..." : "Verificar"}
+          {isSubmitting ? "Validando..." : "Enviar"}
         </button>
       </div>
     </form>

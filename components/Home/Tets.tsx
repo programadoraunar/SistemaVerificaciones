@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import CaptchaComponent from "../ui/CaptchaComponent";
+import CaptchaComponent from "../ui/Captcha";
 
 function Tets() {
   const [captchaValue, setCaptchaValue] = useState<string>("");

@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoginFormData, loginSchema } from "@/validations/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const {
@@ -16,8 +18,34 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [blockTime, setBlockTime] = useState<number>(0); // Tiempo de espera en segundos
+
+  // Reducir el tiempo de bloqueo cada segundo
+  useEffect(() => {
+    if (blockTime > 0) {
+      const timer = setTimeout(() => setBlockTime(blockTime - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [blockTime]);
+
   const onSubmit = async (data: LoginFormData) => {
-    await signInAction(data); // Aquí se ejecuta la acción de inicio de sesión
+    setErrorMessage(null); // Limpiar mensaje de error previo
+
+    const result = await signInAction(data);
+
+    if (!result.success) {
+      setErrorMessage(result.message!);
+      toast.error(result.message!);
+
+      // Capturar tiempo de espera si está incluido en el mensaje del backend
+      const waitTimeMatch = result.message!.match(/en (\d+) segundos/);
+      if (waitTimeMatch) {
+        setBlockTime(parseInt(waitTimeMatch[1], 10)); // Extraer tiempo de espera del mensaje
+      }
+    } else {
+      window.location.href = "/dashboard"; // Redirigir si es exitoso
+    }
   };
 
   return (
@@ -45,8 +73,15 @@ export default function LoginForm() {
           <p className="text-red-600 text-sm">{errors.password.message}</p>
         )}
 
-        <SubmitButton disabled={isSubmitting} pendingText="Ingresando...">
-          {isSubmitting ? "Ingresando..." : "Ingresar"}
+        <SubmitButton
+          disabled={isSubmitting || blockTime > 0} // Bloqueo basado en tiempo
+          pendingText={`Espera ${blockTime}s...`} // Mensaje dinámico
+        >
+          {isSubmitting
+            ? "Ingresando..."
+            : blockTime > 0
+              ? `Intenta en ${blockTime}s`
+              : "Ingresar"}
         </SubmitButton>
       </div>
     </form>

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import CaptchaComponent from "../ui/Captcha";
 
 function Tets() {
   const [captchaValue, setCaptchaValue] = useState<string>("");
@@ -20,8 +19,6 @@ function Tets() {
       <h1>Formulario de Registro</h1>
       <form onSubmit={handleSubmit}>
         {/* Otros campos de tu formulario */}
-
-        <CaptchaComponent onChange={handleCaptchaChange} />
 
         <button type="submit">Enviar</button>
       </form>

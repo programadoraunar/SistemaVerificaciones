@@ -51,11 +51,15 @@ const Egresado = () => {
       egresado_nombre: datosGraduado[0]?.nombre || "", // Maneja el caso donde no hay datos
       egresado_documento: identificacion,
     };
-
     emailjs
-      .send("service_bk1vz0a", "template_zcttbui", templateParams, {
-        publicKey: "dvTPfnCvNqCnywfFE",
-      })
+      .send(
+        process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE!,
+        process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE!,
+        templateParams,
+        {
+          publicKey: process.env.NEXT_PUBLIC_EMAIL_JS_ANON_KEY!,
+        }
+      )
       .then(
         () => {
           setIsModalOpen(true);

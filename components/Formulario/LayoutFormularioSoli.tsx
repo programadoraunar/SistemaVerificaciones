@@ -130,6 +130,9 @@ const LayoutFormularioSoli: React.FC = () => {
           setFormacionAcademicaContext(
             datosVerificacion.formacionAcademicaEgresado
           );
+          //enviamos al contexto del solicitante
+          setSolicitanteCorreo(datosCompletos.correoElectronico);
+          setSolicitanteNombre(datosCompletos.nombresSolicitante);
           await registrarConsultaConEgresadoEmpresas({
             apellidosSolicitante: datosCompletos.apellidosSolicitante,
             cargo: datosCompletos.cargoSolicitante,

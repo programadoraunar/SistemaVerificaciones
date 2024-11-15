@@ -24,9 +24,14 @@ export const Emailjs: React.FC<EmailjsProps> = ({
     };
 
     emailjs
-      .send("service_bk1vz0a", "template_bajilhw", templateParams, {
-        publicKey: "dvTPfnCvNqCnywfFE",
-      })
+      .send(
+        process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE!,
+        process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE!,
+        templateParams,
+        {
+          publicKey: process.env.NEXT_PUBLIC_EMAIL_JS_ANON_KEY!,
+        }
+      )
       .then(
         () => {
           console.log("SUCCESS!");

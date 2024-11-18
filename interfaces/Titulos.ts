@@ -13,4 +13,5 @@ export interface Titulo {
   titulo_id: number;
   nombre: string;
   codigos: string[];
+  categoria: string;
 }

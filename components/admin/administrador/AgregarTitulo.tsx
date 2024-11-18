@@ -1,9 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  CODE_TECNICO_TO_ID_TITULO,
-  CODE_TO_ID_TITULO,
-} from "@/constants/options";
 import { Titulo } from "@/interfaces/Titulos";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useRef, useState } from "react";
@@ -11,7 +7,9 @@ import toast, { Toaster } from "react-hot-toast";
 import useSWR, { mutate } from "swr";
 
 const fetcher2 = async () => {
-  const { data, error } = await supabase.rpc("obtener_titulos_con_codigos");
+  const { data, error } = await supabase.rpc("obtener_titulos_con_codigos", {
+    p_categoria: "profesional",
+  });
   if (error) throw error;
   return data;
 };
@@ -19,27 +17,29 @@ const fetcher2 = async () => {
 const AgregarTitulo = () => {
   const { data: titulos2, error } = useSWR<Titulo[]>("titulos2", fetcher2);
   const [nombre, setNombre] = useState("");
+  const [categoria, setCategoria] = useState(""); // Nueva categoría
   const [codigos, setCodigos] = useState<string[]>([]);
   const [codigoNuevo, setCodigoNuevo] = useState("");
   const [codigoEditando, setCodigoEditando] = useState<string | null>(null);
   const [codigoEditado, setCodigoEditado] = useState<string>("");
+
   const [idEditar, setIdEditar] = useState<number | null>(null);
   const formularioRef = useRef<HTMLFormElement | null>(null);
 
-  // Efecto para cargar el título seleccionado al editar
   useEffect(() => {
     if (idEditar && titulos2) {
       const tituloSeleccionado = titulos2.find((t) => t.titulo_id === idEditar);
       if (tituloSeleccionado) {
         setNombre(tituloSeleccionado.nombre);
-        setCodigos(tituloSeleccionado.codigos); // Actualiza el estado de códigos
+        setCategoria(tituloSeleccionado.categoria || "");
+        setCodigos(tituloSeleccionado.codigos || []);
       }
     }
   }, [idEditar, titulos2]);
 
-  // Función para limpiar el formulario
   const limpiarFormulario = () => {
     setNombre("");
+    setCategoria("");
     setCodigos([]);
     setCodigoNuevo("");
     setCodigoEditando(null);
@@ -47,29 +47,43 @@ const AgregarTitulo = () => {
     setIdEditar(null);
   };
 
-  // Manejar el envío del formulario para agregar o actualizar títulos
   const manejarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!categoria) {
+      toast.error("Por favor, selecciona una categoría.");
+      return;
+    }
 
     if (idEditar) {
       const { error } = await supabase
         .from("titulos")
-        .update({ nombre })
+        .update({ nombre, categoria })
         .eq("id", idEditar);
       if (error) {
         toast.error("Error al actualizar el título");
       } else {
         toast.success("¡Título actualizado!");
-        mutate("titulos2"); // Revalidar después de actualizar
+        mutate("titulos2");
+        limpiarFormulario();
       }
     } else {
-      // Lógica para agregar un nuevo título
-      const { error } = await supabase.from("titulos").insert([{ nombre }]);
+      const { data, error } = await supabase
+        .from("titulos")
+        .insert([{ nombre, categoria }])
+        .select();
       if (error) {
         toast.error("Error al agregar el título");
-      } else {
+      } else if (data?.length) {
+        const nuevoTituloId = data[0].id;
+        for (const codigo of codigos) {
+          await supabase
+            .from("codigostitulos")
+            .insert([{ codigo, titulo_id: nuevoTituloId }]);
+        }
         toast.success("¡Título agregado!");
-        mutate("titulos2"); // Revalidar después de agregar
+        mutate("titulos2");
+        limpiarFormulario();
       }
     }
   };
@@ -97,29 +111,46 @@ const AgregarTitulo = () => {
       mutate("titulos2");
     }
   };
-
   // Función para eliminar un código
-  const eliminarCodigo = (codigo: string) => {
-    setCodigos((prevCodigos) => prevCodigos.filter((c) => c !== codigo));
+  const eliminarCodigo = async (codigo: string) => {
+    // Verificar si el código está en el modo de edición, en cuyo caso no se eliminaría
+    if (codigoEditando === codigo) {
+      toast.error("No se puede eliminar el código mientras está en edición.");
+      return;
+    }
+
+    // Hacer la solicitud para eliminar el código de la base de datos
+    const { error } = await supabase
+      .from("codigostitulos")
+      .delete()
+      .eq("codigo", codigo) // Filtra por el código a eliminar
+      .single(); // .single() asegura que solo se elimine una fila
+
+    if (error) {
+      toast.error("Error al eliminar el código");
+    } else {
+      // Si no hubo errores, actualiza el estado local eliminando el código
+      setCodigos((prevCodigos) => prevCodigos.filter((c) => c !== codigo));
+      toast.success("¡Código eliminado!");
+      mutate("titulos2"); // Vuelve a obtener los datos actualizados
+    }
   };
 
-  // Función para iniciar la edición de un título
   const editarTitulo = (titulo: Titulo) => {
     setIdEditar(titulo.titulo_id);
     formularioRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
   // Función para iniciar la edición de un código
   const editarCodigo = (codigo: string) => {
     setCodigoEditando(codigo);
     setCodigoEditado(codigo); // Copiar el código actual al campo de edición
   };
-
   // Manejar la actualización de un código
   const manejarActualizarCodigo = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!codigoEditando) return;
+    console.log(codigoEditado);
 
     const { error } = await supabase
       .from("codigostitulos")
@@ -136,24 +167,26 @@ const AgregarTitulo = () => {
       mutate("titulos2");
     }
   };
+  const eliminarTitulo = async (tituloId: number) => {
+    const { error } = await supabase
+      .from("titulos")
+      .delete()
+      .eq("id", tituloId); // Elimina el título por ID
+
+    if (error) {
+      toast.error("Error al eliminar el título");
+    } else {
+      // Si no hubo errores, actualiza el estado local para reflejar la eliminación
+      toast.success("¡Título eliminado!");
+      mutate("titulos2"); // Vuelve a obtener los datos actualizados
+    }
+  };
 
   // Cancelar edición y limpiar formulario
   const cancelarEdicion = () => {
     limpiarFormulario();
   };
-  const titulosProfesionales = titulos2
-    ? titulos2.filter((titulo) =>
-        Object.values(CODE_TO_ID_TITULO).includes(titulo.titulo_id)
-      )
-    : [];
-  console.log(titulosProfesionales);
 
-  const titulosFiltradosTecnicos = titulos2
-    ? titulos2.filter((titulo) =>
-        Object.values(CODE_TECNICO_TO_ID_TITULO).includes(titulo.titulo_id)
-      )
-    : [];
-  // Manejo de errores y carga de datos
   if (error) return <div>Error al cargar los títulos</div>;
   if (!titulos2) return <div>Cargando...</div>;
 
@@ -176,25 +209,33 @@ const AgregarTitulo = () => {
             className="p-2 border border-gray-400 rounded mb-2"
             required
           />
-          {idEditar && (
-            <div className="flex flex-col mb-2">
-              <input
-                type="text"
-                value={codigoNuevo}
-                onChange={(e) => setCodigoNuevo(e.target.value)}
-                placeholder="Nuevo código"
-                className="p-2 border border-gray-400 rounded mb-2"
-              />
-              <button
-                type="button"
-                onClick={agregarCodigo}
-                className="bg-blue-950 text-white rounded p-2"
-              >
-                Agregar Código
-              </button>
-            </div>
-          )}
+          <select
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+            className="p-2 border border-gray-400 rounded mb-2"
+            required
+          >
+            <option value="">Selecciona una categoría</option>
+            <option value="profesional">Profesional</option>
+          </select>
+          <div className="flex gap-3 mb-3">
+            <input
+              type="text"
+              value={codigoNuevo}
+              onChange={(e) => setCodigoNuevo(e.target.value)}
+              placeholder="Nuevo código"
+              className="p-2 border border-gray-400 rounded"
+            />
+            <button
+              type="button"
+              onClick={agregarCodigo}
+              className="bg-blue-950 text-white rounded text-sm px-2"
+            >
+              Agregar Código
+            </button>
+          </div>
           <div className="mb-2">
+            <span className="py-2">Codigos Actuales</span>
             {codigos.map((codigo) => (
               <div key={codigo} className="flex items-center justify-center">
                 {codigoEditando === codigo ? (
@@ -257,7 +298,7 @@ const AgregarTitulo = () => {
             )}
           </div>
         </form>
-        {/* Sección para títulos profesionales */}
+
         <div className="my-6">
           <h3 className="text-xl font-semibold text-gray-700 mb-4">
             Títulos Profesionales
@@ -270,6 +311,9 @@ const AgregarTitulo = () => {
                     Nombre
                   </th>
                   <th className="p-4 text-left text-gray-700 font-semibold">
+                    Categoría
+                  </th>
+                  <th className="p-4 text-left text-gray-700 font-semibold">
                     Códigos
                   </th>
                   <th className="p-4 text-left text-gray-700 font-semibold">
@@ -278,12 +322,15 @@ const AgregarTitulo = () => {
                 </tr>
               </thead>
               <tbody>
-                {titulosProfesionales.map((titulo) => (
+                {titulos2.map((titulo) => (
                   <tr
                     key={titulo.titulo_id}
-                    className={`border-b ${idEditar === titulo.titulo_id ? "bg-gray-100" : ""}`}
+                    className={`border-b ${
+                      idEditar === titulo.titulo_id ? "bg-gray-100" : ""
+                    }`}
                   >
                     <td className="border-gray-400 p-2">{titulo.nombre}</td>
+                    <td className="border-gray-400 p-2">{titulo.categoria}</td>
                     <td className="border-gray-400 p-2">
                       {titulo.codigos.length > 0
                         ? titulo.codigos.join(", ")
@@ -296,50 +343,20 @@ const AgregarTitulo = () => {
                       >
                         Editar
                       </button>
+
+                      <button
+                        type="button"
+                        onClick={() => eliminarTitulo(titulo.titulo_id)} // Llama a la función de eliminación
+                        className="text-red-500"
+                      >
+                        Eliminar
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-        <div className="mt-6">
-          <h3 className="font-semibold text-lg py-2">Títulos Técnicos</h3>
-          <table className="w-full border-collapse border border-gray-400">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="p-4 text-left text-gray-700 font-semibold">
-                  Nombre
-                </th>
-                <th className="p-4 text-left text-gray-700 font-semibold">
-                  Códigos
-                </th>
-                <th className="p-4 text-left text-gray-700 font-semibold">
-                  Acciones
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {titulosFiltradosTecnicos.map((titulo) => (
-                <tr key={titulo.titulo_id}>
-                  <td className="border-gray-400 p-2">{titulo.nombre}</td>
-                  <td className="border-gray-400 p-2">
-                    {titulo.codigos.length > 0
-                      ? titulo.codigos.join(", ")
-                      : "N/A"}
-                  </td>
-                  <td className="border-gray-400 p-2">
-                    <button
-                      className="text-blue-500"
-                      onClick={() => editarTitulo(titulo)}
-                    >
-                      Editar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
       <Toaster />

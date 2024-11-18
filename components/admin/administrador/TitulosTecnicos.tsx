@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Modal from "@/components/ui/Modal";
 import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 import { Titulo } from "@/interfaces/Titulos";
 import { supabase } from "@/utils/supabase/client";
@@ -10,14 +9,17 @@ import useSWR, { mutate } from "swr";
 
 const fetcher2 = async () => {
   const { data, error } = await supabase.rpc("obtener_titulos_con_codigos", {
-    p_categoria: "profesional",
+    p_categoria: "tecnico",
   });
   if (error) throw error;
   return data;
 };
 
-const AgregarTitulo = () => {
-  const { data: titulos2, error } = useSWR<Titulo[]>("titulos2", fetcher2);
+const TitulosTecnico = () => {
+  const { data: titulos2, error } = useSWR<Titulo[]>(
+    "titulosTecnico",
+    fetcher2
+  );
   const [nombre, setNombre] = useState("");
   const [categoria, setCategoria] = useState(""); // Nueva categoría
   const [codigos, setCodigos] = useState<string[]>([]);
@@ -26,8 +28,10 @@ const AgregarTitulo = () => {
   const [codigoEditado, setCodigoEditado] = useState<string>("");
   const [idEditar, setIdEditar] = useState<number | null>(null);
   const formularioRef = useRef<HTMLFormElement | null>(null);
+  //estados para la confirmación de eliminación de un titulo
   const [idEliminar, setIdEliminar] = useState<number | null>(null); // Estado para el ID a eliminar titulo
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     if (idEditar && titulos2) {
       const tituloSeleccionado = titulos2.find((t) => t.titulo_id === idEditar);
@@ -66,7 +70,7 @@ const AgregarTitulo = () => {
         toast.error("Error al actualizar el título");
       } else {
         toast.success("¡Título actualizado!");
-        mutate("titulos2");
+        mutate("titulosTecnico");
         limpiarFormulario();
       }
     } else {
@@ -84,7 +88,7 @@ const AgregarTitulo = () => {
             .insert([{ codigo, titulo_id: nuevoTituloId }]);
         }
         toast.success("¡Título agregado!");
-        mutate("titulos2");
+        mutate("titulosTecnico");
         limpiarFormulario();
       }
     }
@@ -110,7 +114,7 @@ const AgregarTitulo = () => {
       setCodigos((prevCodigos) => [...prevCodigos, codigoNuevo]);
       setCodigoNuevo(""); // Limpiar el campo de entrada
       toast.success("¡Código agregado!");
-      mutate("titulos2");
+      mutate("titulosTecnico");
     }
   };
   // Función para eliminar un código
@@ -134,7 +138,7 @@ const AgregarTitulo = () => {
       // Si no hubo errores, actualiza el estado local eliminando el código
       setCodigos((prevCodigos) => prevCodigos.filter((c) => c !== codigo));
       toast.success("¡Código eliminado!");
-      mutate("titulos2"); // Vuelve a obtener los datos actualizados
+      mutate("titulosTecnico"); // Vuelve a obtener los datos actualizados
     }
   };
 
@@ -166,15 +170,15 @@ const AgregarTitulo = () => {
       toast.success("¡Código actualizado!");
       setCodigoEditando(null); // Limpiar el estado después de la actualización
       setCodigoEditado("");
-      mutate("titulos2");
+      mutate("titulosTecnico");
     }
   };
-
   // Abre la modal de confirmación y establece el título a eliminar
   const confirmarEliminacion = (tituloId: number) => {
     setIdEliminar(tituloId);
     setIsModalOpen(true);
   };
+  // Ló
   // Lógica para eliminar el título
   const eliminarTitulo = async () => {
     if (!idEliminar) return;
@@ -205,7 +209,7 @@ const AgregarTitulo = () => {
   return (
     <div className="overflow-x-auto h-[800px] overflow-y-auto">
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 bg-white">
-        Títulos Profesionales
+        Títulos Técnicos Profesionales
       </h2>
       <div className="container mx-auto p-4">
         <form
@@ -228,7 +232,7 @@ const AgregarTitulo = () => {
             required
           >
             <option value="">Selecciona una categoría</option>
-            <option value="profesional">Profesional</option>
+            <option value="tecnico">Tecnico</option>
           </select>
           <div className="flex gap-3 mb-3">
             <input
@@ -312,9 +316,6 @@ const AgregarTitulo = () => {
         </form>
 
         <div className="my-6">
-          <h3 className="text-xl font-semibold text-gray-700 mb-4">
-            Títulos Profesionales
-          </h3>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-400">
               <thead className="bg-gray-200">
@@ -326,7 +327,7 @@ const AgregarTitulo = () => {
                     Categoría
                   </th>
                   <th className="p-4 text-left text-gray-700 font-semibold">
-                    SNIES
+                    SIET
                   </th>
                   <th className="p-4 text-left text-gray-700 font-semibold">
                     Acciones
@@ -376,10 +377,9 @@ const AgregarTitulo = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={eliminarTitulo}
       />
-
       <Toaster />
     </div>
   );
 };
 
-export default AgregarTitulo;
+export default TitulosTecnico;

@@ -8,18 +8,18 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import Image from "next/image";
 // Array dinámico para las imágenes
 const images = [
-  { src: "/GRADUADOS1.webp", alt: "Graduado 2" },
-  { src: "/GRADUADOS2.webp", alt: "Graduado" },
-  { src: "/GRADUADOS3.webp", alt: "Escudo AUNAR" },
-  { src: "/GRADUADOS4.webp", alt: "Graduado 2" },
-  { src: "/GRADUADOS5.webp", alt: "Graduado" },
-  { src: "/GRADUADOS6.webp", alt: "Escudo AUNAR" },
-  { src: "/GRADUADOS7.webp", alt: "Graduado 2" },
-  { src: "/GRADUADOS8.webp", alt: "Graduado" },
-  { src: "/GRADUADOS9.webp", alt: "Escudo AUNAR" },
-  { src: "/GRADUADOS10.webp", alt: "Graduado 2" },
-  { src: "/GRADUADOS11.webp", alt: "Graduado" },
-  { src: "/GRADUADOS12.webp", alt: "Escudo AUNAR" },
+  { src: "/GRADUADOS1.webp", alt: "GRADUADOS1" },
+  { src: "/GRADUADOS2.webp", alt: "GRADUADOS2" },
+  { src: "/GRADUADOS3.webp", alt: "GRADUADOS3" },
+  { src: "/GRADUADOS4.webp", alt: "GRADUADOS4" },
+  { src: "/GRADUADOS5.webp", alt: "GRADUADOS5" },
+  { src: "/GRADUADOS6.webp", alt: "GRADUADOS6" },
+  { src: "/GRADUADOS7.webp", alt: "GRADUADOS7" },
+  { src: "/GRADUADOS8.webp", alt: "GRADUADOS8" },
+  { src: "/GRADUADOS9.webp", alt: "GRADUADOS9" },
+  { src: "/GRADUADOS10.webp", alt: "GRADUADOS10" },
+  { src: "/GRADUADOS11.webp", alt: "GRADUADOS11" },
+  { src: "/GRADUADOS12.webp", alt: "GRADUADOS12" },
 ];
 
 export default function Carousel() {
@@ -43,8 +43,8 @@ export default function Carousel() {
             <div className="flex h-full w-full items-center justify-center">
               <Image
                 src={image.src}
-                width={500}
-                height={300}
+                width={800}
+                height={400}
                 alt={image.alt}
                 className="rounded-lg shadow-md"
                 onError={(e) => (e.currentTarget.src = "/fallback.jpg")} // Imagen de respaldo

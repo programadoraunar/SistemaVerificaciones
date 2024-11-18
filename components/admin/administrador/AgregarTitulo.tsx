@@ -146,6 +146,7 @@ const AgregarTitulo = () => {
         Object.values(CODE_TO_ID_TITULO).includes(titulo.titulo_id)
       )
     : [];
+  console.log(titulosProfesionales);
 
   const titulosFiltradosTecnicos = titulos2
     ? titulos2.filter((titulo) =>

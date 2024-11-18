@@ -63,6 +63,9 @@ const Egresado = () => {
       .then(
         () => {
           setIsModalOpen(true);
+          setTimeout(() => {
+            router.push("/");
+          }, 7000);
         },
         (error) => {
           console.log("FAILED...", error.text);
@@ -94,8 +97,8 @@ const Egresado = () => {
   }
 
   return (
-    <div className="">
-      <div className="flex justify-center items-center lg:py-36 bg-gray-100 min-h-screen">
+    <div>
+      <div className="bg-hero flex justify-center items-center lg:py-36 bg-gray-100 min-h-screen">
         <div className="bg-white shadow-md rounded-lg p-8 max-w-2xl w-full">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Verificación de Graduado
@@ -188,7 +191,7 @@ const Egresado = () => {
 
             <div className="flex justify-center">
               <button
-                className="p-2 bg-blue-zodiac-950 text-white rounded-md hover:bg-blue-800 text-center"
+                className="p-2 bg-blue-zodiac-950 text-white rounded-md text-center"
                 onClick={sendEmail}
               >
                 Solicitar Verificación

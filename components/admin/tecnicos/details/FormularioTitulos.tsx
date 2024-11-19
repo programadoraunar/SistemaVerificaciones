@@ -172,7 +172,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 py-2">
             <button
               type="button" // Cambiado a "button" para manejar el envío por separado
               onClick={handleSubmit((data) => onSubmit(data, index))}

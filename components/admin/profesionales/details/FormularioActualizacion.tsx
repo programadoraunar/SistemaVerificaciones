@@ -8,19 +8,25 @@ import { supabase } from "@/utils/supabase/client";
 import toast from "react-hot-toast";
 import Modal from "@/components/ui/Modal";
 import NuevoTituloProfesional from "./NuevoTituloProfesional";
+import useSWR from "swr";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
   onSuccess: () => void;
 }
+
+// Fetcher para usar con SWR
+const fetchProfesional = async (numeroIdentificacion: string) => {
+  const result = await obtenerDetallesActualizacionProfesional({
+    numero_identificacion: numeroIdentificacion,
+  });
+  return result;
+};
+
 const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   numeroIdentificacion,
   onSuccess,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [professionalData, setProfessionalData] =
-    useState<ProfesionalActualizar | null>(null);
-  const [titulos, setTitulos] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -30,29 +36,16 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   const handleRegistroExitoso = () => {
     closeModal(); // Cierra el modal
   };
-  useEffect(() => {
-    const fetchProfessional = async () => {
-      try {
-        setLoading(true);
-        const result = await obtenerDetallesActualizacionProfesional({
-          numero_identificacion: numeroIdentificacion,
-        });
-        // Establece los datos del profesional
-        setProfessionalData(result[0]);
-        setTitulos(result.filter((item: any) => item.id_titulo));
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfessional();
-  }, [numeroIdentificacion]);
-
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
+  const { data, error, isLoading, mutate } = useSWR(
+    numeroIdentificacion
+      ? ["profesionalActualizacion", numeroIdentificacion]
+      : null,
+    () => fetchProfesional(numeroIdentificacion)
+  );
+  if (isLoading) return <p>Cargando...</p>;
+  if (error) return <p>Error al cargar los datos</p>;
+  const professionalData = data ? data[0] : null;
+  const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
 
   const onSubmit = async (data: ProfesionalActualizar) => {
     // si contiene un nombre lo que llega es por que hay que actualizar los datos personales de los administradores
@@ -79,6 +72,21 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
       // si no hay es para actualizar los títulos del profesional
     }
   };
+  //Función que permite elimina un titulo en especifico, se lo hace directamente aquí para tener la posibilidad de revalidar datos
+  const eliminarTitulo = async (idEliminar: any) => {
+    try {
+      const { error } = await supabase.rpc("eliminar_titulo_profesional", {
+        p_id: idEliminar,
+      });
+
+      if (error) throw new Error(error.message);
+      console.log(idEliminar);
+      mutate();
+      toast.success(`Título con eliminado correctamente`);
+    } catch (error) {
+      toast.error(`Error al eliminar el título`);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-5 lg:p-4 rounded-lg shadow-lg">
@@ -103,6 +111,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
                   nombre={professionalData.nombre_profesional}
                   apellido={professionalData.apellido_profesional}
                   extension={professionalData.id_extension}
+                  eliminarTitulo={eliminarTitulo}
                 />
               }
             />

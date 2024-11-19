@@ -23,6 +23,7 @@ interface FormularioTitulosProps {
   nombre: string; // Agregar esta línea
   apellido: string; // Agregar esta línea
   extension: number; // Agregar esta línea
+  eliminarTitulo: (data: any) => void;
 }
 
 // Define el tipo para los valores del formulario
@@ -42,6 +43,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   nombre,
   apellido,
   extension,
+  eliminarTitulo,
 }) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
   // Obtiene los nombres de los títulos
@@ -173,6 +175,13 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               className="bg-blue-zodiac-950 text-white p-2 rounded"
             >
               Guardar Cambios
+            </button>
+            <button
+              type="button"
+              onClick={() => eliminarTitulo(titulo.id)} // Llamada a la función de eliminación
+              className="bg-red-600 text-white p-2 rounded"
+            >
+              Eliminar Título
             </button>
           </div>
           <GenerarDocumentoWord

@@ -251,7 +251,6 @@ const TitulosTecnico = () => {
             </button>
           </div>
           <div className="mb-2">
-            <span className="py-2">Codigos Actuales</span>
             {codigos.map((codigo) => (
               <div key={codigo} className="flex items-center justify-center">
                 {codigoEditando === codigo ? (

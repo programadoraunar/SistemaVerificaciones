@@ -12,13 +12,11 @@ import {
 import { DatosProcesados, TecnicoConTituloImport } from "@/interfaces/Tecnicos";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import {
-  CODE_TECNICO_TO_ID_TITULO,
-  EXTENSION_TO_ID,
-} from "@/constants/options";
+import { EXTENSION_TO_ID } from "@/constants/options";
 import { supabase } from "@/utils/supabase/client";
 import DownloadTemplate from "@/components/ui/DownloadTemplate";
 import DownloadExcelFile from "../../excel/Tecnicos/DownloadExcelFile";
+import useCodigosSIETTecnicos from "@/hooks/useCodigosSNIESTecnicos";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -31,6 +29,12 @@ const UploadExcelTecnico = () => {
   const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
+  // usamos el hook para obtener el mapeo de los codigos SIET con los títulos
+  const {
+    data: codeToIdTitulo,
+    isLoading,
+    error: errorCodigos,
+  } = useCodigosSIETTecnicos();
   const columnHelper = createColumnHelper<TecnicoConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -203,7 +207,7 @@ const UploadExcelTecnico = () => {
         nombre_tecnico: row.nombre_tecnico,
         apellido_tecnico: row.apellido_tecnico,
         siet: row.siet,
-        titulo_nombre: CODE_TECNICO_TO_ID_TITULO[row.siet as number] || null,
+        titulo_nombre: codeToIdTitulo?.[row.siet as number] || null,
         nombre_extension:
           EXTENSION_TO_ID[normalizedExtension as string] || null,
         acta_grado: row.acta_grado,
@@ -265,7 +269,8 @@ const UploadExcelTecnico = () => {
 
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
-    subirDatos(datosTransformados);
+    console.log(datosTransformados);
+    //subirDatos(datosTransformados);
   };
   //boton para limpiar la tabla
   const limpiarTabla = () => {

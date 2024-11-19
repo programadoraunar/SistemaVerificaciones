@@ -16,10 +16,11 @@ import {
 } from "@/interfaces/Profesionales";
 import DownloadExcelFile from "../../excel/Profesionales/DownloadExcelFile";
 import { supabase } from "@/utils/supabase/client";
-import { EXTENSION_TO_ID, CODE_TO_ID_TITULO } from "@/constants/options";
+import { EXTENSION_TO_ID } from "@/constants/options";
 import toast from "react-hot-toast";
 import { Button } from "../../../ui/button";
 import DownloadTemplate from "../../../ui/DownloadTemplate";
+import useCodigosSNIESProfesionales from "@/hooks/useCodigosSNIESProfesionales";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -31,8 +32,14 @@ const UploadExcel: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [multipleCount, setMultipleCount] = useState<number>(0);
   const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
+  const [error, setError] = useState<string | null>(null);
+  // usamos el hook para obtener el mapeo de los codigos SNIES con los títulos
+  const {
+    data: codeToIdTitulo,
+    isLoading,
+    error: errorCodigos,
+  } = useCodigosSNIESProfesionales();
   const columnHelper = createColumnHelper<ProfesionalConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -157,7 +164,6 @@ const UploadExcel: React.FC = () => {
       setError("Error al cargar el archivo");
     }
   };
-
   const processTransformedData = (data: DatosProcesados[]) => {
     const processedData = data.map((row: DatosProcesados) => {
       // Función para normalizar tipo de identificación
@@ -202,7 +208,7 @@ const UploadExcel: React.FC = () => {
         nombre_profesional: row.nombre_profesional,
         apellido_profesional: row.apellido_profesional,
         snies: row.snies,
-        titulo_nombre: CODE_TO_ID_TITULO[row.snies as number] || null,
+        titulo_nombre: codeToIdTitulo?.[row.snies as number] || null,
         nombre_extension:
           EXTENSION_TO_ID[normalizedExtension as string] || null,
         acta_grado: row.acta_grado,
@@ -215,68 +221,6 @@ const UploadExcel: React.FC = () => {
 
     return processedData;
   };
-  //subimos los datos en sus respectivas tablas profesionales y títulos
-  /* const subirDatos = async (datos: DatosProcesados[]) => {
-    const loadingToastId = toast.loading("Cargando datos, por favor espera...");
-    const datosParaInsertar = datos.map((item) => ({
-      tipo_identificacion: item.tipo_identificacion,
-      nombre: item.nombre_profesional,
-      apellido: item.apellido_profesional,
-      numero_identificacion: item.numero_identificacion.toString(),
-      id_extension: item.nombre_extension,
-    }));
-
-    const { data: profesionalesData, error: profesionalesError } =
-      await supabase
-        .from("profesionales")
-        .insert(datosParaInsertar)
-        .select("id");
-
-    // Verificar si hay un error al insertar los profesionales
-    if (profesionalesError) {
-      console.error("Error al insertar datos:", profesionalesError);
-      toast.error("Error al registrar el profesional.");
-      toast.dismiss(loadingToastId);
-      return; // Salir de la función si hay un error
-    }
-
-    // Verificar que profesionalesData no sea null
-    if (!profesionalesData) {
-      console.error(
-        "No se recibió datos de profesionales después de la inserción."
-      );
-      toast.error("No se pudo registrar el profesional.");
-      toast.dismiss(loadingToastId);
-      return; // Salir de la función si no hay datos
-    }
-
-    // Paso 3: Preparar los títulos para insertar
-    const titulosParaInsertar = datos.map((item, index) => ({
-      id_profesional: profesionalesData[index]?.id || null, // Usar el ID del profesional correspondiente
-      id_titulo: item.titulo_nombre || null, // Obtener el ID del título
-      acta_grado: item.acta_grado,
-      folio: item.folio,
-      fecha_grado: item.fecha_grado
-        ? new Date(item.fecha_grado).toISOString().split("T")[0]
-        : null,
-      libro_registro_grado: item.libro_registro_grado,
-      numero_diploma: item.numero_diploma,
-    }));
-
-    const { data: titulosData, error: titulosError } = await supabase
-      .from("profesionalestitulos")
-      .insert(titulosParaInsertar);
-
-    if (titulosError) {
-      console.error("Error al insertar títulos:", titulosError);
-      toast.error("Error al registrar los títulos del profesional.");
-    } else {
-      toast.dismiss(loadingToastId);
-      toast.success("¡Profesional y títulos registrados con éxito!");
-      limpiarTabla();
-    }
-  };
- */
   const subirDatos = async (datos: DatosProcesados[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
 
@@ -335,11 +279,9 @@ const UploadExcel: React.FC = () => {
     setPreviewData([]);
   };
 
-  const [error, setError] = useState<string | null>(null);
-
   return (
     <div className="file-upload bg-white my-5 p-5">
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:justify-between">
         <div className="flex flex-col gap-3">
           <h2>Cargar archivo Excel</h2>
           <input

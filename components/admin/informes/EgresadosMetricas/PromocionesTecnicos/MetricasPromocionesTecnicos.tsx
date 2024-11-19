@@ -2,7 +2,6 @@
 import { supabase } from "@/utils/supabase/client";
 import React, { useMemo, useState } from "react";
 import useSWR from "swr";
-
 interface Promocion {
   nombre_titulo: string;
   anio: string;
@@ -11,7 +10,7 @@ interface Promocion {
 }
 const fetcher = async () => {
   const { data: result, error } = await supabase.rpc(
-    "obtener_promociones_anuales_y_acumuladas_por_titulo"
+    "obtener_promociones_anuales_y_acumuladas_por_tecnico"
   );
   if (error) throw new Error(error.message);
   if (!result || result.length === 0)
@@ -19,14 +18,13 @@ const fetcher = async () => {
   return result;
 };
 
-const MetricasPromociones = () => {
+const MetricasPromocionesTecnicos = () => {
   const { data, error, isValidating } = useSWR<Promocion[], Error>(
-    "promociones",
+    "promocionesTecnicos",
     fetcher
   );
   const [selectedTitulo, setSelectedTitulo] = useState("");
   const [selectedAnio, setSelectedAnio] = useState<number | "">("");
-  console.log(data);
   // Obtener los títulos únicos disponibles
   const titulosDisponibles = useMemo(() => {
     return data
@@ -34,7 +32,6 @@ const MetricasPromociones = () => {
       : [];
   }, [data]);
   console.log(titulosDisponibles);
-
   // Filtrar años correspondientes al título seleccionado
   const aniosDisponibles = useMemo(() => {
     return data && selectedTitulo
@@ -43,7 +40,6 @@ const MetricasPromociones = () => {
           .map((item) => item.anio)
       : [];
   }, [data, selectedTitulo]);
-
   // Calcular el total de promociones acumuladas para el título seleccionado
   const totalPromocionesAcumuladas = useMemo(() => {
     if (data && selectedTitulo) {
@@ -56,7 +52,6 @@ const MetricasPromociones = () => {
     }
     return 0;
   }, [data, selectedTitulo]);
-
   // Obtener promociones anuales para el año y título seleccionado
   const promocionesAnuales = useMemo(() => {
     const registro = data?.find(
@@ -65,10 +60,8 @@ const MetricasPromociones = () => {
     );
     return registro ? registro.total_promociones_anuales : 0;
   }, [data, selectedTitulo, selectedAnio]);
-
   if (isValidating) return <div>Cargando datos...</div>;
   if (error) return <div>Error: {error.message}</div>;
-
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Métricas de Promociones</h2>
@@ -140,4 +133,4 @@ const MetricasPromociones = () => {
   );
 };
 
-export default MetricasPromociones;
+export default MetricasPromocionesTecnicos;

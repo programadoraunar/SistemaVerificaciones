@@ -16,7 +16,6 @@ import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
 import FormularioActualizacion from "./details/FormularioActualizacion";
 import Modal from "@/components/ui/Modal";
-import GenerarDocumentoWord from "../profesionales/VerificacionWord/GenerarDocumentoWord";
 import DownloadTemplate from "@/components/ui/DownloadTemplate";
 // Función de fetch para SWR
 const fetcher = async () => {
@@ -240,7 +239,11 @@ const TableTecnicos = ({ searchResults }: { searchResults: Tecnico[] }) => {
       )}
       <Toaster />
 
-      <Modal isOpen={modalOpen} onClose={closeModal} title="Actualizar Tecnico">
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="Detalles Técnico Laboral"
+      >
         {identificacion !== null && (
           <FormularioActualizacion
             numeroIdentificacion={identificacion}

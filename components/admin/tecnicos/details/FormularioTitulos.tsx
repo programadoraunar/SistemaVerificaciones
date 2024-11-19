@@ -1,10 +1,11 @@
 "use client";
 import { supabase } from "@/utils/supabase/client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import GenerarDocumentoWord from "../UploadExcel/GenerarDocumentoWord";
+import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 interface TecnicoTitulo {
   id: number;
   id_tecnico: number; // Esta propiedad se mantiene pero no se utiliza en la función
@@ -24,6 +25,7 @@ interface FormularioTitulosProps {
   nombre: string; // Agregar esta línea
   apellido: string; // Agregar esta línea
   extension: number; // Agregar esta línea
+  eliminarTitulo: (data: any) => void;
 }
 // Define el tipo para los valores del formulario
 interface FormValues {
@@ -43,6 +45,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   nombre,
   apellido,
   extension,
+  eliminarTitulo,
 }) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
   // Obtiene los nombres de los títulos
@@ -58,7 +61,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
     },
     {}
   );
-
   useEffect(() => {
     reset({
       ...titulos.reduce((acc, titulo, index) => {
@@ -170,13 +172,20 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
             <button
               type="button" // Cambiado a "button" para manejar el envío por separado
               onClick={handleSubmit((data) => onSubmit(data, index))}
               className="bg-blue-zodiac-950 text-white p-2 rounded"
             >
               Guardar Cambios
+            </button>
+            <button
+              type="button"
+              onClick={() => eliminarTitulo(titulo.id)} // Llamada a la función de eliminación
+              className="bg-red-600 text-white p-2 rounded"
+            >
+              Eliminar Título
             </button>
           </div>
           <GenerarDocumentoWord

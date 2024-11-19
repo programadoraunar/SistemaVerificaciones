@@ -22,6 +22,7 @@ interface PreviewData {
   multipleCount: number;
   multipleTitle: any[];
 }
+
 const UploadExcelTecnico = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [multipleCount, setMultipleCount] = useState<number>(0);

@@ -1,6 +1,7 @@
 import React from "react";
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
   return (
     <div className="bg-white text-blueBase flex flex-col justify-center items-center py-3 px-5 sm:py-4 sm:px-6 md:py-5 md:px-7 lg:py-6 lg:px-24 xl:py-7 xl:px-52 2xl:py-7 2xl:px-60 border-t border-blueBase">
       <div className="flex items-center flex-col lg:flex-row">
@@ -26,7 +27,7 @@ function Footer() {
 
       <div className="px-4 py-3 lg:px-44">
         <p className="text-center text-sm lg:text-base">
-          ©Copyright 2024 - Derechos Reservados
+          ©Copyright {currentYear} - Derechos Reservados
         </p>
 
         <p className="text-center  text-sm py-3 lg:text-base">

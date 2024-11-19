@@ -10,7 +10,9 @@ export default async function Layout({
   return (
     <>
       <NavBar />
-      <div className="w-full flex flex-col gap-12 items-center">{children}</div>
+      <div className="w-full flex flex-col gap-12 items-center bg-hero">
+        {children}
+      </div>
       <Toaster />
       <Footer />
     </>

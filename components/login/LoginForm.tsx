@@ -51,38 +51,40 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex-1 flex flex-col min-w-64 py-52"
+      className="flex-1 flex flex-col min-w-80 py-52 "
     >
-      <h1 className="text-2xl font-medium">Ingresar</h1>
-      <div className="flex flex-col gap-2 mt-8">
-        <Label htmlFor="email">Correo Electrónico</Label>
-        <Input {...register("email")} placeholder="you@example.com" />
-        {errors.email && (
-          <p className="text-red-600 text-sm">{errors.email.message}</p>
-        )}
+      <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-8">
+        <h1 className="text-2xl font-medium">Ingresar</h1>
+        <div className="flex flex-col gap-2 mt-8">
+          <Label htmlFor="email">Correo Electrónico</Label>
+          <Input {...register("email")} placeholder="you@example.com" />
+          {errors.email && (
+            <p className="text-red-600 text-sm">{errors.email.message}</p>
+          )}
 
-        <div className="flex justify-between items-center">
-          <Label htmlFor="password">Contraseña</Label>
+          <div className="flex justify-between items-center">
+            <Label htmlFor="password">Contraseña</Label>
+          </div>
+          <Input
+            {...register("password")}
+            type="password"
+            placeholder="Tu Contraseña"
+          />
+          {errors.password && (
+            <p className="text-red-600 text-sm">{errors.password.message}</p>
+          )}
+
+          <SubmitButton
+            disabled={isSubmitting || blockTime > 0} // Bloqueo basado en tiempo
+            pendingText={`Espera ${blockTime}s...`} // Mensaje dinámico
+          >
+            {isSubmitting
+              ? "Ingresando..."
+              : blockTime > 0
+                ? `Intenta en ${blockTime}s`
+                : "Ingresar"}
+          </SubmitButton>
         </div>
-        <Input
-          {...register("password")}
-          type="password"
-          placeholder="Tu Contraseña"
-        />
-        {errors.password && (
-          <p className="text-red-600 text-sm">{errors.password.message}</p>
-        )}
-
-        <SubmitButton
-          disabled={isSubmitting || blockTime > 0} // Bloqueo basado en tiempo
-          pendingText={`Espera ${blockTime}s...`} // Mensaje dinámico
-        >
-          {isSubmitting
-            ? "Ingresando..."
-            : blockTime > 0
-              ? `Intenta en ${blockTime}s`
-              : "Ingresar"}
-        </SubmitButton>
       </div>
     </form>
   );

@@ -16,11 +16,10 @@ import {
 } from "@/interfaces/Profesionales";
 import DownloadExcelFile from "../../excel/Profesionales/DownloadExcelFile";
 import { supabase } from "@/utils/supabase/client";
-import { EXTENSION_TO_ID } from "@/constants/options";
 import toast from "react-hot-toast";
 import { Button } from "../../../ui/button";
-import DownloadTemplate from "../../../ui/DownloadTemplate";
 import useCodigosSNIESProfesionales from "@/hooks/useCodigosSNIESProfesionales";
+import useExtensionesId from "@/hooks/useExtensionesId";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -35,11 +34,8 @@ const UploadExcel: React.FC = () => {
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const [error, setError] = useState<string | null>(null);
   // usamos el hook para obtener el mapeo de los codigos SNIES con los títulos
-  const {
-    data: codeToIdTitulo,
-    isLoading,
-    error: errorCodigos,
-  } = useCodigosSNIESProfesionales();
+  const { data: codeToIdTitulo } = useCodigosSNIESProfesionales();
+  const { data: extensiones } = useExtensionesId();
   const columnHelper = createColumnHelper<ProfesionalConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -209,8 +205,7 @@ const UploadExcel: React.FC = () => {
         apellido_profesional: row.apellido_profesional,
         snies: row.snies,
         titulo_nombre: codeToIdTitulo?.[row.snies as number] || null,
-        nombre_extension:
-          EXTENSION_TO_ID[normalizedExtension as string] || null,
+        nombre_extension: extensiones?.[normalizedExtension as string] || null,
         acta_grado: row.acta_grado,
         numero_diploma: row.numero_diploma,
         folio: row.folio,

@@ -1,3 +1,5 @@
+import { CursoExtensionTitulos } from "./Titulos";
+
 /**
  * Interfaz que representa una curso de extension con título.
  * @interface ExtensionConTitulo
@@ -86,4 +88,35 @@ export interface Extension {
   nombre_tecnico: string;
   apellido_tecnico: string;
   nombre_extension: number | null;
+}
+export interface CursosExtensionRegistro {
+  /**
+   * Tipo de identificación del profesional.
+   * @type {string}
+   */
+  tipoIdentificacion: string;
+
+  /**
+   * Número de identificación del profesional.
+   * @type {string}
+   */
+  numeroIdentificacion: string;
+
+  /**
+   * Nombre del profesional.
+   * @type {string}
+   */
+  nombre: string;
+
+  /**
+   * Apellido del profesional.
+   * @type {string}
+   */
+  apellido: string;
+  /**
+   * ID de la extensión del título.
+   * @type {number}
+   */
+  id_extension: number;
+  titulos: CursoExtensionTitulos[];
 }

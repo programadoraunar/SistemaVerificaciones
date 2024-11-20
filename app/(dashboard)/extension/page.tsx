@@ -1,6 +1,5 @@
 "use client";
-import FormularioRegistro from "@/components/admin/profesionales/FormularioRegistro";
-import SearchHeader from "@/components/admin/tecnicos/SearchHeader";
+import FormularioRegistroCurso from "@/components/admin/cursosExtension/FormularioRegistroCurso";
 import Modal from "@/components/ui/Modal";
 import { ExtensionConTitulo } from "@/interfaces/CursosExtension";
 import React, { useState } from "react";
@@ -38,7 +37,7 @@ function cursoExtensionPage() {
         onClose={closeModal}
         title="Registro de Curso de Extension"
       >
-        <FormularioRegistro onSuccess={handleRegistroExitoso} />
+        <FormularioRegistroCurso onSuccess={handleRegistroExitoso} />
       </Modal>
       <Toaster />
     </div>

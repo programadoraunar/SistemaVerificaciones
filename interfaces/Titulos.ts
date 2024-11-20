@@ -15,3 +15,11 @@ export interface Titulo {
   codigos: string[];
   categoria: string;
 }
+
+//hare otra interfaz para el mddelo de curso en extension  que difiere mucho
+// Interfaz para la tabla cursosextensiontitulos
+export interface CursoExtensionTitulos {
+  titulo_curso_id: number;
+  periodo_formacion?: string; // Periodo de formación (opcional)
+  fecha_entrega: Date; // Fecha de entrega del título (opcional)
+}

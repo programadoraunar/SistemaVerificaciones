@@ -1,4 +1,5 @@
 // src/lib/supabaseFunctions.ts
+import { CursosExtensionRegistro } from "@/interfaces/CursosExtension";
 import { ProfesionalRegistro } from "@/interfaces/Profesionales";
 import { supabase } from "@/utils/supabase/client"; // Asegúrate de importar tu cliente Supabase
 import { da } from "date-fns/locale";
@@ -37,6 +38,26 @@ export const registrarTecnicoConTitulos = async (data: ProfesionalRegistro) => {
     }
   );
   console.log(error);
+
+  if (error) throw error;
+
+  return result; // Devuelve el resultado si no hay error
+};
+
+export const registrarCursoExtensionConTitulos = async (
+  data: CursosExtensionRegistro
+) => {
+  const { data: result, error } = await supabase.rpc(
+    "registrar_curso_extension_con_titulos",
+    {
+      p_tipo_identificacion: data.tipoIdentificacion,
+      p_numero_identificacion: data.numeroIdentificacion,
+      p_nombre: data.nombre,
+      p_apellido: data.apellido,
+      p_id_extension: data.id_extension,
+      p_titulos: data.titulos,
+    }
+  );
 
   if (error) throw error;
 

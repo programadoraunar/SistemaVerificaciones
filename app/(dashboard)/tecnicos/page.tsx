@@ -6,7 +6,8 @@ import UploadExcelTecnico from "@/components/admin/tecnicos/UploadExcel/UploadEx
 import Modal from "@/components/ui/Modal";
 import { Tecnico } from "@/interfaces/Tecnicos";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import { FaTools } from "react-icons/fa";
 function tecnicosPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -22,7 +23,11 @@ function tecnicosPage() {
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">
-        <p className="text-2xl lg:text-3xl font-bold">Técnicos Laborales</p>
+        <div className="flex gap-3">
+          <FaTools size={36} />
+          <p className="text-2xl lg:text-3xl font-bold">Técnicos Laborales</p>
+        </div>
+
         <div>
           <button
             onClick={openModal}

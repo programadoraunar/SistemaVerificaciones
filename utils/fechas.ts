@@ -8,9 +8,10 @@ import { utcToZonedTime } from "date-fns-tz";
  * @param {string} fecha - Fecha en formato 'YYYY-MM-DD'
  * @returns {string} - Fecha formateada
  */
-export const formatearFecha = (fecha: any) => {
+export const formatearFecha = (fecha: string) => {
   const fechaISO = parseISO(fecha);
-  return format(new Date(fecha), "MMMM d 'de' yyyy", { locale: es });
+  // Devuelve la fecha formateada.
+  return format(fechaISO, "MMMM d 'de' yyyy", { locale: es });
 };
 
 /**

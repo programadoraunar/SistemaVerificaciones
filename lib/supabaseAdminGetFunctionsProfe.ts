@@ -1,8 +1,6 @@
 import {
   ProfecionalBusquedaDocumento,
-  ProfesionalRegistro,
   ProfecionalBusquedaNombres,
-  ProfesionalActualizar,
   ProfecionalBusquedaActualizacion,
 } from "@/interfaces/Profesionales";
 import { supabase } from "@/utils/supabase/client";
@@ -67,4 +65,14 @@ export const obtenerDetallesActualizacionTecnico = async (
   );
   if (error) throw error;
   return result;
+};
+
+export const fetchTitulos = async (categoria: string) => {
+  const { data, error } = await supabase
+    .from("titulos") // Tabla "titulos"
+    .select() // Seleccionar todas las columnas necesarias
+    .eq("categoria", categoria); // Filtrar por la categoría seleccionada
+
+  if (error) throw new Error(error.message);
+  return data;
 };

@@ -26,14 +26,12 @@ const MetricasPromociones = () => {
   );
   const [selectedTitulo, setSelectedTitulo] = useState("");
   const [selectedAnio, setSelectedAnio] = useState<number | "">("");
-  console.log(data);
   // Obtener los títulos únicos disponibles
   const titulosDisponibles = useMemo(() => {
     return data
       ? Array.from(new Set(data.map((item) => item.nombre_titulo)))
       : [];
   }, [data]);
-  console.log(titulosDisponibles);
 
   // Filtrar años correspondientes al título seleccionado
   const aniosDisponibles = useMemo(() => {

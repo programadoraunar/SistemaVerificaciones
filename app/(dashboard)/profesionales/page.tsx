@@ -7,6 +7,7 @@ import Modal from "@/components/ui/Modal";
 import { InformacionProfesional } from "@/interfaces/Profesionales";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import { PiStudentBold } from "react-icons/pi";
 function profecionalesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -25,7 +26,11 @@ function profecionalesPage() {
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">
-        <p className="text-2xl lg:text-3xl font-bold">Profesionales</p>
+        <div className="flex gap-3">
+          <PiStudentBold size={37} />
+          <p className="text-2xl lg:text-3xl font-bold">Profesionales</p>
+        </div>
+
         <div>
           <button
             onClick={openModal}

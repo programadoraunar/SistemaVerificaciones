@@ -1,5 +1,6 @@
 import { identificationOptionsFormulario } from "@/constants/options";
 import { TitulosTecnico } from "@/interfaces/Titulos";
+import { fetchTitulos } from "@/lib/supabaseAdminGetFunctionsProfe";
 import { registrarTecnicoConTitulos } from "@/lib/supabaseAdminPostFunctions";
 import { supabase } from "@/utils/supabase/client";
 import React from "react";
@@ -42,7 +43,11 @@ const FormularioRegistroTecnicos = ({
     return data;
   };
 
-  const { data: titulos } = useSWR("titulos", fetcher);
+  // Fetch para obtener los títulos
+  const { data: titulos, error: titulosError } = useSWR(
+    ["titulos", "tecnico"],
+    ([_, categoria]) => fetchTitulos(categoria)
+  );
   const { data: extensiones } = useSWR("extension", fetcher);
   const { fields, append, remove } = useFieldArray({
     control,

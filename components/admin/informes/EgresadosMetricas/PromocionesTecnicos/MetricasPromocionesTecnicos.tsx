@@ -31,7 +31,6 @@ const MetricasPromocionesTecnicos = () => {
       ? Array.from(new Set(data.map((item) => item.nombre_titulo)))
       : [];
   }, [data]);
-  console.log(titulosDisponibles);
   // Filtrar años correspondientes al título seleccionado
   const aniosDisponibles = useMemo(() => {
     return data && selectedTitulo

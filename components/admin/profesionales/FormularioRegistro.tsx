@@ -8,7 +8,7 @@ import { identificationOptionsFormulario } from "@/constants/options";
 import { registrarProfesionalConTitulo } from "@/lib/supabaseAdminPostFunctions";
 import { toast, Toaster } from "react-hot-toast";
 import { Titulos } from "@/interfaces/Titulos";
-
+import { fetchTitulos } from "@/lib/supabaseAdminGetFunctionsProfe";
 interface FormularioRegistroProps {
   onSuccess: () => void; // Nueva prop para cerrar el modal
 }
@@ -41,8 +41,10 @@ function FormularioRegistro({ onSuccess }: FormularioRegistroProps) {
     if (error) throw new Error(error.message);
     return data;
   };
-
-  const { data: titulos } = useSWR("titulos", fetcher);
+  const { data: titulos } = useSWR(
+    ["titulos", "profesional"],
+    ([_, categoria]) => fetchTitulos(categoria)
+  );
   const { data: extensiones } = useSWR("extension", fetcher);
 
   const { fields, append, remove } = useFieldArray({

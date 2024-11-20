@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { fetchTitulos } from "@/lib/supabaseAdminGetFunctionsProfe";
 import { supabase } from "@/utils/supabase/client";
 import { data } from "autoprefixer";
 import React, { useState } from "react";
@@ -33,14 +34,10 @@ const NuevoTituloProfesional: React.FC<NuevoTituloProfesionalProps> = ({
     }
   );
   // Fetch para obtener los títulos
-  const fetcher = async (url: string) => {
-    const { data, error } = await supabase.from(url).select();
-    if (error) throw new Error(error.message);
-    return data;
-  };
-
-  const { data: titulos, error: titulosError } = useSWR("titulos", fetcher);
-
+  const { data: titulos, error: titulosError } = useSWR(
+    ["titulos", "profesional"],
+    ([_, categoria]) => fetchTitulos(categoria)
+  );
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profesionalData) {

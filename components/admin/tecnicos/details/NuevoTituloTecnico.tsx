@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { fetchTitulos } from "@/lib/supabaseAdminGetFunctionsProfe";
 import { supabase } from "@/utils/supabase/client";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -35,13 +36,10 @@ const NuevoTituloTecnico: React.FC<NuevoTituloTecnicoProps> = ({
   );
 
   // Fetch para obtener los títulos
-  const fetcher = async (url: string) => {
-    const { data, error } = await supabase.from(url).select();
-    if (error) throw new Error(error.message);
-    return data;
-  };
-
-  const { data: titulos, error: titulosError } = useSWR("titulos", fetcher);
+  const { data: titulos, error: titulosError } = useSWR(
+    ["titulos", "tecnico"],
+    ([_, categoria]) => fetchTitulos(categoria)
+  );
 
   // Manejo del formulario de envío
   const handleSubmit = async (e: React.FormEvent) => {

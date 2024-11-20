@@ -25,8 +25,6 @@ const Egresado = () => {
         router.push("/");
         return;
       }
-      console.log("egresado a buscar " + identificacion);
-
       try {
         const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
           numero_documento: identificacion,

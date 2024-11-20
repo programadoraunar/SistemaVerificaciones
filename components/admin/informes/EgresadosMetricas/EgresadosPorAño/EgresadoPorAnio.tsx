@@ -29,6 +29,7 @@ const EgresadoPorAnio: React.FC = () => {
     const year = e.target.value ? parseInt(e.target.value) : null;
     setSelectedYear(year);
   };
+  console.log(data);
 
   // Obtener la cantidad de egresados para el año seleccionado
   const getCantidadEgresados = () => {

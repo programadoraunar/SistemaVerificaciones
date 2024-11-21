@@ -151,3 +151,37 @@ export interface CursoExtensionBusquedaNombres {
    */
   apellidos: string | null;
 }
+
+export interface CursoExtensionActualizar {
+  /**
+   * Identificador único del profesional.
+   * @type {number}
+   */
+  id_cursoExtension: number;
+
+  /**
+   * Tipo de identificación del profesional.
+   * @type {string}
+   */
+  tipo_identificacion: string;
+
+  /**
+   * Número de identificación del profesional.
+   * @type {string}
+   */
+  numero_identificacion: string;
+
+  /**
+   * Nombre del profesional.
+   * @type {string}
+   */
+  nombre_cursoextension: string;
+
+  /**
+   * Apellido del profesional.
+   * @type {string}
+   */
+  apellido_cursoextension: string;
+
+  id_extension: number;
+}

@@ -1,6 +1,6 @@
 import { ProfesionalActualizar } from "@/interfaces/Profesionales";
 import { obtenerDetallesActualizacionProfesional } from "@/lib/supabaseAdminGetFunctionsProfe";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FormularioDatosPersonales from "../details/FormularioDatosPersonales";
 import FormularioTitulos from "../details/FormularioTitulos";
 import ExpandingButton from "@/components/ui/ExpandingButton";
@@ -45,6 +45,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar los datos</p>;
   const professionalData = data ? data[0] : null;
+  console.log(professionalData);
   const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
 
   const onSubmit = async (data: ProfesionalActualizar) => {

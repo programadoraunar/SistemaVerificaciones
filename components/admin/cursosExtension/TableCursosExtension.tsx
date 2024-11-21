@@ -1,5 +1,6 @@
 "use client";
 import Loading from "@/components/ui/Loading";
+import Modal from "@/components/ui/Modal";
 import { InformacionCursoExtension } from "@/interfaces/CursosExtension";
 import { obtenerInformacionCursosExtension } from "@/lib/supabaseAdminGetFunctionsProfe";
 import {
@@ -14,6 +15,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
+import FormActualizacionCursosExtension from "./details/FormActualizacionCursosExtension";
 const fetcher = async () => {
   const result = await obtenerInformacionCursosExtension();
   return result;
@@ -241,6 +243,19 @@ function TableCursosExtension({
         <Loading />
       )}
       <Toaster />
+      {/* Modal para mostrar el formulario de actualización */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="Actualizar Egresado Curso Extension"
+      >
+        {identificacion !== null && (
+          <FormActualizacionCursosExtension
+            numeroIdentificacion={identificacion}
+            onSuccess={closeModal}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

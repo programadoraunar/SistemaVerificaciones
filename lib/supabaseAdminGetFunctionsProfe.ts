@@ -71,6 +71,18 @@ export const obtenerDetallesActualizacionTecnico = async (
   return result;
 };
 
+export const obtenerDetallesActualizacionCursosExtension = async (
+  data: ProfecionalBusquedaActualizacion
+) => {
+  const { data: result, error } = await supabase.rpc(
+    "obtener_detalles_actualizacion_curso_extension",
+    {
+      p_numero_identificacion: data.numero_identificacion,
+    }
+  );
+  if (error) throw error;
+  return result;
+};
 export const fetchTitulos = async (categoria: string) => {
   const { data, error } = await supabase
     .from("titulos") // Tabla "titulos"

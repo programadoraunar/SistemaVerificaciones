@@ -45,6 +45,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   extension,
   eliminarTitulo,
 }) => {
+  console.log(titulos);
   const { register, handleSubmit, reset } = useForm<FormValues>();
   // Obtiene los nombres de los títulos
   const { data: titulosNombres } = useSWR("titulos", fetcher);
@@ -61,6 +62,8 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
     {}
   );
   const onSubmit = async (data: FormValues, index: number) => {
+    console.log("Datos enviados para el curso:", data);
+    console.log(index);
     try {
       const id = Number(data[`id_${index}`]);
       const idTitulo = Number(data[`id_titulo_${index}`]);

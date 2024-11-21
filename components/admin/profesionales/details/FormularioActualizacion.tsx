@@ -42,10 +42,10 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
       : null,
     () => fetchProfesional(numeroIdentificacion)
   );
+  console.log(data);
   if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar los datos</p>;
   const professionalData = data ? data[0] : null;
-  console.log(professionalData);
   const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
 
   const onSubmit = async (data: ProfesionalActualizar) => {

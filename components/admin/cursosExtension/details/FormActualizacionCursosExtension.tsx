@@ -4,6 +4,8 @@ import FormularioDatosPersonales from "./FormularioDatosPersonales";
 import { supabase } from "@/utils/supabase/client";
 import toast from "react-hot-toast";
 import { CursoExtensionActualizar } from "@/interfaces/CursosExtension";
+import ExpandingButton from "@/components/ui/ExpandingButton";
+import FormularioCursosExtension from "./FormularioCursosExtension";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -20,7 +22,6 @@ const fetchCursoExtension = async (numeroIdentificacion: string) => {
 const FormActualizacionCursosExtension: React.FC<
   FormularioActualizacionProps
 > = ({ numeroIdentificacion, onSuccess }) => {
-  console.log(numeroIdentificacion);
   const { data, error, isLoading, mutate } = useSWR(
     numeroIdentificacion
       ? ["cursoExtensionActualizacion", numeroIdentificacion]
@@ -28,6 +29,7 @@ const FormActualizacionCursosExtension: React.FC<
     () => fetchCursoExtension(numeroIdentificacion)
   );
   const cursoExtensionData = data ? data[0] : null;
+  console.log(data);
   const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
 
   if (isLoading) return <p>Cargando...</p>;
@@ -58,17 +60,40 @@ const FormActualizacionCursosExtension: React.FC<
       // si no hay es para actualizar los títulos del profesional
     }
   };
+  //Función que permite elimina un titulo en especifico, se lo hace directamente aquí para tener la posibilidad de revalidar datos
+  const eliminarTitulo = async (idEliminar: any) => {};
+
   return (
     <div className="max-w-2xl mx-auto bg-white p-5 lg:p-4 rounded-lg shadow-lg">
       {cursoExtensionData && (
-        <FormularioDatosPersonales
-          tipoIdentificacion={cursoExtensionData.tipo_identificacion}
-          numeroIdentificacion={cursoExtensionData.numero_identificacion}
-          nombre={cursoExtensionData.nombre_cursoextension}
-          apellido={cursoExtensionData.apellido_cursoextension}
-          extension={cursoExtensionData.id_extension}
-          onSubmit={onSubmit} // Puedes pasar el onSubmit si necesitas manejar el envío desde aquí
-        />
+        <>
+          <FormularioDatosPersonales
+            tipoIdentificacion={cursoExtensionData.tipo_identificacion}
+            numeroIdentificacion={cursoExtensionData.numero_identificacion}
+            nombre={cursoExtensionData.nombre_cursoextension}
+            apellido={cursoExtensionData.apellido_cursoextension}
+            extension={cursoExtensionData.id_extension}
+            onSubmit={onSubmit} // Puedes pasar el onSubmit si necesitas manejar el envío desde aquí
+          />
+          <div className="py-4">
+            <ExpandingButton
+              buttonText="Titulo(s)"
+              expandedContent={
+                <FormularioCursosExtension
+                  cursos={titulos}
+                  tipoIdentificacion={cursoExtensionData.tipo_identificacion}
+                  numeroIdentificacion={
+                    cursoExtensionData.numero_identificacion
+                  }
+                  nombre={cursoExtensionData.nombre_cursoextension}
+                  apellido={cursoExtensionData.apellido_cursoextension}
+                  extension={cursoExtensionData.id_extension}
+                  eliminarCurso={eliminarTitulo}
+                />
+              }
+            />
+          </div>
+        </>
       )}
     </div>
   );

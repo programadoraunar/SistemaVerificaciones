@@ -1,4 +1,8 @@
 import {
+  CursoExtensionBusquedaDocumento,
+  CursoExtensionBusquedaNombres,
+} from "@/interfaces/CursosExtension";
+import {
   ProfecionalBusquedaDocumento,
   ProfecionalBusquedaNombres,
   ProfecionalBusquedaActualizacion,
@@ -75,4 +79,42 @@ export const fetchTitulos = async (categoria: string) => {
 
   if (error) throw new Error(error.message);
   return data;
+};
+
+export const obtenerInformacionCursosExtension = async () => {
+  const { data, error } = await supabase.rpc(
+    "obtener_informacion_cursos_extension"
+  );
+
+  if (error) {
+    console.error("Error en Supabase RPC:", error);
+    throw error;
+  }
+  return data;
+};
+
+export const obtenerCursosExtensionPorDocumento = async (
+  data: CursoExtensionBusquedaDocumento
+) => {
+  const { data: result, error } = await supabase.rpc(
+    "obtener_cursosexension_por_numero_identificacion",
+    {
+      p_numero_identificacion: data.numero_identificacion,
+    }
+  );
+  if (error) throw error;
+  return result;
+};
+export const obtnerCursosExtensionPorNombreApellido = async (
+  data: CursoExtensionBusquedaNombres
+) => {
+  const { data: result, error } = await supabase.rpc(
+    "obtener_curso_extension_por_nombre_apellido",
+    {
+      p_apellido: data.apellidos || null,
+      p_nombre: data.nombres || null,
+    }
+  );
+  if (error) throw error;
+  return result;
 };

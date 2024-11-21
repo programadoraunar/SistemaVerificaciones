@@ -1,17 +1,20 @@
 "use client";
-import React, { useState } from "react";
 import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
-import { CiSearch } from "react-icons/ci";
-import { Tecnico } from "@/interfaces/Tecnicos";
 import {
-  obtenerTecnicoPorDocumento,
-  obtnerTecnicoPorNombreApellido,
-} from "@/lib/supabaseAdminGetFunctionTec";
+  Extension,
+  InformacionCursoExtension,
+} from "@/interfaces/CursosExtension";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
+import { useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import {
+  obtenerCursosExtensionPorDocumento,
+  obtnerCursosExtensionPorNombreApellido,
+} from "@/lib/supabaseAdminGetFunctionsProfe";
 
 interface SearchHeaderProps {
-  onSearch: (data: Tecnico[]) => void;
+  onSearch: (data: InformacionCursoExtension[]) => void;
 }
 const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   const [numeroIdentificacion, setNumeroIdentificacion] = useState("");
@@ -48,9 +51,11 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
 
     setErrorIdentificacion(""); // Limpiar el error si la búsqueda es exitosa
     try {
-      const result = await obtenerTecnicoPorDocumento({
+      const result = await obtenerCursosExtensionPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
+      console.log(result);
+
       onSearch(result);
     } catch (err) {
       console.error(err);
@@ -69,24 +74,26 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     const searchTerm = nombreApellido.trim();
     try {
       // Primero intentamos buscar como apellido
-      let result = await obtnerTecnicoPorNombreApellido({
+      let result = await obtnerCursosExtensionPorNombreApellido({
         nombres: null,
         apellidos: searchTerm,
       });
+
       // Si no hay resultados, intentamos buscar como nombre
       if (!result || result.length === 0) {
-        result = await obtnerTecnicoPorNombreApellido({
+        result = await obtnerCursosExtensionPorNombreApellido({
           nombres: searchTerm,
           apellidos: null,
         });
       }
+
       // Si aún no hay resultados y hay un espacio en el término de búsqueda,
       // dividimos en nombre y apellido
       if ((!result || result.length === 0) && searchTerm.includes(" ")) {
         const [firstWord, ...restWords] = searchTerm.split(" ");
         const lastWords = restWords.join(" ");
 
-        result = await obtnerTecnicoPorNombreApellido({
+        result = await obtnerCursosExtensionPorNombreApellido({
           nombres: firstWord,
           apellidos: lastWords,
         });
@@ -95,7 +102,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
     } catch (err) {
       console.error("Error en la búsqueda:", err);
     }
-
     setErrorNombre("");
   };
   return (

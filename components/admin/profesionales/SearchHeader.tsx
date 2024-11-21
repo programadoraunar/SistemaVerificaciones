@@ -19,12 +19,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
   const [nombreApellido, setNombreApellido] = useState(""); // Estado para nombres o apellido
   const [errorIdentificacion, setErrorIdentificacion] = useState("");
   const [errorNombre, setErrorNombre] = useState(""); // Estado para errores de nombre
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]);
-  const [errorDateRange, setErrorDateRange] = useState<string>("");
-
   const validateIdentificacion = (value: string) => {
     if (!value) {
       return "Este campo es obligatorio"; // Mensaje si el campo está vacío
@@ -43,10 +37,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       return "Ingrese solo Nombres Validos"; // Mensaje si contiene caracteres no permitidos
     }
     return ""; // Sin errores
-  };
-  // Función para recibir el rango de fechas desde el hijo
-  const handleDateChange = (dates: [Date | null, Date | null]) => {
-    setDateRange(dates);
   };
   const handleSearchByIdentificacion = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevenir el comportamiento por defecto del formulario

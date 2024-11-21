@@ -1,44 +1,41 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import Loading from "@/components/ui/Loading";
+import { InformacionCursoExtension } from "@/interfaces/CursosExtension";
+import { obtenerInformacionCursosExtension } from "@/lib/supabaseAdminGetFunctionsProfe";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
-import {
-  InformacionProfesional,
-  ProfesionalConTitulo,
-} from "@/interfaces/Profesionales";
-import Loading from "../../ui/Loading";
-import { obtenerInformacionProfesionales } from "@/lib/supabaseAdminGetFunctionsProfe";
-import { toast, Toaster } from "react-hot-toast";
-import Modal from "../../ui/Modal";
-import FormularioActualizacion from "./details/FormularioActualizacion";
+import React, { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
-import DownloadTemplate from "@/components/ui/DownloadTemplate";
-// Función de fetch para SWR
 const fetcher = async () => {
-  const result = await obtenerInformacionProfesionales();
+  const result = await obtenerInformacionCursosExtension();
   return result;
 };
 
-function TableProfecionales({
+function TableCursosExtension({
   searchResults,
 }: {
-  searchResults: InformacionProfesional[];
+  searchResults: InformacionCursoExtension[];
 }) {
-  const { data, error, isLoading, mutate } = useSWR("profesionales", fetcher, {
-    revalidateOnFocus: false,
-  });
+  const { data, error, isLoading, mutate } = useSWR(
+    "cursosExtension",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const [identificacion, setIdentificacion] = useState<string | null>(null);
 
-  const columnHelper = createColumnHelper<InformacionProfesional>();
+  const columnHelper = createColumnHelper<InformacionCursoExtension>();
 
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
@@ -50,11 +47,11 @@ function TableProfecionales({
       cell: (info) => <div className="text-center">{info.getValue()}</div>,
     }),
 
-    columnHelper.accessor("nombre_profesional", {
+    columnHelper.accessor("nombre_cursoextension", {
       header: "Nombre",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("apellido_profesional", {
+    columnHelper.accessor("apellido_cursoextension", {
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
@@ -239,32 +236,12 @@ function TableProfecionales({
               </button>
             </div>
           </div>
-          <div className="flex w-full justify-end py-5">
-            <DownloadTemplate
-              fileUrl="plantillas/PlantillaProfesionales.xlsx"
-              fileName="PlantillaProfesionales.xlsx"
-            />
-          </div>
         </>
       ) : (
         <Loading />
       )}
       <Toaster />
-
-      {/* Modal para mostrar el formulario de actualización */}
-      <Modal
-        isOpen={modalOpen}
-        onClose={closeModal}
-        title="Actualizar Profesional"
-      >
-        {identificacion !== null && (
-          <FormularioActualizacion
-            numeroIdentificacion={identificacion}
-            onSuccess={closeModal}
-          />
-        )}
-      </Modal>
     </div>
   );
 }
-export default TableProfecionales;
+export default TableCursosExtension;

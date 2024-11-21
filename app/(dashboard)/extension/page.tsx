@@ -1,7 +1,12 @@
 "use client";
+import SearchHeader from "@/components/admin/cursosExtension/SearchHeader";
 import FormularioRegistroCurso from "@/components/admin/cursosExtension/FormularioRegistroCurso";
+import TableCursosExtension from "@/components/admin/cursosExtension/TableCursosExtension";
 import Modal from "@/components/ui/Modal";
-import { ExtensionConTitulo } from "@/interfaces/CursosExtension";
+import {
+  ExtensionConTitulo,
+  InformacionCursoExtension,
+} from "@/interfaces/CursosExtension";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -17,7 +22,9 @@ function cursoExtensionPage() {
     toast.success("¡Registro exitoso!");
     closeModal(); // Cierra el modal
   };
-  const [searchResults, setSearchResults] = useState<ExtensionConTitulo[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    InformacionCursoExtension[]
+  >([]);
 
   return (
     <div className="flex flex-col p-5 bg-gray-100">
@@ -32,6 +39,8 @@ function cursoExtensionPage() {
           </button>
         </div>
       </div>
+      <SearchHeader onSearch={setSearchResults} />
+      <TableCursosExtension searchResults={searchResults} />
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

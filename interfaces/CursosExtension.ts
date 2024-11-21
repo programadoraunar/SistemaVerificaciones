@@ -85,8 +85,8 @@ export interface Extension {
   id_cursos_extension: number;
   tipo_identificacion: string;
   numero_identificacion: string;
-  nombre_tecnico: string;
-  apellido_tecnico: string;
+  nombre_cursoextension: string;
+  apellido_cursoextension: string;
   nombre_extension: number | null;
 }
 export interface CursosExtensionRegistro {
@@ -119,4 +119,35 @@ export interface CursosExtensionRegistro {
    */
   id_extension: number;
   titulos: CursoExtensionTitulos[];
+}
+
+export interface InformacionCursoExtension {
+  id_cursoExtension: number;
+  tipo_identificacion: string;
+  numero_identificacion: string;
+  nombre_cursoextension: string;
+  apellido_cursoextension: string;
+  nombre_extension: number | null;
+}
+
+export interface CursoExtensionBusquedaDocumento {
+  /**
+   * Número de identificación del profesional.
+   * @type {string}
+   */
+  numero_identificacion: string;
+}
+
+export interface CursoExtensionBusquedaNombres {
+  /**
+   * Nombres del profesional. Puede ser null.
+   * @type {string|null}
+   */
+  nombres: string | null;
+
+  /**
+   * Apellidos del profesional. Puede ser null.
+   * @type {string|null}
+   */
+  apellidos: string | null;
 }

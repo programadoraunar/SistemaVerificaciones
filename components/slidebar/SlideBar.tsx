@@ -43,18 +43,18 @@ function SlideBar() {
                 },
                 {
                   href: "/extension",
-                  label: "Extensión",
+                  label: "Cursos de Extensión",
                   icon: <FaBookOpen />,
-                },
-                {
-                  href: "/adminCampos",
-                  label: "Administración",
-                  icon: <FaWpforms />,
                 },
                 {
                   href: "/informes",
                   label: "Informes",
                   icon: <IoInformationCircleSharp />,
+                },
+                {
+                  href: "/adminCampos",
+                  label: "Administración",
+                  icon: <FaWpforms />,
                 },
               ].map(({ href, label, icon }) => (
                 <li key={href}>

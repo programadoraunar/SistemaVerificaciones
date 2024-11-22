@@ -45,7 +45,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   extension,
   eliminarTitulo,
 }) => {
-  console.log(titulos);
   const { register, handleSubmit, reset } = useForm<FormValues>();
   // Obtiene los nombres de los títulos
   const { data: titulosNombres } = useSWR("titulos", fetcher);

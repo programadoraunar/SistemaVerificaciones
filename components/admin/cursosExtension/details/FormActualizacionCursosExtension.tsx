@@ -29,14 +29,12 @@ const FormActualizacionCursosExtension: React.FC<
     () => fetchCursoExtension(numeroIdentificacion)
   );
   const cursoExtensionData = data ? data[0] : null;
-  console.log(data);
   const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
 
   if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar los datos</p>;
 
   const onSubmit = async (data: CursoExtensionActualizar) => {
-    console.log(data.apellido_cursoextension);
     if (data.nombre_cursoextension) {
       try {
         const { error } = await supabase.rpc("actualizar_cursoextensiondatos", {

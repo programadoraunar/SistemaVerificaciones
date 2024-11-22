@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
+import GenerarDocumentoWord from "../VerficacionWord/GenerarDocumentoWord";
 
 interface CursoExtension {
   id: number;
@@ -146,6 +147,18 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
               Eliminar Curso
             </button>
           </div>
+          <GenerarDocumentoWord
+            persona={{
+              tipoIdentificacion,
+              numeroIdentificacion,
+              nombre,
+              apellido,
+              extension,
+              titulo_nombre: cursosMap?.[curso.id_titulo] || "",
+              periodo_formacion: curso.periodo_formacion,
+              fecha_entrega: curso.fecha_entrega,
+            }}
+          />
         </div>
       ))}
     </form>

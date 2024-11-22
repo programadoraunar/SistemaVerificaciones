@@ -9,6 +9,7 @@ import {
 } from "@/interfaces/CursosExtension";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { PiStudentBold } from "react-icons/pi";
 
 function cursoExtensionPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,11 +30,14 @@ function cursoExtensionPage() {
   return (
     <div className="flex flex-col p-5 bg-gray-100">
       <div className="flex justify-between items-center pb-14 lg:pt-10">
-        <p className="text-2xl lg:text-3xl font-bold">Cursos de Extension</p>
+        <div className="flex gap-3 items-center">
+          <PiStudentBold size={37} />
+          <p className="text-xl lg:text-3xl font-bold">Cursos de Extension</p>
+        </div>
         <div>
           <button
             onClick={openModal}
-            className="px-4 py-2 bg-blue-zodiac-950 text-white rounded"
+            className="px-4 py-2 bg-blue-zodiac-950 text-white rounded text-sm"
           >
             Registrar Nuevo +
           </button>

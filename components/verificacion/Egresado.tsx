@@ -53,7 +53,6 @@ const Egresado = () => {
 
     fetchEgresado();
   }, [egresado, identificacion, router]);
-
   const sendEmail = () => {
     const templateParams = {
       solicitante_nombre: solicitanteNombre,

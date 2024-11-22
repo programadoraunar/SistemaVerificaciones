@@ -42,7 +42,6 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
       : null,
     () => fetchProfesional(numeroIdentificacion)
   );
-  console.log(data);
   if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar los datos</p>;
   const professionalData = data ? data[0] : null;

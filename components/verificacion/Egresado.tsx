@@ -2,7 +2,10 @@
 import { useEgresado } from "@/context/EgresadoContext";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { obtenerInformacionEgresado } from "@/lib/SupabasePublicFunctions";
+import {
+  obtenerInformacionEgresado,
+  obtenerInformacionEgresadoCurso,
+} from "@/lib/SupabasePublicFunctions";
 import { EgresadoVerificado } from "@/interfaces/Verificacion";
 import { formatearFecha } from "@/utils/fechas";
 import Loading from "../ui/Loading";
@@ -26,13 +29,23 @@ const Egresado = () => {
         return;
       }
       try {
-        const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
-          numero_documento: identificacion,
-          formacionAcademica: formacionAcademicaContext,
-        });
+        console.log(formacionAcademicaContext);
+        if (formacionAcademicaContext == 1 || formacionAcademicaContext == 2) {
+          const data: EgresadoVerificado[] = await obtenerInformacionEgresado({
+            numero_documento: identificacion,
+            formacionAcademica: formacionAcademicaContext,
+          });
 
-        setDatosGraduado(data); // Establece los datos del egresado como un array
-        setLoading(false);
+          setDatosGraduado(data); // Establece los datos del egresado como un array
+          setLoading(false);
+        } else {
+          const data: EgresadoVerificado[] =
+            await obtenerInformacionEgresadoCurso({
+              numero_documento: identificacion,
+            });
+          setDatosGraduado(data); // Establece los datos del egresado como un array
+          setLoading(false);
+        }
       } catch (error) {
         setLoading(false);
       }
@@ -124,56 +137,90 @@ const Egresado = () => {
                   disabled
                   className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
                 />
-                <div className="flex flex-col py-5 md:flex-row md:gap-3 items-center w-full">
-                  <div className="flex flex-col w-[100%] md:w-[50%]">
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      Fecha de Grado
-                    </label>
-                    <input
-                      type="text"
-                      value={formatearFecha(item.fecha_grado)}
-                      disabled
-                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                    />
-                  </div>
-                  <div className="flex flex-col w-[100%] md:w-[50%]">
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      Acta de Grado
-                    </label>
-                    <input
-                      type="text"
-                      value={item.acta_grado}
-                      disabled
-                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                    />
-                  </div>
-                </div>
+                {formacionAcademicaContext == 1 ||
+                formacionAcademicaContext == 2 ? (
+                  // Profesionales y Técnicos
+                  <>
+                    <div className="flex flex-col py-5 md:flex-row md:gap-3 items-center w-full">
+                      <div className="flex flex-col w-[100%] md:w-[50%]">
+                        <label className="block text-gray-700 font-semibold mb-2">
+                          Fecha de Grado
+                        </label>
+                        <input
+                          type="text"
+                          value={formatearFecha(item.fecha_grado || "")}
+                          disabled
+                          className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                        />
+                      </div>
+                      <div className="flex flex-col w-[100%] md:w-[50%]">
+                        <label className="block text-gray-700 font-semibold mb-2">
+                          Acta de Grado
+                        </label>
+                        <input
+                          type="text"
+                          value={item.acta_grado}
+                          disabled
+                          className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
 
-                <div className="flex flex-col md:flex-row md:gap-3 items-center">
-                  <div className="flex flex-col w-[100%] md:w-[50%]">
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      Folio
-                    </label>
-                    <input
-                      type="text"
-                      value={item.folio}
-                      disabled
-                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                    />
-                  </div>
+                    <div className="flex flex-col md:flex-row md:gap-3 items-center">
+                      <div className="flex flex-col w-[100%] md:w-[50%]">
+                        <label className="block text-gray-700 font-semibold mb-2">
+                          Folio
+                        </label>
+                        <input
+                          type="text"
+                          value={item.folio}
+                          disabled
+                          className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                        />
+                      </div>
 
-                  <div className="flex flex-col w-[100%] md:w-[50%]">
-                    <label className="block text-gray-700 font-semibold mb-2">
-                      Libro de Registros
-                    </label>
-                    <input
-                      type="text"
-                      value={item.libro_registro_grado}
-                      disabled
-                      className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
-                    />
-                  </div>
-                </div>
+                      <div className="flex flex-col w-[100%] md:w-[50%]">
+                        <label className="block text-gray-700 font-semibold mb-2">
+                          Libro de Registros
+                        </label>
+                        <input
+                          type="text"
+                          value={item.libro_registro_grado}
+                          disabled
+                          className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  // Cursos de Extensión
+                  <>
+                    <div className="flex flex-col py-5 md:flex-row md:gap-3 items-center w-full">
+                      <div className="flex flex-col w-[100%] md:w-[50%]">
+                        <label className="block text-gray-700 font-semibold mb-2">
+                          Periodo de Formación
+                        </label>
+                        <input
+                          type="text"
+                          value={item.periodo_formacion}
+                          disabled
+                          className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                        />
+                      </div>
+                      <div className="flex flex-col w-[100%] md:w-[50%]">
+                        <label className="block text-gray-700 font-semibold mb-2">
+                          Fecha de Entrega
+                        </label>
+                        <input
+                          type="text"
+                          value={formatearFecha(item.fecha_entrega || "")}
+                          disabled
+                          className="w-full bg-gray-100 border border-gray-300 rounded-md p-2 cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
             <div
@@ -206,6 +253,7 @@ const Egresado = () => {
           </div>
         </div>
       </div>
+
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

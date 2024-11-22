@@ -7,16 +7,20 @@ export interface EgresadoVerificado {
   nombre: string;
   apellido: string;
   titulo: string;
-  fecha_grado: string;
-  acta_grado: string;
-  folio: string;
-  libro_registro_grado: string;
+  fecha_grado?: string; // Solo para profesionales y técnicos
+  acta_grado?: string; // Solo para profesionales y técnicos
+  folio?: string; // Solo para profesionales y técnicos
+  libro_registro_grado?: string; // Solo para profesionales y técnicos
+  periodo_formacion?: string; // Solo para egresados de curso de extensión
+  fecha_entrega?: string; // Solo para egresados de curso de extensión
 }
 export interface BuscarEgresado {
   numero_documento: string;
   formacionAcademica: string;
 }
-
+export interface BuscarEgresadoCurso {
+  numero_documento: string;
+}
 export interface DataRegistroNatural {
   nombresSolicitante: string;
   apellidosSolicitante: string;

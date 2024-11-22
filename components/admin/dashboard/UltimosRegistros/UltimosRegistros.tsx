@@ -48,7 +48,7 @@ function UltimosRegistros() {
             <tr>
               <th className="border border-gray-300 p-2">Tipo</th>
               <th className="border border-gray-300 p-2">Descripción</th>
-              <th className="border border-gray-300 p-2">Detalles</th>
+              <th className="border border-gray-300 p-2">Identificación</th>
             </tr>
           </thead>
           <tbody>
@@ -61,10 +61,8 @@ function UltimosRegistros() {
                   <td className="border border-gray-300 p-2">
                     {egresado.nombre} {egresado.apellido}
                   </td>
-                  <td className="border border-gray-300 p-2 text-center">
-                    <Button>
-                      <Link>Ver Detalles</Link>
-                    </Button>
+                  <td className="border border-gray-300 p-2">
+                    {egresado.numero_identificacion}
                   </td>
                 </tr>
               ))

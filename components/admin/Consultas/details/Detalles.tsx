@@ -21,6 +21,7 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
       try {
         const consultaId: ConsultaBusquedaId = { id: idConsulta };
         const response = await obtenerDetallesConsultaId(consultaId);
+        console.log(response);
         setConsulta(response[0]);
         setIsLoading(false);
       } catch (error) {
@@ -130,10 +131,16 @@ const Detalles: React.FC<Detalles> = ({ idConsulta, onSuccess }) => {
           <Button>
             <Link href="/tecnicos">Mas Información</Link>
           </Button>
-        ) : (
+        ) : consulta.tipo === "Profesional" ? (
           <div className="my-10">
             <Button>
               <Link href="/profesionales">Mas Información</Link>
+            </Button>
+          </div>
+        ) : (
+          <div className="my-10">
+            <Button>
+              <Link href="/extension">Mas Información</Link>
             </Button>
           </div>
         )}

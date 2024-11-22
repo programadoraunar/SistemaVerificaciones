@@ -4,4 +4,5 @@ export interface Registros {
   tipo: "Profesional" | "Técnico Laboral" | "Curso de Extensión";
   nombre: string;
   apellido: string;
+  numero_identificacion: string;
 }

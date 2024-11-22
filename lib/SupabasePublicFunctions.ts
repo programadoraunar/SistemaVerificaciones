@@ -1,5 +1,6 @@
 import {
   BuscarEgresado,
+  BuscarEgresadoCurso,
   DataRegistroEmpresa,
   DataRegistroNatural,
   Verificacion,
@@ -24,6 +25,18 @@ export const obtenerInformacionEgresado = async (
     {
       p_numero_identificacion: dataBusqueda.numero_documento,
       _formacion_academica_egresado: dataBusqueda.formacionAcademica,
+    }
+  );
+  if (error) throw error; // Lanza el error para que se maneje en el
+  return data; // Devuelve los datos
+};
+export const obtenerInformacionEgresadoCurso = async (
+  dataBusqueda: BuscarEgresadoCurso
+) => {
+  const { data, error } = await supabase.rpc(
+    "obtener_informacion_egresados_verificacion_curso_extension",
+    {
+      p_numero_identificacion: dataBusqueda.numero_documento,
     }
   );
   if (error) throw error; // Lanza el error para que se maneje en el

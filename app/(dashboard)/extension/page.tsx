@@ -3,13 +3,11 @@ import SearchHeader from "@/components/admin/cursosExtension/SearchHeader";
 import FormularioRegistroCurso from "@/components/admin/cursosExtension/FormularioRegistroCurso";
 import TableCursosExtension from "@/components/admin/cursosExtension/TableCursosExtension";
 import Modal from "@/components/ui/Modal";
-import {
-  ExtensionConTitulo,
-  InformacionCursoExtension,
-} from "@/interfaces/CursosExtension";
+import { InformacionCursoExtension } from "@/interfaces/CursosExtension";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { PiStudentBold } from "react-icons/pi";
+import UploadExcelCursos from "@/components/admin/cursosExtension/UploadExcel/UploadExcelCursos";
 
 function cursoExtensionPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +43,7 @@ function cursoExtensionPage() {
       </div>
       <SearchHeader onSearch={setSearchResults} />
       <TableCursosExtension searchResults={searchResults} />
+      <UploadExcelCursos />
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

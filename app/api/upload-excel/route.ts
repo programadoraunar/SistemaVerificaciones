@@ -40,6 +40,7 @@ export async function POST(req: Request) {
 
     worksheet.eachRow((row, rowNumber) => {
       if (rowNumber > 1) {
+        // Verificar si row.values es un array o un objeto
         const rowData = Array.isArray(row.values)
           ? row.values.slice(1).map((value) => {
               if (
@@ -52,7 +53,17 @@ export async function POST(req: Request) {
               }
               return null;
             })
-          : [];
+          : Object.values(row.values).map((value) => {
+              if (
+                typeof value === "string" ||
+                typeof value === "number" ||
+                value instanceof Date ||
+                value === null
+              ) {
+                return formatDate(value);
+              }
+              return null;
+            });
 
         const idNumber = rowData[1] as string;
 

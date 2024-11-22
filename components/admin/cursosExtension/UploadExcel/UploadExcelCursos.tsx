@@ -9,16 +9,13 @@ import {
   SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-
 import {
-  DatosProcesados,
-  ProfesionalConTituloImport,
-} from "@/interfaces/Profesionales";
-import DownloadExcelFile from "../../excel/Profesionales/DownloadExcelFile";
-import { supabase } from "@/utils/supabase/client";
+  DatosProcesadosCursos,
+  ExtensionConTituloImport,
+} from "@/interfaces/CursosExtension";
 import toast from "react-hot-toast";
-import { Button } from "../../../ui/button";
-import useCodigosSNIESProfesionales from "@/hooks/useCodigosSNIESProfesionales";
+import { Button } from "@/components/ui/button";
+import useCodigoCursos from "@/hooks/UseCodigoCursos";
 import useExtensionesId from "@/hooks/useExtensionesId";
 interface PreviewData {
   preview: (string | number | null)[][];
@@ -26,17 +23,16 @@ interface PreviewData {
   multipleCount: number;
   multipleTitle: any[];
 }
-
-const UploadExcel: React.FC = () => {
+const UploadExcelCursos: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [multipleCount, setMultipleCount] = useState<number>(0);
   const [multipleTitles, setMultipleTitles] = useState<any[]>([]);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const [error, setError] = useState<string | null>(null);
-  // usamos el hook para obtener el mapeo de los codigos SNIES con los títulos
-  const { data: codeToIdTitulo } = useCodigosSNIESProfesionales();
+  const { data: codeToIdTitulo } = useCodigoCursos();
+  console.log(codeToIdTitulo);
   const { data: extensiones } = useExtensionesId();
-  const columnHelper = createColumnHelper<ProfesionalConTituloImport>();
+  const columnHelper = createColumnHelper<ExtensionConTituloImport>();
   const columns = [
     columnHelper.accessor("tipo_identificacion", {
       header: "Tipo Identificación",
@@ -46,15 +42,15 @@ const UploadExcel: React.FC = () => {
       header: "Número Identificación",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("nombre_profesional", {
+    columnHelper.accessor("nombre_cursoextension", {
       header: "Nombre",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("apellido_profesional", {
+    columnHelper.accessor("apellido_cursoextension", {
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("snies", {
+    columnHelper.accessor("nombre_extension", {
       header: "SNIES",
       cell: (info) => info.getValue(),
     }),
@@ -62,42 +58,33 @@ const UploadExcel: React.FC = () => {
       header: "Título",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("numero_diploma", {
+    columnHelper.accessor("periodo_formacion", {
       header: "N° de Diploma",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("acta_grado", {
+    columnHelper.accessor("fecha_entrega", {
+      header: "Acta de Grado",
+      cell: (info) => {
+        const dateValue = info.getValue();
+        return dateValue ? dateValue.toLocaleDateString() : "N/A"; // Aquí se convierte la fecha a string
+      },
+    }),
+    columnHelper.accessor("intensidadHoraria", {
       header: "Acta de Grado",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("folio", {
-      header: "Folio",
+    columnHelper.accessor("tipo", {
+      header: "Acta de Grado",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("fecha_grado", {
-      header: "Fecha de Grado",
-      cell: (info) => {
-        const dateValue = info.getValue();
-        return dateValue
-          ? dateValue.toISOString().split("T")[0]
-          : "No disponible";
-      },
-    }),
-
-    columnHelper.accessor("libro_registro_grado", {
-      header: "Libro Registro",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("nombre_extension", {
-      header: "Extensión",
+    columnHelper.accessor("alianza", {
+      header: "Acta de Grado",
       cell: (info) => info.getValue(),
     }),
   ];
-
-  const [previewData, setPreviewData] = useState<ProfesionalConTituloImport[]>(
+  const [previewData, setPreviewData] = useState<ExtensionConTituloImport[]>(
     []
   );
-
   const table = useReactTable({
     data: previewData,
     columns,
@@ -109,7 +96,6 @@ const UploadExcel: React.FC = () => {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
     const file = e.target.files?.[0];
@@ -136,23 +122,22 @@ const UploadExcel: React.FC = () => {
       setMultipleCount(data.multipleCount);
       setMultipleTitles(data.multipleTitle);
       // Transformar los datos de preview a ProfesionalConTitulo[]
-      const transformedData: ProfesionalConTituloImport[] = data.preview.map(
+      const transformedData: ExtensionConTituloImport[] = data.preview.map(
         (row) => ({
           tipo_identificacion: row[0] as string,
           numero_identificacion: row[1] as string,
-          nombre_profesional: row[2] as string,
-          apellido_profesional: row[3] as string,
-          snies: row[4] as Number,
+          nombre_cursoextension: row[2] as string,
+          apellido_cursoextension: row[3] as string,
+          nombre_extension: row[4] as string,
           titulo_nombre: row[5] as string,
-          nombre_extension: row[6] as string,
-          acta_grado: row[7] as string,
-          numero_diploma: row[8] as string,
-
-          folio: row[9] as string,
-          fecha_grado: row[10] ? new Date(row[10] as string) : null, // Asegúrate de que el formato sea correcto
-          libro_registro_grado: row[11] as string,
+          periodo_formacion: row[6] as string,
+          fecha_entrega: row[7] ? new Date(row[7] as string) : null,
+          intensidadHoraria: row[8] as string,
+          tipo: row[9] as string,
+          alianza: row[10] as string,
         })
       );
+      console.log(transformedData);
       setPreviewData(transformedData);
       toast.dismiss(loadingToastId);
     } catch (err) {
@@ -160,8 +145,8 @@ const UploadExcel: React.FC = () => {
       setError("Error al cargar el archivo");
     }
   };
-  const processTransformedData = (data: DatosProcesados[]) => {
-    const processedData = data.map((row: DatosProcesados) => {
+  const processTransformedData = (data: DatosProcesadosCursos[]) => {
+    const processedData = data.map((row: DatosProcesadosCursos) => {
       // Función para normalizar tipo de identificación
       const normalizeTipoIdentificacion = (tipo: string) => {
         if (!tipo) return tipo;
@@ -188,6 +173,14 @@ const UploadExcel: React.FC = () => {
         const normalized = tipo.replace(/\./g, "").toUpperCase().trim();
         return tipoMap[normalized] || tipo; // Devuelve la forma estandarizada o el valor original
       };
+      const formatDate = (date: any) => {
+        if (!date) return null;
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      };
       // Asegurarse de que nombre_extension sea un string antes de llamar a toLowerCase()
       const normalizedExtension =
         typeof row.nombre_extension === "string"
@@ -197,83 +190,59 @@ const UploadExcel: React.FC = () => {
       const tipoIdentificacion = normalizeTipoIdentificacion(
         row.tipo_identificacion
       );
+      const fecha_entrega = row.fecha_entrega
+        ? formatDate(row.fecha_entrega)
+        : null;
+      const intensidadHoraria = row.intensidadHoraria
+        ? String(row.intensidadHoraria)
+        : null;
+      const numero_identificacion = row.numero_identificacion
+        ? String(row.numero_identificacion)
+        : null;
 
+      const tituloId = Number(
+        Object.keys(codeToIdTitulo).find(
+          (key) => codeToIdTitulo[key] === row.titulo_nombre
+        )
+      );
+      if (!tituloId) {
+        toast.error(
+          `El título "${row.titulo_nombre}" no coincide con ningún título en la base de datos.`
+        );
+        return null;
+      }
       return {
         tipo_identificacion: tipoIdentificacion,
-        numero_identificacion: row.numero_identificacion,
-        nombre_profesional: row.nombre_profesional,
-        apellido_profesional: row.apellido_profesional,
-        snies: row.snies,
-        titulo_nombre: codeToIdTitulo?.[row.snies as number] || null,
+        numero_identificacion: numero_identificacion,
+        nombre_cursoextension: row.nombre_cursoextension,
+        apellido_cursoextension: row.apellido_cursoextension,
         nombre_extension: extensiones?.[normalizedExtension as string] || null,
-        acta_grado: row.acta_grado,
-        numero_diploma: row.numero_diploma,
-        folio: row.folio,
-        fecha_grado: row.fecha_grado ? new Date(row.fecha_grado) : null,
-        libro_registro_grado: row.libro_registro_grado,
+        titulo_nombre: tituloId,
+        fecha_entrega: fecha_entrega,
+        intensidadHoraria: intensidadHoraria,
+        tipo: row.tipo,
+        alianza: row.alianza,
       };
     });
 
     return processedData;
   };
-  const subirDatos = async (datos: DatosProcesados[]) => {
+
+  const subirDatos = async (datos: DatosProcesadosCursos[]) => {
     const loadingToastId = toast.loading("Cargando datos, por favor espera...");
 
-    // Mapeo de los datos para que coincidan con el formato esperado por la función en el backend
-    const datosParaInsertar = datos.map((item) => ({
-      tipo_identificacion: item.tipo_identificacion,
-      numero_identificacion: item.numero_identificacion.toString(),
-      nombre: item.nombre_profesional,
-      apellido: item.apellido_profesional,
-      id_extension: item.nombre_extension,
-      titulo_nombre: item.titulo_nombre, // ID del título
-      acta_grado: item.acta_grado,
-      folio: item.folio,
-      fecha_grado: item.fecha_grado,
-      libro_registro_grado: item.libro_registro_grado,
-      numero_diploma: item.numero_diploma,
-    }));
-
-    try {
-      // Llamar a la función RPC en Supabase
-      const { data, error } = await supabase.rpc(
-        "insertar_profesionales_y_titulos_excel",
-        { datos: datosParaInsertar }
-      );
-
-      // Manejo de la respuesta del servidor
-      if (error) {
-        toast.error(`Error: ${error.message}`);
-        console.error(error);
-      } else if (data && data.mensaje && data.duplicados) {
-        // Caso de duplicados
-        toast.error(`${data.mensaje}: ${data.duplicados.join(", ")}`, {
-          duration: 10000,
-        });
-      } else {
-        toast.success("Profesionales y títulos insertados correctamente.");
-        console.log(data); // Aquí puedes ver la respuesta de la función
-      }
-    } catch (error) {
-      toast.error("Error al conectar con el servidor.");
-      console.error("Error:", error);
-    } finally {
-      // Descartar el toast de carga
-      toast.dismiss(loadingToastId);
-      limpiarTabla();
-    }
+    console.log(datos);
   };
-
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
-    subirDatos(datosTransformados);
+    console.log(datosTransformados);
   };
+
   // función para limpiar tabla
   const limpiarTabla = () => {
     setFileInputKey(Date.now());
     setPreviewData([]);
   };
-
   return (
     <div className="file-upload bg-white my-5 p-5">
       <div className="flex flex-col gap-3 md:flex-row md:justify-between">
@@ -300,7 +269,6 @@ const UploadExcel: React.FC = () => {
             Hay {multipleCount} personas con múltiples títulos que no se
             mostrarán en la tabla.
           </p>
-          <DownloadExcelFile multipleTitleData={multipleTitles} />
         </div>
       )}
 
@@ -446,4 +414,5 @@ const UploadExcel: React.FC = () => {
     </div>
   );
 };
-export default UploadExcel;
+
+export default UploadExcelCursos;

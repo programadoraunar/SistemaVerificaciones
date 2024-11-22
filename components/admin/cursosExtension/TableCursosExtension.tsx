@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import useSWR from "swr";
 import FormActualizacionCursosExtension from "./details/FormActualizacionCursosExtension";
+import DownloadTemplate from "@/components/ui/DownloadTemplate";
 const fetcher = async () => {
   const result = await obtenerInformacionCursosExtension();
   return result;
@@ -237,6 +238,12 @@ function TableCursosExtension({
                 <span className="w-5 h-5">{">>"}</span>
               </button>
             </div>
+          </div>
+          <div className="flex w-full justify-end py-5">
+            <DownloadTemplate
+              fileUrl="plantillas/PlantillaCursosExtension.xlsx"
+              fileName="PlantillaCursosExtension.xlsx"
+            />
           </div>
         </>
       ) : (

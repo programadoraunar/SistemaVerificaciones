@@ -24,7 +24,6 @@ const FormularioEmpresa: FC<FormularioEmpresaProps> = ({ onSubmit }) => {
 
   // Función que se ejecuta cuando el formulario se envía
   const handleFormSubmit = (data: FormularioEmpresaType) => {
-    console.log("activo el evento");
     if (isCaptchaValid) {
       onSubmit(data); // Envía el formulario solo si el CAPTCHA es válido
     } else {

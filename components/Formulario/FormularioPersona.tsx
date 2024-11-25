@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  FormularioEgresadoType,
   formularioPersonaSchema,
   FormularioPersonaType,
 } from "../../validations/validationSchema";
 import cities from "@/utils/dataPaises/dataPaises.json";
 import { identificationSolicitanteOptionsFormulario } from "@/constants/options";
+import Captcha from "../ui/Captcha";
+import toast from "react-hot-toast";
 
 interface FormularioPersonaProps {
   onSubmit: (data: FormularioPersonaType) => void;
@@ -30,10 +33,11 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormularioPersonaType>({
     resolver: zodResolver(formularioPersonaSchema),
   });
+  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
 
   // Estados de países, regiones y ciudades
   const [paises, setPaises] = useState<string[]>([]);
@@ -65,9 +69,16 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
         city.subcountry === watch("subcountry")
     )
     .sort((a, b) => a.name.localeCompare(b.name));
+  const handleFormSubmit = (data: any) => {
+    if (isCaptchaValid) {
+      onSubmit(data); // Envía el formulario solo si el CAPTCHA es válido
+    } else {
+      toast.error("CAPTCHA INVALIDO");
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className="flex flex-col gap-5 p-2">
         <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-5">
           {/* Nombres del Solicitante */}
@@ -235,12 +246,20 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             </select>
           </div>
         )}
+        <div className="flex justify-center pt-5">
+          <Captcha
+            validate={(res) => {
+              setIsCaptchaValid(res);
+            }}
+          />{" "}
+          {/* Componente CAPTCHA */}
+        </div>
 
         <div className="mt-6">
           <button
             type="submit"
             className="w-full p-2 bg-blue-zodiac-950 text-white rounded-md text-center"
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
             {isLoading ? "Cargando..." : "Verificar"}
           </button>

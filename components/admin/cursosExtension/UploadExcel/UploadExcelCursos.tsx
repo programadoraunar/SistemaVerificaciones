@@ -206,7 +206,8 @@ const UploadExcelCursos: React.FC = () => {
 
       if (!tituloId) {
         toast.error(
-          `El título "${row.titulo_nombre}" no coincide con ningún título en la base de datos.`
+          `El título "${row.titulo_nombre}" no coincide con ningún título en la base de datos. Revisa puntos, comas o tildes`,
+          { duration: 6000 }
         );
         return null;
       }
@@ -272,6 +273,12 @@ const UploadExcelCursos: React.FC = () => {
   };
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
+    // Verificar si hay datos transformados que sean null
+    const hayErrores = datosTransformados.some((dato) => dato === null);
+
+    if (hayErrores) {
+      return; // Detiene la ejecución si hay errores
+    }
     const datosFiltrados = datosTransformados.filter(
       (dato): dato is DatosProcesadosCursos =>
         dato !== null && typeof dato.nombre_extension === "number"
@@ -283,6 +290,8 @@ const UploadExcelCursos: React.FC = () => {
   const limpiarTabla = () => {
     setFileInputKey(Date.now());
     setPreviewData([]);
+    setMultipleCount(0);
+    setMultipleTitles([]);
   };
   return (
     <div className="file-upload bg-white my-5 p-5">

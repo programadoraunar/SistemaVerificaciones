@@ -11,6 +11,7 @@ const fetcher = async (tableName: string) => {
 };
 const TitulosCursos = () => {
   const { data, error, mutate } = useSWR("tituloscursos", fetcher);
+  const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
     id: null, // Se utiliza para identificar el registro en edición
     nombre_certificado: "",
@@ -18,7 +19,12 @@ const TitulosCursos = () => {
     tipo: "",
     intencidad_horaria: "",
   });
-
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+  const filteredData = data.filter((titulo: any) =>
+    titulo.nombre_certificado.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const [isEditing, setIsEditing] = useState(false);
 
   if (error) return <div>Error al cargar los datos.</div>;
@@ -51,7 +57,11 @@ const TitulosCursos = () => {
       }
     } else {
       // Insertar nuevo registro
-      const { error } = await supabase.from("tituloscursos").insert([formData]);
+      const { id, ...insertData } = formData; // Elimina `id` antes de la inserción
+      const { error } = await supabase
+        .from("tituloscursos")
+        .insert([insertData]);
+      console.log(error);
       if (error) {
         toast.error("Error al insertar los datos");
       } else {
@@ -85,7 +95,7 @@ const TitulosCursos = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-x-auto h-[800px] overflow-y-auto">
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 bg-white">
         Administración de Títulos de Cursos
       </h2>
@@ -136,6 +146,13 @@ const TitulosCursos = () => {
             </Button>
           )}
         </form>
+        <input
+          type="text"
+          placeholder="Buscar por nombre de certificado..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="p-2 border border-gray-400 rounded mb-4 w-full"
+        />
       </div>
       <div className="my-6">
         <div className="overflow-x-auto">
@@ -160,11 +177,13 @@ const TitulosCursos = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((titulo: any) => (
-                <tr key={titulo.id}>
-                  <td>{titulo.nombre_certificado}</td>
-                  <td>{titulo.alianzas_con}</td>
-                  <td>{titulo.tipo}</td>
+              {filteredData.map((titulo: any) => (
+                <tr key={titulo.id} className="border-b">
+                  <td className="border-gray-400 p-2">
+                    {titulo.nombre_certificado}
+                  </td>
+                  <td className="border-gray-400 p-2">{titulo.alianzas_con}</td>
+                  <td className="border-gray-400 p-2">{titulo.tipo}</td>
                   <td className="border-gray-400 text-center">
                     {titulo.intencidad_horaria}
                   </td>

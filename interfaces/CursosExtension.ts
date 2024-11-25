@@ -126,7 +126,7 @@ export interface CursoExtensionActualizar {
 }
 export interface DatosProcesadosCursos {
   tipo_identificacion: string;
-  numero_identificacion: string; // Cambiado a string
+  numero_identificacion: string;
   nombre_cursoextension: string;
   apellido_cursoextension: string;
   titulo_nombre: string | number | null;

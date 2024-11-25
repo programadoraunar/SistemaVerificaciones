@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import useCodigoCursos from "@/hooks/UseCodigoCursos";
 import useExtensionesId from "@/hooks/useExtensionesId";
 import { supabase } from "@/utils/supabase/client";
+import DownloadExcelFile from "../../excel/cursos/DownloadExcelFile";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -31,7 +32,6 @@ const UploadExcelCursos: React.FC = () => {
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const [error, setError] = useState<string | null>(null);
   const { data: codeToIdTitulo } = useCodigoCursos();
-  console.log(codeToIdTitulo);
   const { data: extensiones } = useExtensionesId();
   const columnHelper = createColumnHelper<ExtensionConTituloImport>();
   const columns = [
@@ -269,7 +269,6 @@ const UploadExcelCursos: React.FC = () => {
       toast.dismiss(loadingToastId);
       limpiarTabla();
     }
-    console.log(datosParaInsertar);
   };
   const manejarClick = () => {
     const datosTransformados = processTransformedData(previewData);
@@ -311,6 +310,7 @@ const UploadExcelCursos: React.FC = () => {
             Hay {multipleCount} personas con múltiples títulos que no se
             mostrarán en la tabla.
           </p>
+          <DownloadExcelFile multipleTitleData={multipleTitles} />
         </div>
       )}
 

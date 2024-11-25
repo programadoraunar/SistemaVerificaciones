@@ -49,7 +49,7 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
   eliminarCurso,
 }) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
-
+  console.log(cursos);
   // Obtiene los nombres de los cursos
   const { data: cursosNombres } = useSWR("tituloscursos", fetcher);
   // Crea un objeto de referencia para los nombres de los cursos

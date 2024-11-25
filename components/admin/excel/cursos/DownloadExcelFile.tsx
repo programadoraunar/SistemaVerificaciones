@@ -23,24 +23,19 @@ const DownloadExcelFile: React.FC<DownloadExcelProps> = ({
         key: "numero_identificacion",
         width: 20,
       },
-      { header: "Nombre Profesional", key: "nombre_profesional", width: 20 },
+      { header: "Nombre", key: "nombre", width: 20 },
       {
-        header: "Apellido Profesional",
-        key: "apellido_profesional",
+        header: "Apellido",
+        key: "apellido",
         width: 20,
       },
-      { header: "SNIES", key: "snies", width: 10 },
-      { header: "Título Nombre", key: "titulo_nombre", width: 25 },
-      { header: "Nombre Extensión", key: "nombre_extension", width: 15 },
-      { header: "Acta Grado", key: "acta_grado", width: 10 },
-      { header: "Número Diploma", key: "numero_diploma", width: 15 },
-      { header: "Folio", key: "folio", width: 10 },
-      { header: "Fecha Grado", key: "fecha_grado", width: 15 },
-      {
-        header: "Libro Registro Grado",
-        key: "libro_registro_grado",
-        width: 20,
-      },
+      { header: "Extension", key: "extension", width: 10 },
+      { header: "Certificado", key: "certificado", width: 25 },
+      { header: "Periodo de Formación", key: "periodo_formacion", width: 15 },
+      { header: "Fecha de Entrega", key: "fecha_entrega", width: 10 },
+      { header: "Intensidad Horaria", key: "intensidad_horaria", width: 15 },
+      { header: "Tipo", key: "tipo", width: 10 },
+      { header: "Alianza", key: "alianza", width: 15 },
     ];
 
     // Agregar datos de `multipleTitleData` a cada fila
@@ -48,16 +43,15 @@ const DownloadExcelFile: React.FC<DownloadExcelProps> = ({
       worksheet.addRow({
         tipo_identificacion: row[0],
         numero_identificacion: row[1],
-        nombre_profesional: row[2],
-        apellido_profesional: row[3],
-        snies: row[4],
-        titulo_nombre: row[5],
-        nombre_extension: row[6],
-        acta_grado: row[7],
-        numero_diploma: row[8],
-        folio: row[9],
-        fecha_grado: row[10],
-        libro_registro_grado: row[11],
+        nombre: row[2],
+        apellido: row[3],
+        extension: row[4],
+        certificado: row[5],
+        periodo_formacion: row[6],
+        fecha_entrega: row[7],
+        intensidad_horaria: row[8],
+        tipo: row[9],
+        alianza: row[10],
       });
     });
 
@@ -69,9 +63,8 @@ const DownloadExcelFile: React.FC<DownloadExcelProps> = ({
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(blob, "ProfesionalesRepetidos.xlsx");
+    saveAs(blob, "CursoEgresadosRepetidos.xlsx");
   };
-
   return <Button onClick={downloadExcelFile}>Descargar Excel</Button>;
 };
 

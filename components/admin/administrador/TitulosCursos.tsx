@@ -22,9 +22,14 @@ const TitulosCursos = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
-  const filteredData = data.filter((titulo: any) =>
-    titulo.nombre_certificado.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = data
+    ? data.filter((titulo: any) =>
+        titulo.nombre_certificado
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      )
+    : [];
+
   const [isEditing, setIsEditing] = useState(false);
 
   if (error) return <div>Error al cargar los datos.</div>;

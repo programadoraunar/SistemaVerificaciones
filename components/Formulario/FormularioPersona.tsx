@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -38,7 +38,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
     resolver: zodResolver(formularioPersonaSchema),
   });
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-
+  const captchaRef = useRef<{ redraw: () => void }>(null);
   // Estados de países, regiones y ciudades
   const [paises, setPaises] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +74,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
       onSubmit(data); // Envía el formulario solo si el CAPTCHA es válido
     } else {
       toast.error("CAPTCHA INVALIDO");
+      captchaRef?.current?.redraw();
     }
   };
 
@@ -251,6 +252,7 @@ const FormularioPersona: React.FC<FormularioPersonaProps> = ({ onSubmit }) => {
             validate={(res) => {
               setIsCaptchaValid(res);
             }}
+            ref={captchaRef}
           />{" "}
           {/* Componente CAPTCHA */}
         </div>

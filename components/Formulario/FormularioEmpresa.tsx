@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,13 +21,14 @@ const FormularioEmpresa: FC<FormularioEmpresaProps> = ({ onSubmit }) => {
     resolver: zodResolver(formularioEmpresaSchema),
   });
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-
+  const captchaRef = useRef<{ redraw: () => void }>(null);
   // Función que se ejecuta cuando el formulario se envía
   const handleFormSubmit = (data: FormularioEmpresaType) => {
     if (isCaptchaValid) {
       onSubmit(data); // Envía el formulario solo si el CAPTCHA es válido
     } else {
       toast.error("CAPTCHA INVALIDO");
+      captchaRef?.current?.redraw();
     }
   };
 
@@ -191,6 +192,7 @@ const FormularioEmpresa: FC<FormularioEmpresaProps> = ({ onSubmit }) => {
           validate={(res) => {
             setIsCaptchaValid(res);
           }}
+          ref={captchaRef}
         />{" "}
         {/* Componente CAPTCHA */}
       </div>

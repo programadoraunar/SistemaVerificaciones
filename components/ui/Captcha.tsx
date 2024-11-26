@@ -1,11 +1,17 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 
 interface CaptchaProps {
   validate: (isValid: boolean) => void;
 }
 
-const Captcha: React.FC<CaptchaProps> = ({ validate }) => {
+const Captcha = forwardRef(({ validate }: CaptchaProps, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [enteredVal, setEnteredVal] = useState("");
   const [captcha, setCaptcha] = useState("");
@@ -88,11 +94,11 @@ const Captcha: React.FC<CaptchaProps> = ({ validate }) => {
     redraw();
   }, []);
 
-  // Verificar CAPTCHA automáticamente
   useEffect(() => {
     const isValid = enteredVal.toUpperCase() === captcha.toUpperCase();
-    validate(isValid); // Llama la función de validación del padre
+    validate(isValid);
   }, [enteredVal, captcha, validate]);
+  useImperativeHandle(ref, () => ({ redraw }));
 
   return (
     <div
@@ -127,6 +133,6 @@ const Captcha: React.FC<CaptchaProps> = ({ validate }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Captcha;

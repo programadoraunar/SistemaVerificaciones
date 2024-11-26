@@ -244,7 +244,7 @@ const TitulosTecnico = () => {
   return (
     <div className="overflow-x-auto h-[800px] overflow-y-auto">
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 bg-white">
-        Títulos Técnicos Profesionales
+        Títulos Técnicos Laborales
       </h2>
       <div className="container mx-auto p-4">
         <form

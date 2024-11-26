@@ -1,4 +1,5 @@
 // src/lib/supabaseFunctions.ts
+import { ActividadRegistro } from "@/interfaces/Actividad";
 import { CursosExtensionRegistro } from "@/interfaces/CursosExtension";
 import { ProfesionalRegistro } from "@/interfaces/Profesionales";
 import { supabase } from "@/utils/supabase/client"; // Asegúrate de importar tu cliente Supabase
@@ -60,6 +61,17 @@ export const registrarCursoExtensionConTitulos = async (
   );
 
   if (error) throw error;
+
+  return result; // Devuelve el resultado si no hay error
+};
+
+export const registrarActividadAdmin = async (data: ActividadRegistro) => {
+  const { data: result, error } = await supabase.rpc("registrar_actividad", {
+    p_descripcion: data.description,
+  });
+
+  if (error) throw error;
+  console.log(error);
 
   return result; // Devuelve el resultado si no hay error
 };

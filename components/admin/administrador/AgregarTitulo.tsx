@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Modal from "@/components/ui/Modal";
 import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 import { Titulo } from "@/interfaces/Titulos";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -84,6 +85,9 @@ const AgregarTitulo = () => {
             .insert([{ codigo, titulo_id: nuevoTituloId }]);
         }
         toast.success("¡Título agregado!");
+        await registrarActividadAdmin({
+          description: `Se insertó un nuevo título con ID ${nuevoTituloId}, nombre "${nombre}" y categoría "${categoria}"`,
+        });
         mutate("titulos2");
         limpiarFormulario();
       }
@@ -134,6 +138,9 @@ const AgregarTitulo = () => {
       // Si no hubo errores, actualiza el estado local eliminando el código
       setCodigos((prevCodigos) => prevCodigos.filter((c) => c !== codigo));
       toast.success("¡Código eliminado!");
+      await registrarActividadAdmin({
+        description: `Se eliminó el código "${codigo}" del título`,
+      });
       mutate("titulos2"); // Vuelve a obtener los datos actualizados
     }
   };
@@ -188,6 +195,9 @@ const AgregarTitulo = () => {
       toast.error("Error al eliminar el título");
     } else {
       toast.success("¡Título eliminado!");
+      await registrarActividadAdmin({
+        description: `Se eliminó el título con ID ${idEliminar}`,
+      });
       mutate("titulos2");
     }
     setIsModalOpen(false); // Cierra la modal después de la operación

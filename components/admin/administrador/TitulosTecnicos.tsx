@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 import { Titulo } from "@/interfaces/Titulos";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -70,6 +71,15 @@ const TitulosTecnico = () => {
         toast.error("Error al actualizar el título");
       } else {
         toast.success("¡Título actualizado!");
+        try {
+          const result = await registrarActividadAdmin({
+            description: "Se Actualizo un titulo de los Técnicos Laborales",
+          });
+          console.log(result);
+        } catch (error) {
+          console.error("Error al registrar la actividad:", error);
+          toast.error("Error al registrar la actividad");
+        }
         mutate("titulosTecnico");
         limpiarFormulario();
       }
@@ -88,6 +98,15 @@ const TitulosTecnico = () => {
             .insert([{ codigo, titulo_id: nuevoTituloId }]);
         }
         toast.success("¡Título agregado!");
+        try {
+          const result = await registrarActividadAdmin({
+            description: "Se Agrego un  titulo en los Técnicos Laborales",
+          });
+          console.log(result);
+        } catch (error) {
+          console.error("Error al registrar la actividad:", error);
+          toast.error("Error al registrar la actividad");
+        }
         mutate("titulosTecnico");
         limpiarFormulario();
       }
@@ -168,6 +187,19 @@ const TitulosTecnico = () => {
       toast.error("Error al actualizar el código");
     } else {
       toast.success("¡Código actualizado!");
+      console.log(codigoEditado);
+
+      try {
+        const result = await registrarActividadAdmin({
+          description:
+            "Se Actualizo un codigo de un titulo de los Técnicos Laborales",
+        });
+        console.log(result);
+      } catch (error) {
+        console.error("Error al registrar la actividad:", error);
+        toast.error("Error al registrar la actividad");
+      }
+      console.log(error);
       setCodigoEditando(null); // Limpiar el estado después de la actualización
       setCodigoEditado("");
       mutate("titulosTecnico");
@@ -192,6 +224,9 @@ const TitulosTecnico = () => {
       toast.error("Error al eliminar el título");
     } else {
       toast.success("¡Título eliminado!");
+      await registrarActividadAdmin({
+        description: `Se eliminó el título con ID ${idEliminar}`,
+      });
       mutate("titulos2");
     }
     setIsModalOpen(false); // Cierra la modal después de la operación

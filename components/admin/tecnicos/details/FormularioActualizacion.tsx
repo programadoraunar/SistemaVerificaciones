@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Modal from "@/components/ui/Modal";
 import NuevoTituloTecnico from "./NuevoTituloTecnico";
 import useSWR from "swr";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -65,6 +66,9 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
         console.log(error);
 
         toast.success("Datos actualizados correctamente");
+        await registrarActividadAdmin({
+          description: `Se Actualizo un Egresado (${data.numero_identificacion}) Técnico Laboral`,
+        });
         onSuccess();
       } catch (error) {
         console.error("Error al actualizar los datos:", error);
@@ -83,6 +87,9 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
       console.log(idEliminar);
       mutate();
       toast.success(`Título con eliminado correctamente`);
+      await registrarActividadAdmin({
+        description: `Se eliminó un título de un egresado Técnico laboral con Identificación ${idEliminar}`,
+      });
     } catch (error) {
       toast.error(`Error al eliminar el título`);
     }

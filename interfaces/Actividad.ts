@@ -3,3 +3,6 @@ export interface Actividad {
   descripcion: string;
   fecha_actividad: string;
 }
+export interface ActividadRegistro {
+  description: string;
+}

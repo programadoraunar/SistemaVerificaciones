@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 import { supabase } from "@/utils/supabase/client";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -57,6 +58,9 @@ const TitulosCursos = () => {
         toast.error("Error al actualizar los datos");
       } else {
         toast.success("Datos actualizados correctamente");
+        await registrarActividadAdmin({
+          description: `Se Actualizo el titulo ${formData.nombre_certificado} en Cursos de Extension`,
+        });
         mutate();
         resetForm();
       }
@@ -71,6 +75,15 @@ const TitulosCursos = () => {
         toast.error("Error al insertar los datos");
       } else {
         toast.success("Datos insertados correctamente");
+        try {
+          const result = await registrarActividadAdmin({
+            description: "Se Registro un nuevo titulo Curso de Extension",
+          });
+          console.log(result);
+        } catch (error) {
+          console.error("Error al registrar la actividad:", error);
+          toast.error("Error al registrar la actividad");
+        }
         mutate();
         resetForm();
       }

@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Extension } from "@/interfaces/Extensiones";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 import { supabase } from "@/utils/supabase/client";
 import React, { useEffect, useRef, useState } from "react";
 import useSWR, { mutate } from "swr";
@@ -46,6 +47,9 @@ const AdministrarExtensiones = () => {
           .from("extensiones")
           .insert([{ nombre }]);
         if (error) throw error;
+        await registrarActividadAdmin({
+          description: `Se registro una nueva extensión con nombre ${nombre}`,
+        });
       }
       mutate("extensiones");
       limpiarFormulario();

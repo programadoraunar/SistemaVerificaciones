@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { CursoExtensionActualizar } from "@/interfaces/CursosExtension";
 import ExpandingButton from "@/components/ui/ExpandingButton";
 import FormularioCursosExtension from "./FormularioCursosExtension";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -49,6 +50,9 @@ const FormActualizacionCursosExtension: React.FC<
         console.log(error);
 
         toast.success("Datos actualizados correctamente");
+        await registrarActividadAdmin({
+          description: `Se Actualizo un Egresado (${data.numero_identificacion}) Curso de Extension`,
+        });
         onSuccess();
       } catch (error) {
         console.error("Error al actualizar los datos:", error);

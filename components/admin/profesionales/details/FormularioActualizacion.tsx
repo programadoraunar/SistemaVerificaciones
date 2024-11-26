@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Modal from "@/components/ui/Modal";
 import NuevoTituloProfesional from "./NuevoTituloProfesional";
 import useSWR from "swr";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -63,6 +64,9 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
         console.log(error);
 
         toast.success("Datos actualizados correctamente");
+        await registrarActividadAdmin({
+          description: `Se Actualizo un Egresado Profesional con Identificación (${data.numero_identificacion}) `,
+        });
         onSuccess();
       } catch (error) {
         console.error("Error al actualizar los datos:", error);

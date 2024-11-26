@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoginFormData, loginSchema } from "@/validations/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -73,6 +74,12 @@ export default function LoginForm() {
           {errors.password && (
             <p className="text-red-600 text-sm">{errors.password.message}</p>
           )}
+          <Link
+            className="text-xs text-foreground underline"
+            href="/forgot-password"
+          >
+            Olvido Su Contraseña?
+          </Link>
 
           <SubmitButton
             disabled={isSubmitting || blockTime > 0} // Bloqueo basado en tiempo

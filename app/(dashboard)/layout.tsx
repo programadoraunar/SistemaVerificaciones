@@ -23,7 +23,7 @@ export default async function DashboardLayout({
   return (
     <>
       <div className="flex flex-col gap-5 justify-center items-center md:flex-row md:justify-between md:px-5 w-full lg:px-24 py-3 bg-blue-zodiac-950 text-xl text-white font-bold">
-        Sistema de Verificación
+        Sistema de Verificación de Titulo
         {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
       </div>
       <div className="min-h-screen grid grid-cols-1 xl:grid-cols-6">

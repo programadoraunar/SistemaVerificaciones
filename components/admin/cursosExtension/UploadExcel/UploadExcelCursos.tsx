@@ -19,6 +19,7 @@ import useCodigoCursos from "@/hooks/UseCodigoCursos";
 import useExtensionesId from "@/hooks/useExtensionesId";
 import { supabase } from "@/utils/supabase/client";
 import DownloadExcelFile from "../../excel/cursos/DownloadExcelFile";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -259,7 +260,14 @@ const UploadExcelCursos: React.FC = () => {
           duration: 10000,
         });
       } else {
-        toast.success("Profesionales y títulos insertados correctamente.");
+        await registrarActividadAdmin({
+          description:
+            "Se registraron egresados de cursos de extensión desde un archivo Excel",
+        });
+
+        toast.success(
+          "Egresados Curso de extension y títulos insertados correctamente."
+        );
         console.log(data); // Aquí puedes ver la respuesta de la función
       }
     } catch (error) {

@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import { Button } from "../../../ui/button";
 import useCodigosSNIESProfesionales from "@/hooks/useCodigosSNIESProfesionales";
 import useExtensionesId from "@/hooks/useExtensionesId";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -252,7 +253,9 @@ const UploadExcel: React.FC = () => {
         });
       } else {
         toast.success("Profesionales y títulos insertados correctamente.");
-        console.log(data); // Aquí puedes ver la respuesta de la función
+        await registrarActividadAdmin({
+          description: "Se registraron Profesionales desde un archivo Excel",
+        });
       }
     } catch (error) {
       toast.error("Error al conectar con el servidor.");

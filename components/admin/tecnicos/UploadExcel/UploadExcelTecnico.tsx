@@ -16,6 +16,7 @@ import { supabase } from "@/utils/supabase/client";
 import DownloadExcelFile from "../../excel/Tecnicos/DownloadExcelFile";
 import useCodigosSIETTecnicos from "@/hooks/useCodigosSNIESTecnicos";
 import useExtensionesId from "@/hooks/useExtensionesId";
+import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 interface PreviewData {
   preview: (string | number | null)[][];
   headers: string[]; // Agrega un campo para las cabeceras
@@ -251,6 +252,10 @@ const UploadExcelTecnico = () => {
         });
       } else {
         toast.success("Datos insertados correctamente.");
+        await registrarActividadAdmin({
+          description: "Se registraron Técnicos desde un archivo Excel",
+        });
+
         console.log(data); // Aquí puedes ver la respuesta de la función
       }
     } catch (error) {

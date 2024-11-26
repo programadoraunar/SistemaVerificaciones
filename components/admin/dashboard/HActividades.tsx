@@ -6,7 +6,11 @@ import { supabase } from "@/utils/supabase/client";
 import useSWR from "swr";
 import { convertirAHoraColombiana } from "@/utils/fechas";
 const fetcher = async (url: string) => {
-  const { data, error } = await supabase.from(url).select("*");
+  const { data, error } = await supabase
+    .from(url)
+    .select("*")
+    .order("fecha_actividad", { ascending: false })
+    .limit(13);
   if (error) throw error;
   return data;
 };

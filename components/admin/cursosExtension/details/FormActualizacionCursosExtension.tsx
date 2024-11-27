@@ -7,6 +7,8 @@ import { CursoExtensionActualizar } from "@/interfaces/CursosExtension";
 import ExpandingButton from "@/components/ui/ExpandingButton";
 import FormularioCursosExtension from "./FormularioCursosExtension";
 import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
+import { useState } from "react";
+import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -31,10 +33,14 @@ const FormActualizacionCursosExtension: React.FC<
   );
   const cursoExtensionData = data ? data[0] : null;
   const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
-
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [idTituloAEliminar, setIdTituloAEliminar] = useState<any>(null);
   if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar los datos</p>;
-
+  const confirmarEliminacion = (idEliminar: any) => {
+    setIdTituloAEliminar(idEliminar);
+    setIsConfirmOpen(true);
+  };
   const onSubmit = async (data: CursoExtensionActualizar) => {
     if (data.nombre_cursoextension) {
       try {
@@ -63,7 +69,27 @@ const FormActualizacionCursosExtension: React.FC<
     }
   };
   //Función que permite elimina un titulo en especifico, se lo hace directamente aquí para tener la posibilidad de revalidar datos
-  const eliminarTitulo = async (idEliminar: any) => {};
+  const eliminarTitulo = async () => {
+    try {
+      if (!idTituloAEliminar) return;
+      const { error } = await supabase.rpc("eliminar_curso_extension_titulo", {
+        p_id: idTituloAEliminar,
+      });
+
+      if (error) throw new Error(error.message);
+
+      mutate(); // Actualizar los datos tras eliminar
+      toast.success(`Título eliminado correctamente`);
+      await registrarActividadAdmin({
+        description: `Se eliminó un título de un egresado curso de extension con Identificación ${idTituloAEliminar}`,
+      });
+    } catch (error) {
+      toast.error(`Error al eliminar el título`);
+    } finally {
+      setIdTituloAEliminar(null); // Limpiar el ID tras la eliminación
+      setIsConfirmOpen(false); // Cerrar la ventana de confirmación
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-5 lg:p-4 rounded-lg shadow-lg">
@@ -90,13 +116,18 @@ const FormActualizacionCursosExtension: React.FC<
                   nombre={cursoExtensionData.nombre_cursoextension}
                   apellido={cursoExtensionData.apellido_cursoextension}
                   extension={cursoExtensionData.id_extension}
-                  eliminarCurso={eliminarTitulo}
+                  eliminarCurso={confirmarEliminacion}
                 />
               }
             />
           </div>
         </>
       )}
+      <VentanaConfirmacion
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={eliminarTitulo}
+      />
     </div>
   );
 };

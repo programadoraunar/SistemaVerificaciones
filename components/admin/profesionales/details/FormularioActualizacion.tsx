@@ -10,6 +10,7 @@ import Modal from "@/components/ui/Modal";
 import NuevoTituloProfesional from "./NuevoTituloProfesional";
 import useSWR from "swr";
 import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
+import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -28,6 +29,9 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   numeroIdentificacion,
   onSuccess,
 }) => {
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [idTituloAEliminar, setIdTituloAEliminar] = useState<any>(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -37,6 +41,11 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   const handleRegistroExitoso = () => {
     closeModal(); // Cierra el modal
   };
+  const confirmarEliminacion = (idEliminar: any) => {
+    setIdTituloAEliminar(idEliminar);
+    setIsConfirmOpen(true);
+  };
+
   const { data, error, isLoading, mutate } = useSWR(
     numeroIdentificacion
       ? ["profesionalActualizacion", numeroIdentificacion]
@@ -77,18 +86,25 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
     }
   };
   //Función que permite elimina un titulo en especifico, se lo hace directamente aquí para tener la posibilidad de revalidar datos
-  const eliminarTitulo = async (idEliminar: any) => {
+  const eliminarTitulo = async () => {
     try {
+      if (!idTituloAEliminar) return;
       const { error } = await supabase.rpc("eliminar_titulo_profesional", {
-        p_id: idEliminar,
+        p_id: idTituloAEliminar,
       });
 
       if (error) throw new Error(error.message);
-      console.log(idEliminar);
-      mutate();
-      toast.success(`Título con eliminado correctamente`);
+
+      mutate(); // Actualizar los datos tras eliminar
+      toast.success(`Título eliminado correctamente`);
+      await registrarActividadAdmin({
+        description: `Se eliminó un título de un egresado profesional con Identificación ${idTituloAEliminar}`,
+      });
     } catch (error) {
       toast.error(`Error al eliminar el título`);
+    } finally {
+      setIdTituloAEliminar(null); // Limpiar el ID tras la eliminación
+      setIsConfirmOpen(false); // Cerrar la ventana de confirmación
     }
   };
 
@@ -115,7 +131,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
                   nombre={professionalData.nombre_profesional}
                   apellido={professionalData.apellido_profesional}
                   extension={professionalData.id_extension}
-                  eliminarTitulo={eliminarTitulo}
+                  eliminarTitulo={confirmarEliminacion}
                 />
               }
             />
@@ -142,6 +158,11 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
           </div>
         </>
       )}
+      <VentanaConfirmacion
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={eliminarTitulo}
+      />
     </div>
   );
 };

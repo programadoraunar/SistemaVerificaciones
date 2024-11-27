@@ -12,6 +12,7 @@ import Modal from "@/components/ui/Modal";
 import NuevoTituloTecnico from "./NuevoTituloTecnico";
 import useSWR from "swr";
 import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
+import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -35,10 +36,17 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [idTituloAEliminar, setIdTituloAEliminar] = useState<any>(null);
   // Función para manejar el éxito del registro
   const handleRegistroExitoso = () => {
     closeModal(); // Cierra el modal
   };
+  const confirmarEliminacion = (idEliminar: any) => {
+    setIdTituloAEliminar(idEliminar);
+    setIsConfirmOpen(true);
+  };
+
   const { data, error, isLoading, mutate } = useSWR(
     numeroIdentificacion
       ? ["tecnicoActualizacion", numeroIdentificacion]
@@ -77,21 +85,24 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
     }
   };
   //Función que permite elimina un titulo en especifico, se lo hace directamente aquí para tener la posibilidad de revalidar datos
-  const eliminarTitulo = async (idEliminar: any) => {
+  const eliminarTitulo = async () => {
     try {
+      if (!idTituloAEliminar) return;
       const { error } = await supabase.rpc("eliminar_titulo_tecnico", {
-        p_id: idEliminar,
+        p_id: idTituloAEliminar,
       });
 
       if (error) throw new Error(error.message);
-      console.log(idEliminar);
       mutate();
       toast.success(`Título con eliminado correctamente`);
       await registrarActividadAdmin({
-        description: `Se eliminó un título de un egresado Técnico laboral con Identificación ${idEliminar}`,
+        description: `Se eliminó un título de un egresado Técnico laboral con Identificación ${idTituloAEliminar}`,
       });
     } catch (error) {
       toast.error(`Error al eliminar el título`);
+    } finally {
+      setIdTituloAEliminar(null); // Limpiar el ID tras la eliminación
+      setIsConfirmOpen(false); // Cerrar la ventana de confirmación
     }
   };
 
@@ -118,7 +129,7 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
                   nombre={tecnicosData.nombre_tecnico}
                   apellido={tecnicosData.apellido_tecnico}
                   extension={tecnicosData.id_extension}
-                  eliminarTitulo={eliminarTitulo}
+                  eliminarTitulo={confirmarEliminacion}
                 />
               }
             />
@@ -145,6 +156,11 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
           </div>
         </>
       )}
+      <VentanaConfirmacion
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={eliminarTitulo}
+      />
     </div>
   );
 };

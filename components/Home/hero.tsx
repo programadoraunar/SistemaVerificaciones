@@ -11,16 +11,16 @@ export default function Header() {
       transition={{ type: "spring", stiffness: 50, duration: 1.7, delay: 1.7 }}
     >
       <div className="flex flex-col">
-        <h2 className="text-3xl font-semibold mt-8 mb-4">Bienvenido</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-4">Bienvenido(a)</h2>
         <p className="text-justify">
           {" "}
-          A través de esta plataforma, podrás verificar la existencia y
-          autenticidad de los títulos certificados de nuestros egresados.
-          Recuerda que la información proporcionada es pública, ya que incluye
-          información sobre el título obtenido por el graduado. Si no eres el
-          titular de los datos, al acceder a esta plataforma declaras que
-          utilizarás la información solo con fines lícitos, específicamente
-          académicos o laborales. Para más información, consulta nuestra{" "}
+          A través de esta plataforma, se podrá verificar la existencia y
+          autenticidad de los títulos certificados de nuestros egresados. Ten en
+          cuenta que la información disponible es de acceso público e incluye
+          detalles sobre el título obtenido por el graduado. Si no eres el
+          titular de los datos, al utilizar esta plataforma, declaras que lo
+          harás únicamente con fines lícitos, específicos a ámbitos académicos o
+          laborales. Para obtener más detalles, consulta nuestra{" "}
           <a
             target="_blank"
             href="https://www.aunar.edu.co/politicas-de-proteccion-de-datos/"

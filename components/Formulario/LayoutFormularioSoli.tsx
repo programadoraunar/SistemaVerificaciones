@@ -338,13 +338,17 @@ const LayoutFormularioSoli: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title="¡Egresado No Encontrado!"
+        title="¡Egresado(a) No Encontrado(a)!"
       >
-        El egresado con numero de identificación{" "}
-        <strong>{identificacion}</strong> no ha sido encontrado. Por favor,
-        verifique que ha ingresado correctamente su número de identificación,
-        que ha seleccionado el tipo de identificación correcto y que ha escogido
-        la formación académica adecuada.
+        El/La egresado(a) con número de identificación{" "}
+        <strong>{identificacion}</strong> no ha sido encontrado(a) en la base de
+        datos de AUNAR. Por favor, verifique que ha ingresado correctamente su
+        número de identificación, que ha seleccionado el tipo de identificación
+        correcto y que ha escogido la formación académica adecuada.
+        <br />
+        De lo contrario comunicarse al siguiente correo
+        asistente.secretaria@aunar.edu.co adjuntando los documentos (diploma,
+        acta de grado y/o certificado).
       </Modal>
 
       {!isLoading ? <></> : <Loading />}

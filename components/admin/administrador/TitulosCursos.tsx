@@ -12,6 +12,11 @@ const fetcher = async (tableName: string) => {
 };
 const TitulosCursos = () => {
   const { data, error, mutate } = useSWR("tituloscursos", fetcher);
+  const { data: extensiones, isLoading: isLoadingExtensiones } = useSWR(
+    "extension",
+    fetcher
+  );
+  console.log(extensiones);
   const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
     id: null, // Se utiliza para identificar el registro en edición
@@ -19,6 +24,7 @@ const TitulosCursos = () => {
     alianzas_con: "",
     tipo: "",
     intencidad_horaria: "",
+    extension: "",
   });
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -36,7 +42,9 @@ const TitulosCursos = () => {
   if (error) return <div>Error al cargar los datos.</div>;
   if (!data) return <div>Cargando...</div>;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -51,6 +59,7 @@ const TitulosCursos = () => {
           alianzas_con: formData.alianzas_con,
           tipo: formData.tipo,
           intencidad_horaria: formData.intencidad_horaria,
+          extension: formData.extension,
         })
         .eq("id", formData.id);
 
@@ -97,6 +106,7 @@ const TitulosCursos = () => {
       alianzas_con: titulo.alianzas_con,
       tipo: titulo.tipo,
       intencidad_horaria: titulo.intencidad_horaria,
+      extension: titulo.extension,
     });
     setIsEditing(true);
   };
@@ -108,6 +118,7 @@ const TitulosCursos = () => {
       alianzas_con: "",
       tipo: "",
       intencidad_horaria: "",
+      extension: "",
     });
     setIsEditing(false);
   };
@@ -153,6 +164,22 @@ const TitulosCursos = () => {
               className="p-2 border border-gray-400 rounded"
               onChange={handleChange}
             />
+            <select
+              name="extension"
+              value={formData.extension}
+              onChange={handleChange}
+              className="p-2 border border-gray-400 rounded"
+            >
+              {" "}
+              <option value="">Seleccionar Extensión</option>{" "}
+              {extensiones &&
+                extensiones.map((ext) => (
+                  <option key={ext.id} value={ext.id}>
+                    {" "}
+                    {ext.nombre}{" "}
+                  </option>
+                ))}{" "}
+            </select>
           </div>
 
           <Button type="submit">
@@ -190,6 +217,9 @@ const TitulosCursos = () => {
                   Intensidad Horaria
                 </th>
                 <th className="p-4 text-left text-gray-700 font-semibold">
+                  Extension
+                </th>
+                <th className="p-4 text-left text-gray-700 font-semibold">
                   Acciones
                 </th>
               </tr>
@@ -205,6 +235,11 @@ const TitulosCursos = () => {
                   <td className="border-gray-400 text-center">
                     {titulo.intencidad_horaria}
                   </td>
+                  <td className="border-gray-400 text-center">
+                    {extensiones?.find((ext) => ext.id === titulo.extension)
+                      ?.nombre || "N/A"}
+                  </td>
+
                   <td className="border-gray-400 p-2">
                     <button onClick={() => handleEdit(titulo)}>Editar</button>
                   </td>

@@ -20,7 +20,7 @@ export default function ForgotPassword({
               <Label htmlFor="email">Email</Label>
               <Input name="email" placeholder="you@example.com" required />
               <SubmitButton formAction={forgotPasswordAction}>
-                Reset Password
+                Restablecer Contraseña
               </SubmitButton>
               <FormMessage message={searchParams} />
             </div>

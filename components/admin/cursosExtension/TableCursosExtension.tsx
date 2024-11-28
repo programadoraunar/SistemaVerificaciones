@@ -58,11 +58,6 @@ function TableCursosExtension({
       header: "Apellido",
       cell: (info) => info.getValue(),
     }),
-
-    columnHelper.accessor("nombre_extension", {
-      header: "Extension",
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.display({
       id: "details",
       header: "Detalles",

@@ -55,7 +55,6 @@ export const registrarCursoExtensionConTitulos = async (
       p_numero_identificacion: data.numeroIdentificacion,
       p_nombre: data.nombre,
       p_apellido: data.apellido,
-      p_id_extension: data.id_extension,
       p_titulos: data.titulos,
     }
   );

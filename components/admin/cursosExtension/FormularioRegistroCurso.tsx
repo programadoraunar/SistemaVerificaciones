@@ -26,6 +26,7 @@ const FormularioRegistroCurso = ({
           titulo_curso_id: 0,
           periodo_formacion: "",
           fecha_entrega: new Date(),
+          id_extension: 0,
         },
       ],
     },
@@ -134,26 +135,6 @@ const FormularioRegistroCurso = ({
         />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Seleccionar Extension
-        </label>
-
-        <select
-          {...register("idExtension")}
-          className="w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
-      "
-        >
-          <option value="">Seleccionar la Extension</option>
-          {extensiones &&
-            extensiones.map((extension: any) => (
-              <option key={extension.id} value={extension.id}>
-                {extension.nombre}
-              </option>
-            ))}
-        </select>
-      </div>
-
       <h3 className="text-xl font-semibold mb-2">Títulos</h3>
       {fields.map((item, index) => (
         <div key={item.id} className="mb-4 p-4 border rounded-md bg-gray-50">
@@ -188,6 +169,25 @@ const FormularioRegistroCurso = ({
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             />
           </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Seleccionar Extension
+            </label>
+
+            <select
+              {...register(`titulos.${index}.id_extension`)}
+              className="w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
+      "
+            >
+              <option value="">Seleccionar la Extension</option>
+              {extensiones &&
+                extensiones.map((extension: any) => (
+                  <option key={extension.id} value={extension.id}>
+                    {extension.nombre}
+                  </option>
+                ))}
+            </select>
+          </div>
 
           <div className="mb-2">
             <label className="block text-sm font-medium text-gray-700">
@@ -219,6 +219,7 @@ const FormularioRegistroCurso = ({
             titulo_curso_id: 0,
             fecha_entrega: new Date(), // Inicializa con la fecha actual
             periodo_formacion: "",
+            id_extension: 0,
           })
         }
         className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"

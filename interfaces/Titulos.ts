@@ -22,4 +22,5 @@ export interface CursoExtensionTitulos {
   titulo_curso_id: number;
   periodo_formacion?: string; // Periodo de formación (opcional)
   fecha_entrega: Date; // Fecha de entrega del título (opcional)
+  id_extension: number;
 }

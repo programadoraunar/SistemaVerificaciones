@@ -57,7 +57,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       });
 
       onSearch(result);
-      if (result!) {
+      if (result.length == 0) {
         toast.error("Curso de Extension no Encontrado");
       }
     } catch (err) {
@@ -102,7 +102,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         });
       }
       onSearch(result);
-      if (result!) {
+      if (result.length == 0) {
         toast.error("Curso de Extension no Encontrado");
       }
     } catch (err) {

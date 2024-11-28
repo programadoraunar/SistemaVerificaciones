@@ -9,7 +9,6 @@ interface GenerarDocumentoWordProps {
     numeroIdentificacion: string;
     nombre: string;
     apellido: string;
-    extension: number;
     titulo_nombre: string;
     periodo_formacion: string;
     fecha_entrega: string;

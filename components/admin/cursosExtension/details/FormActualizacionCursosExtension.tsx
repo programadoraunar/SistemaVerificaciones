@@ -49,7 +49,6 @@ const FormActualizacionCursosExtension: React.FC<
           p_tipo_identificacion: data.tipo_identificacion,
           p_nombre: data.nombre_cursoextension,
           p_apellido: data.apellido_cursoextension,
-          p_id_extension: data.id_extension,
         });
 
         if (error) throw error;
@@ -100,7 +99,6 @@ const FormActualizacionCursosExtension: React.FC<
             numeroIdentificacion={cursoExtensionData.numero_identificacion}
             nombre={cursoExtensionData.nombre_cursoextension}
             apellido={cursoExtensionData.apellido_cursoextension}
-            extension={cursoExtensionData.id_extension}
             onSubmit={onSubmit} // Puedes pasar el onSubmit si necesitas manejar el envío desde aquí
           />
           <div className="py-4">
@@ -115,7 +113,6 @@ const FormActualizacionCursosExtension: React.FC<
                   }
                   nombre={cursoExtensionData.nombre_cursoextension}
                   apellido={cursoExtensionData.apellido_cursoextension}
-                  extension={cursoExtensionData.id_extension}
                   eliminarCurso={confirmarEliminacion}
                 />
               }

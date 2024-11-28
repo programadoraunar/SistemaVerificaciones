@@ -52,11 +52,7 @@ export interface CursosExtensionRegistro {
    * @type {string}
    */
   apellido: string;
-  /**
-   * ID de la extensión del título.
-   * @type {number}
-   */
-  id_extension: number;
+
   titulos: CursoExtensionTitulos[];
 }
 
@@ -66,7 +62,6 @@ export interface InformacionCursoExtension {
   numero_identificacion: string;
   nombre_cursoextension: string;
   apellido_cursoextension: string;
-  nombre_extension: number | null;
 }
 
 export interface CursoExtensionBusquedaDocumento {

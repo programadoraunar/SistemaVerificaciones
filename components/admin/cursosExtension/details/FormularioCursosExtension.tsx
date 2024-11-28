@@ -25,7 +25,6 @@ interface FormularioCursosExtensionProps {
   numeroIdentificacion: string;
   nombre: string;
   apellido: string;
-  extension: number;
   eliminarCurso: (id: number) => void;
 }
 
@@ -45,11 +44,9 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
   numeroIdentificacion,
   nombre,
   apellido,
-  extension,
   eliminarCurso,
 }) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
-  console.log(cursos);
   // Obtiene los nombres de los cursos
   const { data: cursosNombres } = useSWR("tituloscursos", fetcher);
   // Crea un objeto de referencia para los nombres de los cursos
@@ -69,6 +66,7 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
       acc[`id_curso_${index}`] = curso.id_titulo;
       acc[`periodo_formacion_${index}`] = curso.periodo_formacion;
       acc[`fecha_entrega_${index}`] = curso.fecha_entrega;
+      acc[`id_extension_${index}`] = curso.id_extension;
       return acc;
     }, {} as FormValues);
 
@@ -80,6 +78,8 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
       const idCurso = Number(data[`id_curso_${index}`]);
       const periodoFormacion = data[`periodo_formacion_${index}`];
       const fechaEntrega = data[`fecha_entrega_${index}`];
+      const id_extension = data[`id_extension_${index}`];
+      console.log(id_extension);
       if (isNaN(idEditar) || isNaN(idCurso)) {
         throw new Error(
           `Los IDs deben ser números válidos para el curso ${index + 1}`
@@ -91,6 +91,7 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
         p_titulo_curso_id: idCurso,
         p_periodo_formacion: periodoFormacion || null,
         p_fecha_entrega: fechaEntrega || null,
+        p_id_extension: id_extension || null,
       });
 
       if (error) throw new Error(error.message);
@@ -99,6 +100,7 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
       console.error(`Error al actualizar el curso ${index + 1}:`, error);
     }
   };
+  const { data: extensiones, isLoading } = useSWR("extension", fetcher);
 
   return (
     <form className="py-4">
@@ -131,6 +133,26 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
               />
             </div>
           </div>
+          <div className="mb-4 w-full lg:w-1/2">
+            <label className="block text-gray-700 text-md font-bold mb-2">
+              Extension
+            </label>
+            {!isLoading && extensiones ? (
+              <select
+                {...register(`id_extension_${index}`)}
+                className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
+              >
+                {extensiones.map((extension: any) => (
+                  <option key={extension.id} value={extension.id}>
+                    {extension.nombre}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p>Cargando extensiones...</p>
+            )}
+          </div>
+
           <div className="flex justify-end">
             <button
               type="button"
@@ -153,7 +175,6 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
               numeroIdentificacion,
               nombre,
               apellido,
-              extension,
               titulo_nombre: cursosMap?.[curso.id_titulo] || "",
               periodo_formacion: curso.periodo_formacion,
               fecha_entrega: curso.fecha_entrega,

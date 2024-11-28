@@ -10,6 +10,11 @@ interface NuevoTituloProfesionalProps {
   onSuccess: () => void; // Nueva prop para cerrar el modal
   numeroIdentificacion: string;
 }
+const fetcher = async (url: string) => {
+  const { data, error } = await supabase.from(url).select();
+  if (error) throw new Error(error.message);
+  return data;
+};
 const NuevoTituloProfesional: React.FC<NuevoTituloProfesionalProps> = ({
   onSuccess,
   numeroIdentificacion,
@@ -20,6 +25,8 @@ const NuevoTituloProfesional: React.FC<NuevoTituloProfesionalProps> = ({
   const [fechaGrado, setFechaGrado] = useState<string>("");
   const [libroRegistroGrado, setLibroRegistroGrado] = useState<string>("");
   const [numeroDiploma, setNumeroDiploma] = useState<string>("");
+  const [id_extension, setIdExtension] = useState<string>("");
+
   const { data: profesionalData, error: profesionalError } = useSWR(
     `/profesional/${numeroIdentificacion}`,
     async () => {
@@ -60,6 +67,7 @@ const NuevoTituloProfesional: React.FC<NuevoTituloProfesionalProps> = ({
           fecha_grado: fechaGrado,
           libro_registro_grado: libroRegistroGrado,
           numero_diploma: numeroDiploma,
+          id_extension: id_extension,
         },
       ]);
 
@@ -72,6 +80,8 @@ const NuevoTituloProfesional: React.FC<NuevoTituloProfesionalProps> = ({
       toast.error("Hubo un error al agregar el título");
     }
   };
+  const { data: extensiones } = useSWR("extension", fetcher);
+
   if (profesionalError || titulosError) {
     return <p className="text-red-500">Error al cargar los datos</p>;
   }
@@ -189,6 +199,26 @@ const NuevoTituloProfesional: React.FC<NuevoTituloProfesionalProps> = ({
             onChange={(e) => setNumeroDiploma(e.target.value)}
             className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Seleccionar Extension
+          </label>
+
+          <select
+            value={id_extension}
+            onChange={(e) => setIdExtension(e.target.value)}
+            className="w-full text-sm px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring ${
+            "
+          >
+            <option value="">Seleccionar la Extension</option>
+            {extensiones &&
+              extensiones.map((extension: any) => (
+                <option key={extension.id} value={extension.id}>
+                  {extension.nombre}
+                </option>
+              ))}
+          </select>
         </div>
 
         <Button type="submit">Registrar Título</Button>

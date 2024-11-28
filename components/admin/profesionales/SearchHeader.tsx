@@ -54,9 +54,11 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       const result = await obtenerProfesionalPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
-      if (result!) {
+
+      if (result.length == 0) {
         toast.error("Profesional encontrado");
       }
+      onSearch(result);
     } catch (err) {
       console.error(err);
     }
@@ -99,7 +101,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
           apellidos: lastWords,
         });
       }
-
+      if (result.length == 0) {
+        toast.error("Profesional no Encontrado");
+      }
       onSearch(result);
       if (result!) {
         toast.error("Profesional no Encontrado");

@@ -14,6 +14,7 @@ interface ProfesionalTitulo {
   fecha_grado: string;
   libro_registro_grado: string;
   numero_diploma: string;
+  id_extension: number;
 }
 
 interface FormularioTitulosProps {
@@ -22,7 +23,6 @@ interface FormularioTitulosProps {
   numeroIdentificacion: string; // Agregar esta línea
   nombre: string; // Agregar esta línea
   apellido: string; // Agregar esta línea
-  extension: number; // Agregar esta línea
   eliminarTitulo: (data: any) => void;
 }
 
@@ -42,7 +42,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   numeroIdentificacion,
   nombre,
   apellido,
-  extension,
   eliminarTitulo,
 }) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
@@ -80,6 +79,7 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
         p_fecha_grado: data[`fecha_grado_${index}`] || null,
         p_libro_registro_grado: data[`libro_registro_grado_${index}`] || null,
         p_numero_diploma: data[`numero_diploma_${index}`] || null,
+        p_id_extension: data[`id_extension_${index}`],
       });
 
       if (error) throw new Error(error.message);
@@ -100,10 +100,13 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
         acc[`fecha_grado_${index}`] = titulo.fecha_grado;
         acc[`libro_registro_grado_${index}`] = titulo.libro_registro_grado;
         acc[`numero_diploma_${index}`] = titulo.numero_diploma;
+        acc[`id_extension_${index}`] = titulo.id_extension;
         return acc;
       }, {} as FormValues),
     });
   }, [titulos, reset]);
+  // Usamos SWR para obtener las extensiones desde la tabla "Extension"
+  const { data: extensiones, isLoading } = useSWR("extension", fetcher);
 
   return (
     <form className="py-4">
@@ -170,6 +173,27 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               />
             </div>
           </div>
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-gray-700 text-md font-bold mb-2">
+                Extension
+              </label>
+              {!isLoading && extensiones ? (
+                <select
+                  {...register(`id_extension_${index}`)}
+                  className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
+                >
+                  {extensiones.map((extension: any) => (
+                    <option key={extension.id} value={extension.id}>
+                      {extension.nombre}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <p>Cargando extensiones...</p>
+              )}
+            </div>
+          </div>
           <div className="flex justify-end">
             <button
               type="button" // Cambiado a "button" para manejar el envío por separado
@@ -192,7 +216,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               numeroIdentificacion,
               nombre,
               apellido,
-              extension,
               // Datos específicos del título
               titulo_nombre: titulosMap?.[titulo.id_titulo] || "",
               fecha_grado: titulo.fecha_grado,

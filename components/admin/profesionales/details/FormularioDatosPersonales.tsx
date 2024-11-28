@@ -8,13 +8,11 @@ interface FormularioDatosPersonalesProps {
   tipoIdentificacion: string; // Nuevo prop para el tipo de identificación
   nombre: string;
   apellido: string;
-  extension: number;
   onSubmit: (data: any) => void; // Asegúrate de definir un tipo adecuado para los datos
 }
 const FormularioDatosPersonales: React.FC<FormularioDatosPersonalesProps> = ({
   numeroIdentificacion,
   tipoIdentificacion, // Añade este prop
-  extension,
   nombre,
   apellido,
   onSubmit,
@@ -27,25 +25,14 @@ const FormularioDatosPersonales: React.FC<FormularioDatosPersonalesProps> = ({
       apellido_profesional: apellido,
       numero_identificacion: numeroIdentificacion, // Añade este campo
       tipo_identificacion: tipoIdentificacion, // Añade este campo
-      extension_profesional: extension,
     });
-  }, [
-    nombre,
-    apellido,
-    numeroIdentificacion,
-    tipoIdentificacion,
-    extension,
-    reset,
-  ]);
+  }, [nombre, apellido, numeroIdentificacion, tipoIdentificacion, reset]);
   // Fetcher usando Supabase
   const fetcher = async (url: string) => {
     const { data, error } = await supabase.from(url).select();
     if (error) throw new Error(error.message);
     return data;
   };
-  // Usamos SWR para obtener las extensiones desde la tabla "Extension"
-  const { data: extensiones, isLoading } = useSWR("extension", fetcher);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col lg:flex-row w-full lg:gap-8">
@@ -100,28 +87,7 @@ const FormularioDatosPersonales: React.FC<FormularioDatosPersonalesProps> = ({
           />
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row w-full lg:gap-8">
-        <div className="mb-4 w-[100%] lg:w-[50%]">
-          <label className="block text-gray-700 text-md font-bold mb-2">
-            Extension
-          </label>
-          {!isLoading && extensiones ? (
-            <select
-              {...register("id_extension")}
-              defaultValue={extension}
-              className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
-            >
-              {extensiones.map((extension: any) => (
-                <option key={extension.id} value={extension.id}>
-                  {extension.nombre}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p>Cargando extensiones...</p>
-          )}
-        </div>
-      </div>
+
       <div className="flex justify-end">
         <button
           type="submit"

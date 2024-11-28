@@ -5,10 +5,10 @@ export interface Titulos {
   fecha_grado: Date;
   libro_registro_grado: string;
   numero_diploma: string;
+  id_extension: number;
 }
 export interface TitulosTecnico extends Titulos {
   numero_certificado: string;
-  id_extension: number;
 }
 export interface Titulo {
   titulo_id: number;

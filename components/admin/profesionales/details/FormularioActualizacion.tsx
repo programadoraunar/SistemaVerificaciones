@@ -66,7 +66,6 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
           p_tipo_identificacion: data.tipo_identificacion,
           p_nombre: data.nombre_profesional,
           p_apellido: data.apellido_profesional,
-          p_id_extension: data.id_extension,
         });
 
         if (error) throw error;
@@ -117,7 +116,6 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
             numeroIdentificacion={professionalData.numero_identificacion}
             nombre={professionalData.nombre_profesional}
             apellido={professionalData.apellido_profesional}
-            extension={professionalData.id_extension}
             onSubmit={onSubmit} // Puedes pasar el onSubmit si necesitas manejar el envío desde aquí
           />
           <div className="py-4">
@@ -130,7 +128,6 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
                   numeroIdentificacion={professionalData.numero_identificacion}
                   nombre={professionalData.nombre_profesional}
                   apellido={professionalData.apellido_profesional}
-                  extension={professionalData.id_extension}
                   eliminarTitulo={confirmarEliminacion}
                 />
               }

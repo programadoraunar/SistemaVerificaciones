@@ -31,11 +31,11 @@ function SlideBar() {
                   label: "Panel de Control",
                   icon: <MdDashboard />,
                 },
-                {
+                /* {
                   href: "/profesionales",
                   label: "Profesionales",
                   icon: <PiStudent />,
-                },
+                }, */
                 {
                   href: "/tecnicos",
                   label: "Técnicos Laborales",

@@ -27,7 +27,7 @@ function cursoExtensionPage() {
 
   return (
     <div className="flex flex-col p-5 bg-gray-100">
-      <div className="flex justify-between items-center pb-14 lg:pt-10">
+      {/* <div className="flex justify-between items-center pb-14 lg:pt-10">
         <div className="flex gap-3 items-center">
           <PiStudentBold size={37} />
           <p className="text-xl lg:text-3xl font-bold">Cursos de Extension</p>
@@ -51,7 +51,7 @@ function cursoExtensionPage() {
       >
         <FormularioRegistroCurso onSuccess={handleRegistroExitoso} />
       </Modal>
-      <Toaster />
+      <Toaster /> */}
     </div>
   );
 }

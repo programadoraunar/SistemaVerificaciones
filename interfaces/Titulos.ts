@@ -8,6 +8,7 @@ export interface Titulos {
 }
 export interface TitulosTecnico extends Titulos {
   numero_certificado: string;
+  id_extension: number;
 }
 export interface Titulo {
   titulo_id: number;

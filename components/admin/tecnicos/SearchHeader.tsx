@@ -53,7 +53,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         numero_identificacion: numeroIdentificacion,
       });
       onSearch(result);
-      if (result!) {
+      if (result.length == 0) {
         toast.error("Técnico Laboral no Encontrado");
       }
     } catch (err) {
@@ -96,7 +96,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         });
       }
       onSearch(result);
-      if (result!) {
+      if (result.length == 0) {
         toast.error("Técnico Laboral no Encontrado");
       }
     } catch (err) {

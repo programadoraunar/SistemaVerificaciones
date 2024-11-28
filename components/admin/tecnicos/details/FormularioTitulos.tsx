@@ -17,6 +17,7 @@ interface TecnicoTitulo {
   numero_diploma: string;
   siet: string;
   numero_certificado: string;
+  id_extension: number;
 }
 interface FormularioTitulosProps {
   titulos: TecnicoTitulo[];
@@ -24,7 +25,6 @@ interface FormularioTitulosProps {
   numeroIdentificacion: string; // Agregar esta línea
   nombre: string; // Agregar esta línea
   apellido: string; // Agregar esta línea
-  extension: number; // Agregar esta línea
   eliminarTitulo: (data: any) => void;
 }
 // Define el tipo para los valores del formulario
@@ -44,7 +44,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
   numeroIdentificacion,
   nombre,
   apellido,
-  extension,
   eliminarTitulo,
 }) => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
@@ -70,8 +69,8 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
         acc[`folio_${index}`] = titulo.folio;
         acc[`fecha_grado_${index}`] = titulo.fecha_grado;
         acc[`libro_registro_grado_${index}`] = titulo.libro_registro_grado;
-        acc[`numero_diploma_${index}`] = titulo.numero_diploma;
         acc[`numero_certificado_${index}`] = titulo.numero_certificado;
+        acc[`id_extension_${index}`] = titulo.id_extension;
         return acc;
       }, {} as FormValues),
     });
@@ -94,8 +93,8 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
         p_folio: data[`folio_${index}`] || null,
         p_fecha_grado: data[`fecha_grado_${index}`] || null,
         p_libro_registro_grado: data[`libro_registro_grado_${index}`] || null,
-        p_numero_diploma: data[`numero_diploma_${index}`] || null,
         p_numero_certificado: data[`numero_certificado_${index}`],
+        p_id_extension: data[`id_extension_${index}`],
       });
 
       if (error) throw new Error(error.message);
@@ -105,6 +104,8 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
       // Mostrar un mensaje al usuario aquí
     }
   };
+  // Usamos SWR para obtener las extensiones desde la tabla "Extension"
+  const { data: extensiones, isLoading } = useSWR("extension", fetcher);
   return (
     <form className="py-4">
       {titulos.map((titulo, index) => (
@@ -171,6 +172,27 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               />
             </div>
           </div>
+          <div className="flex flex-col lg:flex-row w-full lg:gap-8">
+            <div className="mb-4 w-full lg:w-1/2">
+              <label className="block text-gray-700 text-md font-bold mb-2">
+                Extension
+              </label>
+              {!isLoading && extensiones ? (
+                <select
+                  {...register(`id_extension_${index}`)}
+                  className="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring"
+                >
+                  {extensiones.map((extension: any) => (
+                    <option key={extension.id} value={extension.id}>
+                      {extension.nombre}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <p>Cargando extensiones...</p>
+              )}
+            </div>
+          </div>
 
           <div className="flex justify-end gap-3 py-2">
             <button
@@ -194,7 +216,6 @@ const FormularioTitulos: React.FC<FormularioTitulosProps> = ({
               numeroIdentificacion,
               nombre,
               apellido,
-              extension,
               titulo_nombre: titulosMap?.[titulo.id_titulo] || "",
               fecha_grado: titulo.fecha_grado,
               acta_grado: titulo.acta_grado,

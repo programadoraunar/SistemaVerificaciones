@@ -22,7 +22,7 @@ function tecnicosPage() {
 
   return (
     <div className="flex flex-col p-5 bg-gray-100">
-      {/* <div className="flex justify-between items-center pb-14 lg:pt-10">
+      <div className="flex justify-between items-center pb-14 lg:pt-10">
         <div className="flex gap-3">
           <FaTools size={36} />
           <p className="text-2xl lg:text-3xl font-bold">Técnicos Laborales</p>
@@ -46,7 +46,7 @@ function tecnicosPage() {
         title="Registro de Técnico"
       >
         <FormularioRegistroTecnicos onSuccess={handleRegistroExitoso} />
-      </Modal> */}
+      </Modal>
       <Toaster />
     </div>
   );

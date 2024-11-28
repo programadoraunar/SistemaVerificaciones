@@ -127,11 +127,7 @@ export interface ProfesionalRegistro {
    * @type {string}
    */
   apellido: string;
-  /**
-   * ID de la extensión del título.
-   * @type {number}
-   */
-  id_extension: number;
+
   titulos: Titulos[];
 }
 

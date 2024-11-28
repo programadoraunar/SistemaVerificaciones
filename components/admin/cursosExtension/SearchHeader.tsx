@@ -12,6 +12,7 @@ import {
   obtenerCursosExtensionPorDocumento,
   obtnerCursosExtensionPorNombreApellido,
 } from "@/lib/supabaseAdminGetFunctionsProfe";
+import toast from "react-hot-toast";
 
 interface SearchHeaderProps {
   onSearch: (data: InformacionCursoExtension[]) => void;
@@ -54,9 +55,11 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       const result = await obtenerCursosExtensionPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
-      console.log(result);
 
       onSearch(result);
+      if (result!) {
+        toast.error("Curso de Extension no Encontrado");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -99,6 +102,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         });
       }
       onSearch(result);
+      if (result!) {
+        toast.error("Curso de Extension no Encontrado");
+      }
     } catch (err) {
       console.error("Error en la búsqueda:", err);
     }

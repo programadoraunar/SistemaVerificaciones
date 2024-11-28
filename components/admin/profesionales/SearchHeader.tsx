@@ -10,6 +10,7 @@ import {
 } from "@/lib/supabaseAdminGetFunctionsProfe";
 import { InformacionProfesional } from "@/interfaces/Profesionales";
 import DateRangePickerProps from "@/components/ui/DateRangePickerProps ";
+import toast from "react-hot-toast";
 interface SearchHeaderProps {
   onSearch: (data: InformacionProfesional[]) => void; // Cambiado aquí
 }
@@ -53,7 +54,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       const result = await obtenerProfesionalPorDocumento({
         numero_identificacion: numeroIdentificacion,
       });
-      onSearch(result);
+      if (result!) {
+        toast.error("Profesional encontrado");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -98,6 +101,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
       }
 
       onSearch(result);
+      if (result!) {
+        toast.error("Profesional no Encontrado");
+      }
     } catch (err) {
       console.error("Error en la búsqueda:", err);
     }

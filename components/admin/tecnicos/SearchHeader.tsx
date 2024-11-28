@@ -9,6 +9,7 @@ import {
   obtenerTecnicoPorDocumento,
   obtnerTecnicoPorNombreApellido,
 } from "@/lib/supabaseAdminGetFunctionTec";
+import toast from "react-hot-toast";
 
 interface SearchHeaderProps {
   onSearch: (data: Tecnico[]) => void;
@@ -52,6 +53,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         numero_identificacion: numeroIdentificacion,
       });
       onSearch(result);
+      if (result!) {
+        toast.error("Técnico Laboral no Encontrado");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -92,6 +96,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         });
       }
       onSearch(result);
+      if (result!) {
+        toast.error("Técnico Laboral no Encontrado");
+      }
     } catch (err) {
       console.error("Error en la búsqueda:", err);
     }

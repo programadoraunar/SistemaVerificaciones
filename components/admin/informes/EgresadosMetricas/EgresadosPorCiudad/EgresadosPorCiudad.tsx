@@ -21,6 +21,8 @@ const EgresadosPorCiudad = () => {
     fetcher
   );
 
+  console.log(data);
+
   // Estado para el tipo de egresado seleccionado
   const [selectedTipo, setSelectedTipo] = useState<string>("Profesionales");
 

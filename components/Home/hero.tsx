@@ -15,10 +15,10 @@ export default function Header() {
         <p className="text-justify">
           {" "}
           A través de esta plataforma, se podrá verificar la existencia y
-          autenticidad de los títulos certificados de nuestros egresados. Ten en
-          cuenta que la información disponible es de acceso público e incluye
-          detalles sobre el título obtenido por el graduado. Si no eres el
-          titular de los datos, al utilizar esta plataforma, declaras que lo
+          autenticidad de los títulos y/o certificados de nuestros egresados.
+          Ten en cuenta que la información disponible es de acceso público e
+          incluye detalles sobre el título obtenido por el graduado. Si no eres
+          el titular de los datos, al utilizar esta plataforma, declaras que lo
           harás únicamente con fines lícitos, específicos a ámbitos académicos o
           laborales. Para obtener más detalles, consulta nuestra{" "}
           <a

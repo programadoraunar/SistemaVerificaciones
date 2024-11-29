@@ -105,9 +105,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ onSearch }) => {
         toast.error("Profesional no Encontrado");
       }
       onSearch(result);
-      if (result!) {
-        toast.error("Profesional no Encontrado");
-      }
     } catch (err) {
       console.error("Error en la búsqueda:", err);
     }

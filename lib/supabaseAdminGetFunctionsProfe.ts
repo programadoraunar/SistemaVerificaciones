@@ -87,7 +87,8 @@ export const fetchTitulos = async (categoria: string) => {
   const { data, error } = await supabase
     .from("titulos") // Tabla "titulos"
     .select() // Seleccionar todas las columnas necesarias
-    .eq("categoria", categoria); // Filtrar por la categoría seleccionada
+    .eq("categoria", categoria) // Filtrar por la categoría seleccionada
+    .order("nombre", { ascending: true }); // Ordenar por la columna "nombre" en orden ascendente (alfabético)
 
   if (error) throw new Error(error.message);
   return data;

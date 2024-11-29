@@ -146,7 +146,10 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
               title={`Agregar Nuevo Titulo a ${tecnicosData.nombre_tecnico}`}
             >
               <NuevoTituloTecnico
-                onSuccess={handleRegistroExitoso}
+                onSuccess={() => {
+                  handleRegistroExitoso();
+                  mutate();
+                }}
                 numeroIdentificacion={tecnicosData.numero_identificacion}
               />
             </Modal>

@@ -163,7 +163,7 @@ const FormularioCursosExtension: React.FC<FormularioCursosExtensionProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => eliminarCurso(curso.id_curso_extension)} // Llamada a la función de eliminación
+              onClick={() => eliminarCurso(curso.id)} // Llamada a la función de eliminación
               className="bg-red-600 text-white p-2 rounded"
             >
               Eliminar Curso

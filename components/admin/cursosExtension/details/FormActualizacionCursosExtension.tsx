@@ -9,6 +9,8 @@ import FormularioCursosExtension from "./FormularioCursosExtension";
 import { registrarActividadAdmin } from "@/lib/supabaseAdminPostFunctions";
 import { useState } from "react";
 import VentanaConfirmacion from "@/components/ui/Modal/ModalConfirmacion/VentanaConfirmacion";
+import Modal from "@/components/ui/Modal";
+import NuevoCursoTecnico from "./NuevoTituloCurso";
 
 interface FormularioActualizacionProps {
   numeroIdentificacion: string; // Prop para recibir solo el número de identificación
@@ -31,6 +33,14 @@ const FormActualizacionCursosExtension: React.FC<
       : null,
     () => fetchCursoExtension(numeroIdentificacion)
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleRegistroExitoso = () => {
+    closeModal(); // Cierra el modal
+  };
   const cursoExtensionData = data ? data[0] : null;
   const titulos = data ? data.filter((item: any) => item.id_titulo) : [];
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -79,6 +89,7 @@ const FormActualizacionCursosExtension: React.FC<
 
       mutate(); // Actualizar los datos tras eliminar
       toast.success(`Título eliminado correctamente`);
+      console.log(idTituloAEliminar);
       await registrarActividadAdmin({
         description: `Se eliminó un título de un egresado curso de extension con Identificación ${idTituloAEliminar}`,
       });
@@ -117,6 +128,29 @@ const FormActualizacionCursosExtension: React.FC<
                 />
               }
             />
+          </div>
+          <div>
+            <div>
+              <button
+                onClick={openModal}
+                className="px-4 py-2 bg-blue-zodiac-950 text-white rounded"
+              >
+                Nuevo Titulo
+              </button>
+            </div>
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              title={`Agregar Nuevo Titulo a ${cursoExtensionData.nombre_cursoextension}`}
+            >
+              <NuevoCursoTecnico
+                onSuccess={() => {
+                  handleRegistroExitoso();
+                  mutate(); // Actualiza los datos después de un nuevo registro
+                }}
+                numeroIdentificacion={cursoExtensionData.numero_identificacion}
+              />
+            </Modal>
           </div>
         </>
       )}

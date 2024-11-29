@@ -149,7 +149,10 @@ const FormularioActualizacion: React.FC<FormularioActualizacionProps> = ({
             >
               <NuevoTituloProfesional
                 numeroIdentificacion={professionalData.numero_identificacion}
-                onSuccess={handleRegistroExitoso}
+                onSuccess={() => {
+                  handleRegistroExitoso();
+                  mutate();
+                }}
               />
             </Modal>
           </div>

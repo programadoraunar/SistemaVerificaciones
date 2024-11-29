@@ -3,6 +3,7 @@ import React from "react";
 import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { formatearFecha } from "@/utils/fechas";
+import { identificationOptionsFormulario } from "@/constants/options";
 interface GenerarDocumentoWordProps {
   persona: {
     tipoIdentificacion: string;
@@ -17,13 +18,18 @@ interface GenerarDocumentoWordProps {
     numero_diploma: string;
   };
 }
-
+const getTipoIdentificacionNombre = (id: string) => {
+  const tipo = identificationOptionsFormulario.find((item) => item.id === id);
+  return tipo ? tipo.nombre : id; // Si no encuentra el id, devuelve el código original
+};
 const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
   persona,
 }) => {
   const generarDocumento = () => {
     const nombreCompleto = `${persona.nombre} ${persona.apellido}`;
-
+    const tipoIdentificacionNombre = getTipoIdentificacionNombre(
+      persona.tipoIdentificacion
+    );
     const doc = new Document({
       sections: [
         {
@@ -55,7 +61,7 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
               alignment: AlignmentType.JUSTIFIED,
               children: [
                 new TextRun({
-                  text: `El (la) señor (a) ${nombreCompleto}, identificado (a) con ${persona.tipoIdentificacion} No. ${persona.numeroIdentificacion}, obtuvo el título de ${persona.titulo_nombre} con fecha de grado ${formatearFecha(persona.fecha_grado)}, inscrito en el Acta No. ${persona.acta_grado}, folio No. ${persona.folio} del libro de Diplomas No. ${persona.libro_registro_grado} de los Registros Institucionales.`,
+                  text: `El (la) señor (a) ${nombreCompleto.toUpperCase()}, identificado (a) con ${tipoIdentificacionNombre} No. ${persona.numeroIdentificacion}, obtuvo el título de ${persona.titulo_nombre} con fecha de grado ${formatearFecha(persona.fecha_grado)}, se encuentra inscrito (a) en el Acta No. ${persona.acta_grado}, folio No. ${persona.folio} del libro de Diplomas No. ${persona.libro_registro_grado} de los Registros Institucionales.`,
                   font: "Century Gothic",
                   size: 24,
                 }),

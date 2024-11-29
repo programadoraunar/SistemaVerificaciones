@@ -3,6 +3,8 @@ import React from "react";
 import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { formatearFecha } from "@/utils/fechas";
+import { supabase } from "@/utils/supabase/client";
+import useSWR from "swr";
 interface GenerarDocumentoWordProps {
   persona: {
     tipoIdentificacion: string;
@@ -14,14 +16,41 @@ interface GenerarDocumentoWordProps {
     fecha_entrega: string;
   };
 }
+const fetchIntensidadHoraria = async (tituloNombre: string) => {
+  const { data, error } = await supabase
+    .from("tituloscursos")
+    .select("intencidad_horaria")
+    .eq("nombre_certificado", tituloNombre)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data?.intencidad_horaria || "N/A"; // Devuelve la intensidad horaria o "N/A" si no se encuentra
+};
 const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
   persona,
 }) => {
   const nombreCompleto = `${persona.nombre} ${persona.apellido}`;
-  console.log(persona.titulo_nombre);
-  const generarDocumento = () => {
-    const nombreCompleto = `${persona.nombre} ${persona.apellido}`;
 
+  // Usamos SWR para obtener la intensidad horaria
+  const {
+    data: intensidadHoraria,
+    error,
+    isLoading,
+  } = useSWR(persona.titulo_nombre, fetchIntensidadHoraria);
+
+  // Si hay un error o está cargando, mostramos un mensaje de carga o error
+  if (isLoading) {
+    return <div>Cargando intensidad horaria...</div>;
+  }
+
+  if (error) {
+    return <div>Error al cargar la intensidad horaria: {error.message}</div>;
+  }
+
+  const generarDocumento = () => {
     const doc = new Document({
       sections: [
         {
@@ -53,18 +82,7 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
               alignment: AlignmentType.JUSTIFIED,
               children: [
                 new TextRun({
-                  text: `El (la) señor (a) ${nombreCompleto}, identificado (a) con ${persona.tipoIdentificacion} No. ${persona.numeroIdentificacion}, obtuvo el título de "${persona.titulo_nombre}" durante el periodo de formación ${persona.periodo_formacion}.`,
-                  font: "Century Gothic",
-                  size: 24,
-                }),
-              ],
-              spacing: { after: 200 },
-            }),
-            new Paragraph({
-              alignment: AlignmentType.JUSTIFIED,
-              children: [
-                new TextRun({
-                  text: `La fecha de entrega del título fue ${formatearFecha(persona.fecha_entrega)}. Este certificado se expide para los fines que el interesado estime convenientes.`,
+                  text: `El (la) señor (a) ${nombreCompleto}, identificado (a) con ${persona.tipoIdentificacion} No. ${persona.numeroIdentificacion}, obtuvo el certificado en "${persona.titulo_nombre}", con una intensidad de ${intensidadHoraria} horas.`,
                   font: "Century Gothic",
                   size: 24,
                 }),
@@ -80,10 +98,11 @@ const GenerarDocumentoWord: React.FC<GenerarDocumentoWordProps> = ({
       saveAs(blob, `Verificacion_Titulo_${persona.numeroIdentificacion}.docx`);
     });
   };
+
   return (
     <button
       onClick={(e) => {
-        e.preventDefault(); // Esto previene el envío del formulario.
+        e.preventDefault(); // Previene el envío del formulario.
         generarDocumento();
       }}
       className="bg-blue-zodiac-950 text-white p-2 rounded"
